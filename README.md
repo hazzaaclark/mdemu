@@ -13,6 +13,9 @@ https://www.youtube.com/watch?v=F8kx56OZQhg&t=738s
 Through this, I will continue to make regular updates to the repository once any changes have been made
 As well as keeping an update log? 
 
+## OneLoneCoder's Repo:
+https://github.com/OneLoneCoder/olcNES
+
 
 
 
