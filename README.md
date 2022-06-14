@@ -17,8 +17,13 @@ https://github.com/OneLoneCoder/olcNES
 
 ## Documentation used:
 
-Motorolla 68000 Programmer Manual: https://www.nxp.com/files-static/archives/doc/ref_manual/M68000PRM.pdf
+● Motorolla 68000 Programmer Manual: https://www.nxp.com/files-static/archives/doc/ref_manual/M68000PRM.pdf
 
+● RasterScroll for useful documentation on MD Graphics: https://rasterscroll.com/mdgraphics/
+
+● PlutieDev's Assembly Programming documentation for the MD: https://plutiedev.com/
+
+● SEGA Mega Drive Technical Manual, this is just a great all rounder for understanding the Mega Drive's Hardware: https://segaretro.org/images/a/a2/Genesis_Software_Manual.pdf
 
 
 
