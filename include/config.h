@@ -25,3 +25,11 @@
 #undef LIB_LOG
 #define LIB_LOG LOG_WARNING
 #endif
+
+
+/***
+* This is declared in the rare event that the Z80 and 68000 
+* include DMA Corruption while computing with the Bus
+*/
+
+#define Z80_DMA_TRANSFER 1
