@@ -50,6 +50,7 @@
 /***
 * This is to disable the Direct Memory Access computing with the Bus
 * This is in the event of the Mem Banks being accessed by the Mapper
+* From which, all of the Internal BIN Data from the CPU and Bus will correspond with the Mapper
 */
 
 #define MEMBANK_SWITCH 0
