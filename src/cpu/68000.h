@@ -19,7 +19,7 @@ public:
 	/// Displayed as Public so this library can be accessed by other scripts
 
 public: 
-	uint16_t a = 0x0000; /// Address Register
+	uint32_t a = 0x000000; /// Address Register
 	uint8_t x = 0x00;  /// X Register
 	uint8_t n = 0x00;  /// N Register
 	uint8_t z = 0x00;  /// Z Register
