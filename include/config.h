@@ -33,3 +33,25 @@
 */
 
 #define Z80_DMA_TRANSFER 1
+
+/***
+* This is to prevent any potential corruption bugs with accessing the IO Ports from the Bus
+* MD MK2 includes an issue where accessing the IO from the Bus while it is computing from the Z80 to the 68000 causes it to corrupt
+*/
+
+#define Z80_IO_TRANSFER 1
+
+/***
+* In the event that you want to disable any Direct Memory Access
+*/
+
+#define DMA_DISABLED 0
+
+/***
+* This is to disable the Direct Memory Access computing with the Bus
+* This is in the event of the Mem Banks being accessed by the Mapper
+*/
+
+#define MEMBANK_SWITCH 0
+
+#endif CONFIG
