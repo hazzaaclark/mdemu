@@ -1,3 +1,8 @@
+/***
+* This Header file is just here to carry out simple Assembly Methods and Instructions
+* This might come in handy for allocating memory, rom-management, etc
+*/
+
 #ifndef ASM_H
 #define ASM_H
 
