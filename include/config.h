@@ -36,13 +36,13 @@
 
 /***
 * This is to prevent any potential corruption bugs with accessing the IO Ports from the Bus
-* MD MK2 includes an issue where accessing the IO from the Bus while it is computing from the Z80 to the 68000 causes it to corrupt
+* MD MK2 includes an issue in which accessing the IO Data Lines from the Bus causes the computation between the 68000 and Z80 to corrupt. 
 */
 
 #define Z80_IO_TRANSFER 1
 
 /***
-* In the event that you want to disable any Direct Memory Access
+* In the event that you want to disable any Direct Memory Access between the Data & Address Lines
 */
 
 #define DMA_DISABLED 0
