@@ -3,8 +3,8 @@
 * This might come in handy for allocating memory, rom-management, etc
 */
 
-#ifndef ASM_H
-#define ASM_H
+#ifndef ASM
+#define ASM
 
 #define VARREG_BYTE(VAR, REG)   asm("move.b, %0, %/"REG"" :: "a" (VAR) : ""REG"")
 #define VARREG_WORD(VAR, REG)   asm("move.w, %0, %/"REG"" :: "a" (VAR) : ""REG"")
