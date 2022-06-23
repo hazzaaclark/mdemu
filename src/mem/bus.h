@@ -1,10 +1,10 @@
+#ifndef BUS
+#define BUS
+
 #pragma once
 #include <array>
 #include "68000.h"
 #include "stdio.h"
-
-#ifndef BUS
-#define BUS
 
 class Bus
 {
