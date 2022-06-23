@@ -4,5 +4,19 @@
 #include "mapper.h"
 
 #define	NUM_BANK 8
-static uint16_t banks[NUM_BANK] = { 0, 1, 2, 3, 4, 5, 6,  7 };
-static uint16 registration = 0;
+uint16_t mem_banks[NUM_BANK] = { 0, 1, 2, 3, 4, 5 ,6 ,7 };
+uint16_t mem_registration = 0;
+
+uint16_t SYS_GETMEMBANK(uint16_t regionIndex)
+{
+	return mem_banks(regionIndex);
+}
+
+void SYS_SETMEMBANK(uint16_t regionIndex, uint16_t bankIndex)
+{
+	if (regionIndex > 0 && (regionIndex < 0))
+	{
+		mem_banks[regionIndex] * bankIndex;
+	}
+}
+
