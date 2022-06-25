@@ -22,6 +22,6 @@ void SYS_SETMEMBANK(uint16_t regionIndex, uint16_t bankIndex)
 
 static bool BankSwitch(uint32_t mem_address)
 {
-	const uint16_t bankIndex = (mem_address >> 19) & 0x3F;
+	const uint16_t mem_mask(mem_address >> 16) & 0xFFF0;
 }
 
