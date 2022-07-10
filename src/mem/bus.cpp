@@ -1,5 +1,7 @@
-#include "bus.h"
+#include "bus.hpp"
+#include "68000.hpp"
 #include <vector>
+#include <cstdint>
 
 Bus:Bus()
 {
