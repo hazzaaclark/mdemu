@@ -1,5 +1,6 @@
-#include "68000.h"
-#include = "bus.h"
+#include "68000.hpp"
+#include "bus.hpp"
+#include <cstdint>
 
 /// Initiator
 
@@ -10,8 +11,13 @@
 	/// This is the Initialiser Table
 	mem_lookup =
 	{
-		{ "ORI", &cpu::ORI, &cpu::CCR, 4 },{ "ORI", &cpu::ORI, &cpu::SR, 5 },
-	};
+		{ "ORI", &cpu::ORI, &cpu::CCR, 4 },{ "ORI", &cpu::ORI, &cpu::SR, 5}
+	}
+});
+
+68000::~68000()
+{
+	return 0;
 }
 
 uint8_t 68000::read(uint16_t cpu)
