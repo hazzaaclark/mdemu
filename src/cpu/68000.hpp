@@ -2,10 +2,7 @@
 #include <string>
 #include <map>
 #include <cstdint>
-
-#ifdef LOG
 #include <stdio.h>
-#endif
 
 class Bus;
 
@@ -21,10 +18,12 @@ public:
 
 public:
 	uint32_t a = 0x000000; /// Address Register
-	uint8_t x = 0x00;  /// X Register
-	uint8_t n = 0x00;  /// N Register
-	uint8_t z = 0x00;  /// Z Register
-	uint8_t v = 0x00;  /// V Register
-	uint8_t c = 0x00;  /// C Register
+	uint8_t indexRegister = 0x00;  /// X Register
+	uint8_t negativeFlag = 0x00;  /// N Register
+	uint8_t zeroFlag = 0x00;  /// Z Register
+	uint8_t overflowFlag = 0x00;  /// V Register
+	uint8_t carryOp = 0x00;  /// C Register
 	uint32_t pc = 0x000000; /// Program Counter
+
+	
 };
