@@ -70,3 +70,9 @@ typedef struct CPU_FUNCTIONS
 	bool COMPLETE();
 
 } FUNC;
+
+
+/** PSEUDO STRUCTURES TO WORK WITH THE DESIGNATED C++ FILE **/
+
+typedef struct CPU_CLASS CLASS;
+typedef struct SETCPU SETCPU;
