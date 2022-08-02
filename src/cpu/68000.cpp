@@ -2,7 +2,8 @@
 #include <cstdint>
 #include <stdio.h>
 
-static void SET_CPU_STATE(STATE *state)
+static void SET_CPU(MAIN* main)
 {
-
+	CPU_MAIN* cpu = main;
+	cpu->PROGRAM_COUNTER;
 }
