@@ -3,6 +3,10 @@
 #include <map>
 #include <string>
 
+#define CPU_MAIN_PARENT(obj);
+#define CPU_MAIN_CLASS;
+#define CPU_MAIN_GET_CLASS;
+
 #define CPU_BYTE 0
 #define CPU_WORD 1
 #define CPU_LONG 2
@@ -12,7 +16,7 @@
 #define CPU_PACKED   6
 #define CPU_UNSIZED  7
 
-typedef struct CPU_STATE
+typedef struct CPU_MAIN
 {
 	/** REGISTERS **/
 
@@ -35,12 +39,12 @@ typedef struct CPU_STATE
 	uint32_t CONDITION_C;
 	uint32_t CONDITION_Z;
 
-} STATE;
+} MAIN;
 
 struct CPU_INIT
 {
-	STATE MASTER_INIT;
-	CPU_STATE env;
+	MAIN MASTER_INIT;
+	CPU_MAIN env;
 	typedef struct CPUCLASS cc;
 };
 
