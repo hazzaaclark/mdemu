@@ -14,11 +14,36 @@
 
 typedef struct CPU_STATE
 {
-	uint32_t DATA_REG;
-	uint32_t ADDRESS_REG;
+	/** REGISTERS **/
+
+	uint32_t DATA_REG[8];
+	uint32_t ADDRESS_REG[8];
 	uint32_t PROGRAM_COUNTER;
+	uint32_t STATUS_REGISTER;
+
+	/** POINTERS **/
+
+	int CURRENT_STACK_POINTER;
+	uint32_t STACK_POINTER[3];
+
+	/** FLAGS **/
+
+	uint32_t CONDITION_OP;
+	uint32_t CONDITION_X;
+	uint32_t CONDITION_N;
+	uint32_t CONDITION_V;
+	uint32_t CONDITION_C;
+	uint32_t CONDITION_Z;
 
 } STATE;
+
+struct CPU_INIT
+{
+	STATE MASTER_INIT;
+	CPU_STATE env;
+	typedef struct CPUCLASS cc;
+};
+
 
 typedef struct CPU_REGISTERS
 {
@@ -34,9 +59,10 @@ typedef struct CPU_REGISTERS
 
 typedef struct CPU_FUNCTIONS
 {
+	virtual void BUS_INIT();
 	virtual void RESET();
 	virtual void INTERRUPT();
 	virtual void TIMER();
+	bool COMPLETE();
 
 } FUNC;
-
