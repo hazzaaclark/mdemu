@@ -3,10 +3,6 @@
 #include <map>
 #include <string>
 
-#define CPU_MAIN_PARENT(obj);
-#define CPU_MAIN_CLASS;
-#define CPU_MAIN_GET_CLASS;
-
 #define CPU_BYTE 0
 #define CPU_WORD 1
 #define CPU_LONG 2
@@ -15,6 +11,8 @@
 #define CPU_EXTENDED 5
 #define CPU_PACKED   6
 #define CPU_UNSIZED  7
+
+class CPUBus;
 
 typedef struct CPU_MAIN
 {
@@ -63,16 +61,11 @@ typedef struct CPU_REGISTERS
 
 typedef struct CPU_FUNCTIONS
 {
-	virtual void BUS_INIT();
+	virtual void BUS_INIT(CPUBus);
 	virtual void RESET();
 	virtual void INTERRUPT();
+	virtual void NM_INTERRUPT();
 	virtual void TIMER();
 	bool COMPLETE();
 
 } FUNC;
-
-
-/** PSEUDO STRUCTURES TO WORK WITH THE DESIGNATED C++ FILE **/
-
-typedef struct CPU_CLASS CLASS;
-typedef struct SETCPU SETCPU;
