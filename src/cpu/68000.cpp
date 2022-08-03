@@ -11,7 +11,7 @@ public:
 		cpu->PROGRAM_COUNTER;
 	}
 
-	static void CPU_RESET()
+	static void CPU_RESET(FUNC* RESET)
 	{
 
 	}
