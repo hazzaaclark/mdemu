@@ -1,5 +1,5 @@
 # MD68000
-WIP Emulation of the SEGA Mega Drive's Hardware.
+Emulation of the SEGA Mega Drive's Hardware.
 This repository is to highlight the ways of which I am able to emulate the MD/Genesis' Hardware in the hopes of making emulated hardware to carry out my MD Developments.
 So, think of this as my interpretation of a MD Dev Kit
 
