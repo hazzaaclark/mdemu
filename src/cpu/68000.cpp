@@ -13,6 +13,6 @@ public:
 
 	static void CPU_RESET()
 	{
-		
+
 	}
 };
