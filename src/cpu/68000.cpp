@@ -2,9 +2,9 @@
 #include <cstdint>
 #include <stdio.h>
 
-static void SET_CPU(MAIN* main)
+static void SET_CPU(CPU_STATE *state)
 {
-	MAIN* cpu = main;
+	CPU_STATE* cpu = state;
 	cpu->PROGRAM_COUNTER;
 }
 
