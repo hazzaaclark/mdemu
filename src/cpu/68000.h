@@ -12,9 +12,7 @@
 #define CPU_PACKED   6
 #define CPU_UNSIZED  7
 
-class CPUBus;
-
-typedef struct CPU_MAIN
+struct CPU_STATE
 {
 	/** REGISTERS **/
 
@@ -37,17 +35,9 @@ typedef struct CPU_MAIN
 	uint32_t CONDITION_C;
 	uint32_t CONDITION_Z;
 
-} MAIN;
-
-struct CPU_INIT
-{
-	MAIN MASTER_INIT;
-	CPU_MAIN env;
-	typedef struct CPUCLASS cc;
 };
 
-
-typedef struct CPU_REGISTERS
+struct CPU_REGISTERS
 {
 	uint32_t ADDRESS_REGISTER;
 	uint32_t PROGRAM_COUNTER;
@@ -57,18 +47,18 @@ typedef struct CPU_REGISTERS
 	uint8_t OVERFLOW_REG;
 	uint8_t CARRY_OP_REG;
 
-} REG;
+};
 
-typedef struct CPU_FUNCTIONS
+struct CPU_FUNCTIONS
 {
-	virtual void BUS_INIT(CPUBus);
-	virtual void RESET();
-	virtual void INTERRUPT();
-	virtual void NM_INTERRUPT();
-	virtual void TIMER();
+	void BUS_INIT();
+	void RESET();
+	void INTERRUPT();
+	void NM_INTERRUPT();
+	void TIMER();
 	bool COMPLETE();
 
-} FUNC;
+};
 
 class
 {
