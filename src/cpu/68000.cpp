@@ -2,17 +2,13 @@
 #include <cstdint>
 #include <stdio.h>
 
-class
+inline void SET_CPU(MAIN* main)
 {
-public:
-	static void SET_CPU(MAIN* main)
-	{
-		MAIN* cpu = main;
-		cpu->PROGRAM_COUNTER;
-	}
+	MAIN* cpu = main;
+	cpu->PROGRAM_COUNTER;
+}
 
-	static void CPU_RESET(FUNC* RESET)
-	{
-
-	}
-};
+inline void CPU_FUNCTIONS::RESET()
+{
+	
+}
