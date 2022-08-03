@@ -72,4 +72,9 @@ public:
 		bool COMPLETE();
 
 	} FUNC;
+
+	struct MEM_MAP
+	{
+		std::map < uint16_t, std::string> DISASM(uint16_t DIS_START, uint16_t DIS_STOP);
+	};
 };
