@@ -10,5 +10,7 @@ static void SET_CPU(MAIN* main)
 
 void CPU_FUNCTIONS::RESET()
 {
-
+	uint32_t ABS_ADDR = 0xFFFFFC;
+	uint32_t READ;
+	void WRITE();
 }
