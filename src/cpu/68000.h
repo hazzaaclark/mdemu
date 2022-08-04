@@ -4,6 +4,9 @@
 #include <string>
 #include <stdio.h>
 
+#ifndef M68K_H
+#define M68K_H
+
 #define CPU_BYTE 0
 #define CPU_WORD 1
 #define CPU_LONG 2
@@ -13,34 +16,4 @@
 #define CPU_PACKED   6
 #define CPU_UNSIZED  7
 
-typedef struct CPU_MAIN
-{
-	/** REGISTERS **/
-
-	uint32_t DATA_REG[8];
-	uint32_t ADDRESS_REG[8];
-	uint32_t PROGRAM_COUNTER;
-	uint32_t STATUS_REGISTER;
-	uint8_t INDEX_REGISTER;
-	uint8_t NEGATIVE_REG;
-	uint8_t ZERO_REG;
-	uint8_t OVERFLOW_REG;
-	uint8_t CARRY_OP_REG;
-
-	/** POINTERS **/
-
-	int CURRENT_STACK_POINTER;
-	uint32_t STACK_POINTER[3];
-
-} CPU;
-
-typedef struct CPU_FUNCTIONS
-{
-	void BUS_INIT();
-	void RESET();
-	void INTERRUPT();
-	void NM_INTERRUPT();
-	void TIMER();
-	bool COMPLETE();
-
-} FUNCTIONS;
+#endif 
