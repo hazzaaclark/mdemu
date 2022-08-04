@@ -16,4 +16,28 @@
 #define CPU_PACKED   6
 #define CPU_UNSIZED  7
 
+class M68K
+{
+public:
+	uint32_t DATA_REG[8];
+	uint32_t ADDRESS_REG[8];
+	uint32_t PROGRAM_COUNTER;
+	uint32_t STATUS_REG;
+	uint8_t INDEX_REGISTER;
+	uint8_t NEGATIVE_REG;
+	uint8_t ZERO_REG;
+	uint8_t OVERFLOW_REG;
+	uint8_t CARRY_OP_REG;
+
+	int CURRENT_STACK_POINTER;
+	uint32_t STACK_POINTER[3];
+
+	static void BUS_INIT();
+	static void CPU_RESET();
+	static void REG_INTERRUPT();
+	static void NON_MASKABLE_RI();
+	static void TIMER();
+	bool CYCLECOMPLETE();
+};
+
 #endif 
