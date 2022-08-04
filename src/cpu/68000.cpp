@@ -2,7 +2,7 @@
 #include <cstdint>
 #include <stdio.h>
 
-M68K::M68K()
+static void CPU_INIT(CPU_MAIN* main)
 {
-	
+	main->PROGRAM_COUNTER;
 }
