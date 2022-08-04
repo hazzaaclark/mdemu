@@ -4,5 +4,5 @@
 
 static void CPU_INIT(CPU_MAIN* main)
 {
-	main->PROGRAM_COUNTER;
+	main->PROGRAM_COUNTER = 0x000000;
 }
