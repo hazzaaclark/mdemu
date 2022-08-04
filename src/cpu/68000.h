@@ -57,8 +57,8 @@ public:
 	};
 
 private:
-	uint32_t ACCESS_FLAG(CPUFLAGS CPUF);
-	uint32_t ABS_ADDR;
+	uint16_t ACCESS_FLAG(CPUFLAGS CPUF);
+	uint16_t ABS_ADDR;
 	uint8_t OPCODE;
 	static void SET_FLAG(CPUFLAGS CPUF, bool SR);
 };
