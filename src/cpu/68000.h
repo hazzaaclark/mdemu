@@ -2,6 +2,7 @@
 #include <vector>
 #include <map>
 #include <string>
+#include <stdio.h>
 
 #define CPU_BYTE 0
 #define CPU_WORD 1
@@ -12,45 +13,32 @@
 #define CPU_PACKED   6
 #define CPU_UNSIZED  7
 
-struct CPU_STATE
+class M68K
 {
+public:
+
+	M68K();
+	~M68K();
+
+public:
+
 	/** REGISTERS **/
 
 	uint32_t DATA_REG[8];
 	uint32_t ADDRESS_REG[8];
 	uint32_t PROGRAM_COUNTER;
 	uint32_t STATUS_REGISTER;
-
-	/** POINTERS **/
-
-	int CURRENT_STACK_POINTER;
-	uint32_t STACK_POINTER[3];
-
-	/** FLAGS **/
-
-	uint32_t CONDITION_OP;
-	uint32_t CONDITION_X;
-	uint32_t CONDITION_N;
-	uint32_t CONDITION_V;
-	uint32_t CONDITION_C;
-	uint32_t CONDITION_Z;
-
-};
-
-struct CPU_REGISTERS
-{
-	uint32_t ADDRESS_REGISTER;
-	uint32_t PROGRAM_COUNTER;
 	uint8_t INDEX_REGISTER;
 	uint8_t NEGATIVE_REG;
 	uint8_t ZERO_REG;
 	uint8_t OVERFLOW_REG;
 	uint8_t CARRY_OP_REG;
 
-};
+	/** POINTERS **/
 
-struct CPU_FUNCTIONS
-{
+	int CURRENT_STACK_POINTER;
+	uint32_t STACK_POINTER[3];
+
 	void BUS_INIT();
 	void RESET();
 	void INTERRUPT();
@@ -58,13 +46,19 @@ struct CPU_FUNCTIONS
 	void TIMER();
 	bool COMPLETE();
 
-};
-
-class
-{
-public:
-	struct MEM_MAP
+	enum CPUFLAGS 
 	{
-		std::map <uint16_t, std::string> DISASM(uint16_t DIS_START, uint16_t DIS_STOP);
+		CONDITION_OP,
+	    CONDITION_X,
+	    CONDITION_N,
+	    CONDITION_V,
+	    CONDITION_C,
+	    CONDITION_Z,
 	};
+
+private:
+	uint32_t ACCESS_FLAG(CPUFLAGS CPUF);
+	uint32_t ABS_ADDR;
+	uint8_t OPCODE;
+	static void SET_FLAG(CPUFLAGS CPUF, bool SR);
 };
