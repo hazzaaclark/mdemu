@@ -13,15 +13,8 @@
 #define CPU_PACKED   6
 #define CPU_UNSIZED  7
 
-class M68K
+typedef struct CPU_MAIN
 {
-public:
-
-	M68K();
-	~M68K();
-
-public:
-
 	/** REGISTERS **/
 
 	uint32_t DATA_REG[8];
@@ -39,6 +32,10 @@ public:
 	int CURRENT_STACK_POINTER;
 	uint32_t STACK_POINTER[3];
 
+} CPU;
+
+typedef struct CPU_FUNCTIONS
+{
 	void BUS_INIT();
 	void RESET();
 	void INTERRUPT();
@@ -46,19 +43,4 @@ public:
 	void TIMER();
 	bool COMPLETE();
 
-	enum CPUFLAGS 
-	{
-		CONDITION_OP,
-	    CONDITION_X,
-	    CONDITION_N,
-	    CONDITION_V,
-	    CONDITION_C,
-	    CONDITION_Z,
-	};
-
-private:
-	uint16_t ACCESS_FLAG(CPUFLAGS CPUF);
-	uint16_t ABS_ADDR;
-	uint8_t OPCODE;
-	static void SET_FLAG(CPUFLAGS CPUF, bool SR);
-};
+} FUNCTIONS;
