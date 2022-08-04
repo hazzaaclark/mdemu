@@ -5,8 +5,6 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-    /** REGISTERS **/
-
 struct REGISTERS
 {
 	uint32_t DATA_REG[8];
