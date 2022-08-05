@@ -1,16 +1,28 @@
 #pragma once
-#include <vector>
-#include <map>
-#include <string>
-#include <stdio.h>
-#include <stdbool.h>
+#include "68000.h"
+#include "bus.h"
 
-class
+class Bus;
+
+/** CPU CONSTRUCTOR **/
+// Assembles the Operation Code table
+
+M68K::M68K()
 {
-public:
 
-	uint16_t CPU_READ(uint16_t a)
-	{
+}
 
-	}
-};
+M68K::~M68K()
+{
+
+}
+
+void M68K::BUS_INIT()
+{
+	Bus* BUS_POINTER = nullptr;
+}
+
+void CPU_READ(uint32_t ADDR)
+{
+	return CPU_READ(ADDR);
+}
