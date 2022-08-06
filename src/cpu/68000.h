@@ -46,6 +46,10 @@ public:
 	struct M68KFLAGS
 	{
 		const char C = (1 << 0);
+		const char X = (1 << 1);
+		const char Z = (1 << 2);
+		const char V = (1 << 3);
+		const char N = (1 << 4);
 	};	
 
 private:
@@ -57,8 +61,9 @@ private:
 	};
 
 	static void SET_FLAG(M68KFLAGS FLAGS, bool STATUS_);
-	static void CPU_READ(uint32_t ADDR, uint32_t DATA);
+	uint32_t CPU_READ(uint32_t ADDR, uint32_t DATA);
 	uint16_t GETFLAGS(M68KFLAGS FLAGS);
+	uint32_t FETCH_LOCATION();
 };
 
 #endif
