@@ -14,7 +14,10 @@ public:
 public:
 	virtual bool CPU_MAP_READ(uint32_t ADDR, uint32_t& MAPPED_ADDR, uint32_t& DATA) = 0;
 	virtual bool CPU_MAP_WRTIE(uint32_t ADDR, uint32_t& MAPPED_ADDR, uint32_t DATA = 0) = 0;
+
+private:
+	uint32_t pSFC = 0;
+	uint32_t pDFC = 0;
 };
 
 #endif 
-
