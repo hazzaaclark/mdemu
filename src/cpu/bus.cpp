@@ -1,4 +1,5 @@
 #include "bus.h"
+#include "68000.h"
 
 Bus::Bus()
 {
