@@ -1,4 +1,3 @@
-#pragma once
 #include "68000.h"
 #include "bus.h"
 
@@ -9,7 +8,11 @@ class Bus;
 
 M68K::M68K()
 {
-
+	using i = M68K;
+	OPCODE_INSTRUCTION
+	{
+		{ "ADDR", }
+	};
 }
 
 M68K::~M68K()
@@ -19,7 +22,7 @@ M68K::~M68K()
 
 void M68K::BUS_INIT()
 {
-	Bus* BUS_POINTER = nullptr;
+	Bus* BUS_POINTER(void** (CPU_READ));
 }
 
 void CPU_READ(uint32_t ADDR)
