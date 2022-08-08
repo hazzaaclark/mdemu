@@ -64,6 +64,13 @@ private:
 	uint32_t CPU_READ(uint32_t ADDR, uint32_t DATA);
 	uint16_t GETFLAGS(M68KFLAGS FLAGS);
 	uint32_t FETCH_LOCATION();
+
+private:
+	/** OPCODES **/
+
+	uint32_t ADDA(); uint32_t ADDA_W(); uint32_t ADDA_L();
+	uint32_t ADDI(); uint32_t ADDI_B(); uint32_t ADDI_W();
+	uint32_t ADDI_L(); uint32_t ADDQ(); uint32_t ADDQ_B();
 };
 
 #endif
