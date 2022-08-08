@@ -17,5 +17,4 @@ private:
 	uint32_t STACK_SIZE;
 };
 
-
 #endif 
