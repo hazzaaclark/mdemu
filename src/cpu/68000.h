@@ -36,12 +36,12 @@ public:
 	int CURRENT_STACK_POINTER;
 	uint32_t STACK_POINTER[3];
 
-	static void BUS_INIT();
-	static void CPU_RESET();
-	static void REG_INTERRUPT();
-	static void NON_MASKABLE_RI();
-	static void TIMER();
-	bool CYCLECOMPLETE();
+	static void BUS_INIT(void);
+	static void CPU_RESET(void);
+	static void REG_INTERRUPT(void);
+	static void NON_MASKABLE_RI(void);
+	static void TIMER(void);
+	bool CYCLECOMPLETE(void);
 
 	struct M68KFLAGS
 	{
@@ -56,9 +56,11 @@ private:
 	struct OPCODE_INSTRUCTION
 	{
 		std::string OPCODE;
-		std::vector<OPCODE_INSTRUCTION> OPCODE_LOOKUP;
 		uint32_t(M68K::* OPERATE)(void*) = nullptr;
+		uint32_t(M68K::* ADDR_MODE)(void*) = nullptr;
 	};
+
+	std::vector<OPCODE_INSTRUCTION> OPCODE_LOOKUP;
 
 	static void SET_FLAG(M68KFLAGS FLAGS, bool STATUS_);
 	uint32_t CPU_READ(uint32_t ADDR, uint32_t DATA);
@@ -66,11 +68,11 @@ private:
 	uint32_t FETCH_LOCATION();
 
 private:
-	/** OPCODES **/
 
+	/** OPCODES **/
 	uint32_t ADDA(); uint32_t ADDA_W(); uint32_t ADDA_L();
 	uint32_t ADDI(); uint32_t ADDI_B(); uint32_t ADDI_W();
 	uint32_t ADDI_L(); uint32_t ADDQ(); uint32_t ADDQ_B();
-};
 
 #endif
+};
