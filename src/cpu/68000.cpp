@@ -4,7 +4,7 @@
 class Bus;
 
 /** CPU CONSTRUCTOR **/
-// Assembles the Operation Code table
+// Assembles the Operation Code table and the bulk of the CPU's main functions
 
 M68K::M68K()
 {
