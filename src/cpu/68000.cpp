@@ -8,10 +8,10 @@ class Bus;
 
 M68K::M68K()
 {
-	using i = M68K;
-	OPCODE_INSTRUCTION
+	using a = M68K;
+	OPCODE_LOOKUP =
 	{
-		{ "ADDR", }
+		{ "ADDA", }
 	};
 }
 
