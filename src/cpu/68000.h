@@ -41,7 +41,7 @@ public:
 	static void REG_INTERRUPT(void);
 	static void NON_MASKABLE_RI(void);
 	static void TIMER(void);
-	bool CYCLECOMPLETE(void);
+	bool CYCLECOMPLETE();
 
 	struct M68KFLAGS
 	{
