@@ -4,6 +4,7 @@
 Bus::Bus()
 {
 	for (auto& i : CPU_RAM) i = 0x0000;
+	CPU.BUS_INIT();
 }
 
 Bus::~Bus()
