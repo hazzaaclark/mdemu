@@ -36,11 +36,11 @@ public:
 	int CURRENT_STACK_POINTER;
 	uint32_t STACK_POINTER[3];
 
-	static void BUS_INIT(void);
-	static void CPU_RESET(void);
-	static void REG_INTERRUPT(void);
-	static void NON_MASKABLE_RI(void);
-	static void TIMER(void);
+	static void BUS_INIT();
+	static void CPU_RESET();
+	static void REG_INTERRUPT();
+	static void NON_MASKABLE_RI();
+	static void TIMER();
 	bool CYCLECOMPLETE();
 
 	struct M68KFLAGS
