@@ -13,7 +13,7 @@ public:
 	~Bus();
 
 public:
-	uint16_t CPU_RAM[4096];
+	uint16_t CPU_RAM[128 * 1024];
 	M68K CPU;
 
 public:
