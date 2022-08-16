@@ -15,10 +15,12 @@ public:
 public:
 	uint8_t YM_READ(const uint16_t PORT);
 
-
 public:
 	static void YM_WRITE(const uint16_t PORT, const uint8_t DATA);
-	static void YM2612_RESET();
+	static void YM_WRITE_SAFE(const uint16_t PORT, const uint8_t DATA);
+	static void YM_RESET();
+
 };
+
 
 #endif 
