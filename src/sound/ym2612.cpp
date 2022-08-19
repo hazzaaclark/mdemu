@@ -19,12 +19,13 @@ static void WRITE_CHANNEL_REG(uint16_t PORT, uint8_t REG, uint8_t CHANNEL, uint8
 
 inline void YM2612::YM_RESET()
 {
-	uint16_t PORT; 
-	uint16_t CHANNEL;
+	uint16_t PORT{}; 
+	uint16_t CHANNEL{};
 	uint16_t BUS;
 
 
 	/* DISABLE TIMER INTERRUPT */
+	
 	YM_WRITE(0, 0x22);
 	YM_WRITE(1, 0X00);
 
@@ -40,7 +41,8 @@ inline void YM2612::YM_RESET()
 	{
 		for (int c = 0; c < 3; c++)
 		{
-			
+			WRITE_REG(PORT, CHANNEL, 0X30, 0X00);
+			WRITE_REG(PORT, CHANNEL, 0X40, 0X7F);
 		}
 	}
 }
