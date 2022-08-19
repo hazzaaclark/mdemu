@@ -1,5 +1,7 @@
 #include "ym2612.h"
 
+/* DUMMY CONSTRUCTOR CLASS */
+
 YM2612::YM2612()
 {
 
@@ -25,7 +27,6 @@ inline void YM2612::YM_RESET()
 
 
 	/* DISABLE TIMER INTERRUPT */
-	
 	YM_WRITE(0, 0x22);
 	YM_WRITE(1, 0X00);
 
@@ -37,12 +38,20 @@ inline void YM2612::YM_RESET()
 	/* FOR LOOPS TO GO THROUGH EACH ITERATION OF THE IO */
 	/* TO CARRY OUT SPECIFIC AUDIO OPERATIONS */
 
-	for (int p = 0; p < 1; p++)
+	for (PORT = 0; PORT < 1; PORT++)
 	{
-		for (int c = 0; c < 3; c++)
+		for (CHANNEL = 0; CHANNEL < 3; CHANNEL++)
 		{
 			WRITE_REG(PORT, CHANNEL, 0X30, 0X00);
 			WRITE_REG(PORT, CHANNEL, 0X40, 0X7F);
+		}
+	}
+
+	for (PORT = 0; PORT < 1; PORT++)
+	{
+		for (CHANNEL = 0; CHANNEL < 3; CHANNEL++)
+		{
+
 		}
 	}
 }
