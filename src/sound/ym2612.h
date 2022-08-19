@@ -21,6 +21,4 @@ public:
 	static void YM_RESET();
 
 };
-
-
 #endif 
