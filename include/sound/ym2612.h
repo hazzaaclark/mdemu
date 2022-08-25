@@ -16,8 +16,11 @@ public:
 
 public:
 	static void YM_WRITE(const uint16_t PORT, const uint8_t DATA);
-	static void YM_WRITE_SAFE(const uint16_t PORT, const uint8_t DATA);
+	static void YM_WRITE_REG(const uint16_t PORT, const uint8_t REG, const uint8_t DATA);
+	static void YM_WRITE_SAFE(const uint16_t PORT, const uint8_t REG, const uint8_t DATA);
 	static void YM_RESET();
+	static void YM_DAC_DISABLED(void*);
+	static void YM_DAC_ENABLED(void*);
 
 };
 
