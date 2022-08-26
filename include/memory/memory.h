@@ -1,9 +1,13 @@
 #pragma once
 #include <cstdint>
-#include <memory.h>
+#include <memory>
+#include <mutex>
+#include <string>
+#include <vector>
+#include <utility>
 
-#ifndef MEMORY_MANAGEMENT_H
-#define MEMORY_MANAGEMENT_H
+#ifndef MEMORY_H
+#define MEMORY_H
 
 class MEM
 {
@@ -17,5 +21,16 @@ private:
 	uint32_t STACK_SIZE;
 };
 
+enum class HEAP_TYPE : uint8_t
+{
+	TRACE_MODE_SELECT,
+	SUPERVISOR_MODE_SELECT,
+	INTERPRETER_MASK
+};
+
+enum class SYS_HEAP : uint32_t
+{
+
+};
 
 #endif 
