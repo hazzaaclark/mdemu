@@ -6,10 +6,13 @@
 
 class OPCODE
 {
+public:
+	OPCODE();
+
 	/* Motorola's Operation Code for their 68000 series of Microprocessors */
 	/* can be broken down into various instructions */
 	/* B = Byte */
-	/* S = Sequence */
+	/* S = Singleton */
 	/* W = Word */
 	/* L = Long */
 	/* These instructions, on a dis-assembled level, showcase the bytesize */
@@ -45,6 +48,15 @@ class OPCODE
 		ble_s,
 		clr_l,
 		clr_w,
+		cmpi_b,
+		cmpi_w,
+		cmpi_l,
+		dbf,
+		divs_w,
+		divu_w,
+		eori_b,
+		eori_w,
+		eori_l,
 
 
 	};
