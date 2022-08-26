@@ -3,6 +3,7 @@
 
 #pragma once
 #include <vector>
+#include <memory>
 #include <map>
 #include <string>
 
@@ -34,6 +35,11 @@ public:
 	static void TIMER();
 	bool CYCLECOMPLETE();
 
+public:
+	uint32_t CPU_READ(uint32_t ADDR, uint32_t DATA);
+	uint32_t FETCH_LOCATION();
+
+public:
 	struct M68KFLAGS
 	{
 		const char C = (1 << 0);
@@ -42,12 +48,6 @@ public:
 		const char V = (1 << 3);
 		const char N = (1 << 4);
 	};
-
-public:
-	static void SET_FLAG(M68KFLAGS FLAGS, bool STATUS_);
-	uint32_t CPU_READ(uint32_t ADDR, uint32_t DATA);
-	uint16_t GETFLAGS(M68KFLAGS FLAGS);
-	uint32_t FETCH_LOCATION();
 
 };
 #endif
