@@ -15,10 +15,9 @@ OPCODE::OPCODE()
 
 inline void OPCODE::LOOKUP_OPCODE(uint32_t CODE)
 {
-	switch (EXTRACT_INSTR(CODE, 0, 3))
+	switch (EXTRACT_INSTR(CODE, 0, 5))
 	{
-	case 1: OPCODE_DECODER();
-	case 2:
+	case 0x000000: OPCODE_DECODER();
 		break;
 	}
 }
