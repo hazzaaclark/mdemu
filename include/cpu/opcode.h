@@ -57,7 +57,18 @@ public:
 		eori_b,
 		eori_w,
 		eori_l,
-
+		exg,
+		ext_w,
+		ext_l,
+		illegal,
+		jmp,
+		jsr,
+		lea,
+		link,
+		lsl_b,
+		lsl_w,
+		move_b,
+		mov
 
 	};
 };
