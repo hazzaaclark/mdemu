@@ -17,6 +17,7 @@ public:
 	/* L = Long */
 	/* These instructions, on a dis-assembled level, showcase the bytesize */
 	/* of each of these operations ranging from 8 bit to 32 bit integer operations */
+	/* The following Operation Code enumator was sourced by http://info.sonicretro.org/SCHG:68000_ASM-to-Hex_Code_Reference */
 
 	enum class OPERATION_CODE : uint32_t
 	{
@@ -119,6 +120,8 @@ public:
 		tst_l,
 		unlk
 	};
+
+	static void LOOKUP_OPCODE(uint32_t CODE);
 };
 
 #endif
