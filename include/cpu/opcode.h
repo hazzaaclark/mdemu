@@ -68,7 +68,8 @@ public:
 		lsl_b,
 		lsl_w,
 		move_b,
-		mov
+		move_l,
+		move_w,
 
 	};
 };
