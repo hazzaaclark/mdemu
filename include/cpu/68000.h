@@ -7,47 +7,35 @@
 #include <map>
 #include <string>
 
+#define REGISTERS
+uint32_t DATA_REG[8]{};
+uint32_t ADDR_REG[8]{};
+uint32_t PROGRM_COUNTER{};
+uint32_t STATUS_REG{};
+uint8_t INDEX_REGISTER{};
+uint8_t NEGATIVE_REG{};
+uint8_t ZERO_REG{};
+uint8_t OVERFLOW_REG{};
+uint8_t CARRY_OP_REG{};
 
-class M68K
-{
-public:
-	M68K();
-	~M68K();
+#define STACK
+unsigned int CURRENT_STACK_POINTER;
+uint32_t STACK_POINTER{};
 
-public:
-	uint32_t DATA_REG[8];
-	uint32_t ADDRESS_REG[8];
-	uint32_t PROGRAM_COUNTER;
-	uint32_t STATUS_REG;
-	uint8_t INDEX_REGISTER;
-	uint8_t NEGATIVE_REG;
-	uint8_t ZERO_REG;
-	uint8_t OVERFLOW_REG;
-	uint8_t CARRY_OP_REG;
+#define CPU_FUNC
+inline void BUS_INIT();
+inline void BUS_INIT();
+inline void CPU_RESET();
+inline void REG_INTERRUPT();
+inline void NON_MASKABLE_RI();
+inline void TIMER();
+extern bool CYCLECOMPLETE();
 
-	int CURRENT_STACK_POINTER;
-	uint32_t STACK_POINTER[3];
+#define FLAGS
+const char* C;
+const char* X;
+const char* Z;
+const char* V;
+const char* N;
 
-	static void BUS_INIT();
-	static void CPU_RESET();
-	static void REG_INTERRUPT();
-	static void NON_MASKABLE_RI();
-	static void TIMER();
-	bool CYCLECOMPLETE();
-
-public:
-	uint32_t CPU_READ(uint32_t ADDR, uint32_t DATA);
-	uint32_t FETCH_LOCATION();
-
-public:
-	struct M68KFLAGS
-	{
-		const char C = (1 << 0);
-		const char X = (1 << 1);
-		const char Z = (1 << 2);
-		const char V = (1 << 3);
-		const char N = (1 << 4);
-	};
-
-};
 #endif
