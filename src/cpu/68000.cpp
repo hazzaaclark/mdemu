@@ -1,36 +1,18 @@
 #include "68000.h"
 #include "bus.h"
+#include "opcode.h"
 
-/** CPU CONSTRUCTOR **/
-// Assembles the Operation Code table
+#define READ(ADDR) (BUS = CPU_READ((ADDR)))
+#define WRITE(ADDR, DATA) CPU_WRITE((ADDR), (BUS = (DATA)));
 
-M68K::M68K()
+inline void CPU_FLAGS()
 {
-	using a = M68K;
-	OPCODE_LOOKUP =
-	{
-		{ "ADDA", }
-	};
-}
-
-M68K::~M68K()
-{
-
-}
-
-void M68K::BUS_INIT()
-{
-	Bus* BUS_POINTER(void** (CPU_READ));
-}
-
-void M68K::CPU_RESET()
-{
-
+	FLAGS{ C, X, Z, V, N; }
 }
 
 uint32_t CPU_READ(uint32_t ADDR)
 {
-	return CPU_READ(ADDR);
+	return sizeof(ADDR);
 }
 
 uint32_t CPU_WRITE(uint32_t ADDR, uint32_t DATA)
