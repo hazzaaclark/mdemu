@@ -9,7 +9,7 @@ inline void RAM_INIT()
 
 inline void BUS_FUNC::CPU_WRTIE(uint32_t ADDR, uint32_t DATA)
 {
-	while(ADDR >= 0x000000 && ADDR <= 0xFFFFFF)
+	while (ADDR >= 0x000000 && ADDR <= 0xFFFFFF)
 		ADDR = sizeof(DATA);
 }
 
