@@ -30,9 +30,10 @@ static void BUS_INIT();
 static void CPU_READ();
 inline void CPU_RESET();
 inline void REG_INTERRUPT();
-inline void NON_MASKABLE_RI();
 inline void TIMER();
 extern bool CYCLECOMPLETE();
+extern bool RESET_JAMMED;
+extern bool RESETTING;
 
 #define FLAGS
 const char* C;
