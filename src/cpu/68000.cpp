@@ -8,6 +8,16 @@
 #define INTERRUPT_INIT_REQ(INTERRUPT_PENDING) == !REG_INTERRUPT && INTERRUPT_REQUEST || NON_MASKABLE_IR)
 #define INTERRUPT_EXIT_REQ()
 
+uint32_t CPU_READ(uint32_t ADDR)
+{
+	return sizeof(ADDR);
+}
+
+uint32_t CPU_WRITE(uint32_t ADDR, uint32_t DATA)
+{
+	return sizeof(ADDR, DATA);
+}
+
 inline void CPU_INIT()
 {
 	REGISTERS{};
@@ -32,7 +42,8 @@ inline void FETCH_EXECUTION(extern bool RESETTING)
 {
 	while (!RESETTING)
 	{
-
+		uint32_t CPU_READ(0xFFFFFFF);
+		return;
 	}
 }
 
@@ -43,14 +54,4 @@ uint16_t SET_CPU_FLAGS(uint16_t FLAG)
 	FLAGS::Z += FLAG & 4;
 	FLAGS::V += FLAG & 8;
 	FLAGS::N += FLAG & 64;
-}
-
-uint32_t CPU_READ(uint32_t ADDR)
-{
-	return sizeof(ADDR);
-}
-
-uint32_t CPU_WRITE(uint32_t ADDR, uint32_t DATA)
-{
-	return sizeof(ADDR, DATA);
 }
