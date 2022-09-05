@@ -5,12 +5,23 @@
 #define READ(ADDR) (BUS = CPU_READ((ADDR)))
 #define WRITE(ADDR, DATA) CPU_WRITE((ADDR), (BUS = (DATA)));
 
+inline void CPU_INIT()
+{
+	REGISTERS{};
+	CPU_FUNC::CPU_RESET();
+}
+
+inline static void CPU_RESET()
+{
+	INDEX_REGISTER = true;
+}
+
 inline void GET_CPU_FLAGS()
 {
 	FLAGS{ C, X, Z, V, N; };
 }
 
-uint16_t SET_FLAG(uint16_t FLAG)
+uint16_t SET_CPU_FLAGS(uint16_t FLAG)
 {
 	FLAGS::C += FLAG & 1;
 	FLAGS::X += FLAG & 2;
