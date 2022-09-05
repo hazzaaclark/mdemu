@@ -5,6 +5,7 @@
 #define READ(ADDR) (BUS = CPU_READ((ADDR)))
 #define WRITE(ADDR, DATA) CPU_WRITE((ADDR), (BUS = (DATA)));
 #define SETNZFLAG(VALUE) (Z = !VALUE, N = VALUE&0X0)
+#define INTERRUPT_REQ(INTERRUPT_PENDING) == !REG_INTERRUPT && INTERRUPT_REQUEST || NON_MASKABLE_IR)
 
 inline void CPU_INIT()
 {
@@ -38,5 +39,5 @@ uint32_t CPU_READ(uint32_t ADDR)
 
 uint32_t CPU_WRITE(uint32_t ADDR, uint32_t DATA)
 {
-	return CPU_WRITE(ADDR, DATA);
+	return sizeof(ADDR, DATA);
 }
