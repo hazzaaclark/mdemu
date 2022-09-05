@@ -4,6 +4,7 @@
 
 #define READ(ADDR) (BUS = CPU_READ((ADDR)))
 #define WRITE(ADDR, DATA) CPU_WRITE((ADDR), (BUS = (DATA)));
+#define SETNZFLAG(VALUE) (Z = !VALUE, N = VALUE&0X0)
 
 inline void CPU_INIT()
 {
