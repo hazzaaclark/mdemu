@@ -9,7 +9,7 @@
 
 inline void CPU_INIT()
 {
-	REGISTERS;
+	REGISTERS{};
 	CPU_FUNC::CPU_RESET();
 }
 
