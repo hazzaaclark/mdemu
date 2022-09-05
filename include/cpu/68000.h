@@ -17,14 +17,17 @@ uint8_t NEGATIVE_REG{};
 uint8_t ZERO_REG{};
 uint8_t OVERFLOW_REG{};
 uint8_t CARRY_OP_REG{};
+unsigned int NON_MASKABLE_IR{};
+unsigned int INTERRUPT_REQUEST{};
+
 
 #define STACK
 unsigned int CURRENT_STACK_POINTER;
 uint32_t STACK_POINTER{};
 
 #define CPU_FUNC
-inline void BUS_INIT();
-inline void BUS_INIT();
+static void BUS_INIT();
+static void CPU_READ();
 inline void CPU_RESET();
 inline void REG_INTERRUPT();
 inline void NON_MASKABLE_RI();
