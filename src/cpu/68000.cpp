@@ -38,7 +38,7 @@ inline void GET_CPU_FLAGS()
 	FLAGS{ C, X, Z, V, N; };
 }
 
-inline void FETCH_EXECUTION(extern bool RESETTING)
+inline void FETCH_EXECUTION()
 {
 	while (!RESETTING)
 	{
