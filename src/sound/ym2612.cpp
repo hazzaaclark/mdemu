@@ -1,12 +1,5 @@
 #include "ym2612.h"
 
-/* DUMMY CONSTRUCTOR CLASS */
-
-YM2612::YM2612()
-{
-
-}
-
 static void WRITE_REG(uint16_t PORT, uint8_t REG, uint8_t CHANNEL, uint8_t VALUE)
 {
 	YM2612::YM_WRITE((PORT * 2) + 0, REG | (CHANNEL * 4));
