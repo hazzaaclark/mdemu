@@ -21,7 +21,6 @@ public:
 	static void YM_RESET();
 	static void YM_DAC_DISABLED(void*);
 	static void YM_DAC_ENABLED(void*);
-
 };
 
 #endif 
