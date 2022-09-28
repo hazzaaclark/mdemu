@@ -4,11 +4,9 @@
 #include <cstdint>
 #include <cstdlib>
 
-class OPCODE
-{
-public:
-	OPCODE();
-	static void LOOKUP_OPCODE(uint32_t CODE);
+#define OPCODE
+static void LOOKUP_OPCODE(uint32_t CODE);
+
 
 	/* Motorola's Operation Code for their 68000 series of Microprocessors */
 	/* can be broken down into various instructions */
@@ -120,6 +118,7 @@ public:
 		tst_w,
 		tst_l,
 		unlk
-	};	
-};
+	};
+
+
 #endif
