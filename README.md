@@ -1,7 +1,12 @@
 # MD68000
+
+```
 Emulation of the SEGA Mega Drive's Hardware.
-This repository is to highlight the ways of which I am able to emulate the MD/Genesis' Hardware in the hopes of making emulated hardware to carry out my MD Developments.
+This repository is to highlight the ways of which I am able to emulate the MD/Genesis' Hardware
+in the hopes of making emulated hardware to carry out my MD Developments.
 So, think of this as my interpretation of a MD Dev Kit
+```
+
 
 ## Inspiration
 This Project was heavily inspired by OneLoneCoder's NES Emulation series and I wanted to see if I would be able to expand my technical skill to
@@ -16,8 +21,10 @@ Several inspirations for this Project include the Dolphin Emulator as well as KE
 ## OneLoneCoder's Repo:
 https://github.com/OneLoneCoder/olcNES
 
+
 ## Documentation used:
 
+```
 ● Motorolla 68000 Programmer Manual: https://www.nxp.com/files-static/archives/doc/ref_manual/M68000PRM.pdf
 
 ● Motorolla 68000 User Manual: https://www.nxp.com/docs/en/reference-manual/MC68000UM.pdf
@@ -33,6 +40,6 @@ https://github.com/OneLoneCoder/olcNES
 ● Zilog Z80 CPU Manual: http://www.z80.info/zip/um0081.pdf
 
 ● Sonic Retro ASM to Hex Opcode reference: http://info.sonicretro.org/SCHG:68000_ASM-to-Hex_Code_Reference 
-
+```
 
 
