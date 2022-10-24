@@ -36,7 +36,7 @@ https://github.com/OneLoneCoder/olcNES
 
 ● ```SEGA Mega Drive Technical Manual, this is just a great all rounder for understanding the Mega Drive's Hardware:``` https://segaretro.org/images/a/a2/Genesis_Software_Manual.pdf
 
-● ```Zilog Z80 CPU Manual:`` http://www.z80.info/zip/um0081.pdf
+● ```Zilog Z80 CPU Manual:``` http://www.z80.info/zip/um0081.pdf
 
 ● ```Sonic Retro ASM to Hex Opcode reference:``` http://info.sonicretro.org/SCHG:68000_ASM-to-Hex_Code_Reference
 
