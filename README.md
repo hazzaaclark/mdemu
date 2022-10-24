@@ -24,22 +24,20 @@ https://github.com/OneLoneCoder/olcNES
 
 ## Documentation used:
 
-```
-● Motorolla 68000 Programmer Manual: https://www.nxp.com/files-static/archives/doc/ref_manual/M68000PRM.pdf
+● ```Motorolla 68000 Programmer Manual:``` https://www.nxp.com/files-static/archives/doc/ref_manual/M68000PRM.pdf
 
-● Motorolla 68000 User Manual: https://www.nxp.com/docs/en/reference-manual/MC68000UM.pdf
+● ```Motorolla 68000 User Manual:``` https://www.nxp.com/docs/en/reference-manual/MC68000UM.pdf
 
-● M68000 Assembly Programming: https://www.inf.pucrs.br/~calazans/undergrad/orgcomp_EC/mat_microproc/MC6800-AssemblyLProg.pdf
+● ```M68000 Assembly Programming:``` https://www.inf.pucrs.br/~calazans/undergrad/orgcomp_EC/mat_microproc/MC6800-AssemblyLProg.pdf
 
-● RasterScroll for useful documentation on MD Graphics: https://rasterscroll.com/mdgraphics/
+● ```RasterScroll for useful documentation on MD Graphics:``` https://rasterscroll.com/mdgraphics/
 
-● PlutieDev's Assembly Programming documentation for the MD: https://plutiedev.com/
+● ```PlutieDev's Assembly Programming documentation for the MD:``` https://plutiedev.com/
 
-● SEGA Mega Drive Technical Manual, this is just a great all rounder for understanding the Mega Drive's Hardware: https://segaretro.org/images/a/a2/Genesis_Software_Manual.pdf
+● ```SEGA Mega Drive Technical Manual, this is just a great all rounder for understanding the Mega Drive's Hardware:``` https://segaretro.org/images/a/a2/Genesis_Software_Manual.pdf
 
-● Zilog Z80 CPU Manual: http://www.z80.info/zip/um0081.pdf
+● ```Zilog Z80 CPU Manual:`` http://www.z80.info/zip/um0081.pdf
 
-● Sonic Retro ASM to Hex Opcode reference: http://info.sonicretro.org/SCHG:68000_ASM-to-Hex_Code_Reference 
-```
+● ```Sonic Retro ASM to Hex Opcode reference:``` http://info.sonicretro.org/SCHG:68000_ASM-to-Hex_Code_Reference
 
 
