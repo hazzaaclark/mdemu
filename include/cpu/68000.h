@@ -1,45 +1,52 @@
+#pragma once
 #ifndef M68K_H
 #define M68K_H
 
-#pragma once
-#include <vector>
-#include <memory>
-#include <map>
-#include <string>
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdint.h>
 
+#ifndef BIT_LOGIC
+#define MASTER_BIT_LOGIC
+
+#define FULL_MASK_INTERRUPT ((uint64_t) 0xFFFFFFFF) /* AN 8 BYTE */
+#define BIT(REG_X, REG_NTH_X) 
+#define BIT_CHANGE
+
+#define REGISTER_BIT_LOGIC
+
+#define CARRY_BIT 0
+#define OVERFLOW_BIT 1
+#define ZERO_BIT 2
+#define NEGATIVE_BIT 3
+#define EXTENDED_BIT 4
+
+#endif
+
+/* REGISTER TABLE */
+
+#ifndef REGISTERS
 #define REGISTERS
-uint32_t DATA_REG[8]{};
-uint32_t ADDR_REG[8]{};
-uint32_t PROGRM_COUNTER{};
-uint32_t STATUS_REG{};
-uint8_t INDEX_REGISTER{};
-uint8_t NEGATIVE_REG{};
-uint8_t ZERO_REG{};
-uint8_t OVERFLOW_REG{};
-uint8_t CARRY_OP_REG{};
-unsigned int NON_MASKABLE_IR{};
-unsigned int INTERRUPT_REQUEST{};
 
+#define CARRY(context) BIT(context->status, CARRY_BIT)
+#define OVERFLOW(context) BIT(context->status, OVERFLOW_BIT)
+#define ZERO(context) BIT(context->status, ZERO_BIT)
+#define NEGATIVE(context) BIT(context->status, NEGATIVE_BIT)
+#define EXTENDED(context) BIT(context->status, EXTENDED_BIT)
 
-#define STACK
-unsigned int CURRENT_STACK_POINTER;
-uint32_t STACK_POINTER{};
+#endif
 
-#define CPU_FUNC
-static void BUS_INIT();
-static void CPU_READ();
-inline void CPU_RESET();
-inline void REG_INTERRUPT();
-inline void TIMER();
-extern bool CYCLECOMPLETE();
-extern bool RESET_JAMMED;
-extern bool RESETTING;
+/* RE-FACTOR TABLE IN ORDER TO CHANGE THE BYTES ALLOCATED AT DIFFERENT REGISTERS */
+/* CREATED IN ORDER TO DISCERN WHICH CONDITION CODE IS BEING TARGETTED */
 
-#define FLAGS
-const char* C;
-const char* X;
-const char* Z;
-const char* V;
-const char* N;
+#ifndef REGISTER_SETS
+#define REGISTER_SETS
+
+#define CARRY_SET(context, byte) context->status = BIT_CHANGE(context->status, CARRY_BIT, byte)
+#define OVERFLOW_SET(context, byte) context->status = BIT_CHANGE(context->status, OVERFLOW_BIT, byte)
+
+#endif 
+
+#define ADDRESS_WIDTH 0xFFFFFF
 
 #endif
