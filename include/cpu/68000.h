@@ -64,7 +64,7 @@ extern struct OPCODE** OPCODE_TABLE{};
 
 typedef struct
 {
-	struct MD* MD;
+	MD* MD;
 	const uint32_t PROGRAM_COUNTER;
 	const uint16_t STATUS_REGISTER;
 	const uint32_t DATA_REG[8];
