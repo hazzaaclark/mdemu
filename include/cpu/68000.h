@@ -2,9 +2,11 @@
 #ifndef M68K_H
 #define M68K_H
 
+#include <assert.h>
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <stdlib.h>
 
 #ifndef BIT_LOGIC
 #define MASTER_BIT_LOGIC
@@ -71,10 +73,36 @@ typedef struct
 	/* DEPEDANT ON THE TYPE OF OPERATION */
 	/* THE CPU USES DIFFERENT STACK POINTERS VIA DEBUGGING */
 	/* THIS CAN LEAD TO VARIOUS EXCEPTION HANDLES BEING USED TO DISCERN BETWEEN STATES */
+	/*
+	/* http://alanclements.org/68kusersupervisor.html
+	/*
 	/* FOR THE DEMONSTRATION OF THE MEGA DRIVE, ONLY THE USER STACK POIINTER WILL BE USED */
 
+	/* AS WELL AS BEING DEMONSTRATED ON THE DOCUMENTATION FOR THE CPU */
+	/* https://www.nxp.com/files-static/archives/doc/ref_manual/M68000PRM.pdf */
+
+	unsigned int PENDING_INTERRUPT;
 	const uint32_t USER_STACK;
+	const uint64_t CYCLES;
+	int32_t REMAINING_CYCLES;
+	bool CYCLES_STOPPED;
+
+	uint32_t INSTRUCTION_COUNT{};
+	uint32_t INSTRUCTION_ADDRESS;
+	uint16_t INSTRUCTION_REGISTER;
+	uint32_t CURRENT_DECODED_INSTRUCTION;
+
 
 } CPU;
+
+static const uint32_t MAX_CYCLES_PER_COREFREQ = 7;
+CPU* CREATE_CPU(struct MD*);
+static void CPU_FREE(CPU*);
+
+/* INTIALISE THE CPU */
+/* THIS SETS UP THE STACK POINTER, PROGRAM COUNTER AND THE PRE-REQUISTIES PRE-FETCHES */
+/* NEEDED TO DECODE AND RECODE INSTRUCTIONS */
+
+static void CPU_INIT(CPU*);
 
 #endif
