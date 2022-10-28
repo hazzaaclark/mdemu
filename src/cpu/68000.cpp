@@ -9,23 +9,17 @@
 #define MAIN()
 OPCODE **OPCODE_TABLE;
 
-namespace M68K
+CPU* CREATE_CPU(MD* CONSOLE)
 {
-	class MAIN_CPU
-	{
-		CPU* CREATE_CPU(MD* CONSOLE)
-		{
-			calloc(1, sizeof(CPU));
-		}
+	calloc(1, sizeof(CPU));
+}
 
-		static void FREE_CPU_MEM(CPU* MEM)
-		{
-			free(MEM);
-		}
+static void FREE_CPU_MEM(CPU* MEM)
+{
+	free(MEM);
+}
 
-		inline void CPU_INIT(CPU* CPU)
-		{
-			CPU->ADDRESS_REG[7];
-		}
-	};
+inline void CPU_INIT(CPU* CPU)
+{
+	CPU->ADDRESS_REG[7];
 }
