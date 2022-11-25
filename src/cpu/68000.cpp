@@ -9,17 +9,22 @@
 #define MAIN()
 OPCODE **OPCODE_TABLE;
 
-CPU* CREATE_CPU(MD* CONSOLE)
+class CPU_MAIN
 {
-	calloc(1, sizeof(CPU));
-}
+public:
+	CPU* CREATE_CPU(MD* CONSOLE)
+	{
+		calloc(1, sizeof(CPU));
+	}
 
-static void FREE_CPU_MEM(CPU* MEM)
-{
-	free(MEM);
-}
+	static void FREE_CPU_MEM(CPU* MEM)
+	{
+		free(MEM);
+	}
 
-inline void CPU_INIT(CPU* CPU)
-{
-	CPU->ADDRESS_REG[7];
-}
+	static void CPU_INIT(CPU* CPU)
+	{
+		CPU->STATUS_REGISTER = 0x2700;
+		CPU->ADDRESS_REG[7] = IO::CPU_READ_LONG(CPU, 0);
+	}
+};
