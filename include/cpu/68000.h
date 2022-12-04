@@ -51,13 +51,18 @@
 
 #endif 
 
-#define ADDRESS_WIDTH 0xFFFFFF
+#define ADDRESS_WIDTH 0xFFFFFFFF
+
+#ifndef _INSTR
+#define INSTR
 
 struct OPCODE;
 struct CPU;
 struct DECODED_OPCODE;
 struct MD;
 extern struct OPCODE** OPCODE_TABLE{};
+
+#endif 
 
 /* CPU STRUCTURE */
 /* JUST BASIC IMPLEMENTATION OF THE M68K's FUNCTIONS */
@@ -82,8 +87,8 @@ typedef struct
 	/* https://www.nxp.com/files-static/archives/doc/ref_manual/M68000PRM.pdf */
 
 	unsigned int PENDING_INTERRUPT;
-	const uint32_t USER_STACK;
-	const uint64_t CYCLES;
+	uint32_t USER_STACK;
+	uint64_t CYCLES;
 	int32_t REMAINING_CYCLES;
 	bool CYCLES_STOPPED;
 
@@ -92,17 +97,16 @@ typedef struct
 	uint16_t INSTRUCTION_REGISTER;
 	uint32_t CURRENT_DECODED_INSTRUCTION;
 
-
 } CPU;
 
 /* ARBITRARY READ AND WRITE FUNCTIONS FOR THE 68000 */
 
 struct IO
 {
-	uint32_t CPU_READ(CPU*, size_t SIZE, uint32_t ADDRESS); /* PARENT READ FUNCTION TO DISCERN THE DATA TYPES AND ADDRESSING MODE */
-	uint8_t CPU_READ_BYTE(CPU*, uint32_t ADDRESS);
-	uint16_t CPU_READ_WORD(CPU*, uint32_t ADDRESS);
-	uint32_t CPU_READ_LONG(CPU*, uint32_t ADDRESS);
+	static uint32_t CPU_READ(CPU*, size_t SIZE, uint32_t ADDRESS); /* PARENT READ FUNCTION TO DISCERN THE DATA TYPES AND ADDRESSING MODE */
+	static uint8_t CPU_READ_BYTE(CPU*, uint32_t ADDRESS);
+	static uint16_t CPU_READ_WORD(CPU*, uint32_t ADDRESS);
+	static uint32_t CPU_READ_LONG(CPU*, uint32_t ADDRESS);
 
 	static void CPU_WRITE(CPU*, size_t SIZE, uint32_t ADDRESS, uint32_t VALUE); /* PARENT WRITE FUNCTION TO DISCERN THE DATA TYPES AND ADDRESSING MODE */
 	static void CPU_WRITE_BYTE(CPU*, uint32_t ADDRESS);
@@ -110,6 +114,7 @@ struct IO
 	static void CPU_WRITE_LONG(CPU*, uint32_t ADDRESS);
 };
 
+static uint16_t CPU_FETCH_ADDR(CPU* CPU);
 static const uint32_t MAX_CYCLES_PER_COREFREQ = 7;
 static void CPU_FREE(CPU*);
 static void CPU_INIT(CPU*);
