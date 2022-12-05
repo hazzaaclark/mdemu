@@ -114,10 +114,21 @@ struct IO
 	static void CPU_WRITE_LONG(CPU*, uint32_t ADDRESS);
 };
 
+/* MISCELLANEOUS FUNCTIONS */
+/* USED AS PUBLIC METHODS THAT ARE INHERITED BY THE CPU CLASS */
+
 static uint16_t CPU_FETCH_ADDR(CPU* CPU);
 static const uint32_t MAX_CYCLES_PER_COREFREQ = 7;
 static void CPU_FREE(CPU*);
 static void CPU_INIT(CPU*);
 CPU* CREATE_CPU(struct MD*);
+
+typedef struct
+{
+	char* BITS;
+	uint16_t E_ADDR;
+	uint16_t E_MODE;
+
+} INSTR_PATTERN;
 
 #endif
