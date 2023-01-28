@@ -2,26 +2,27 @@
 
 #ifndef _INSTRUCTION_
 #define _INSTRUCTION_
-#else
 #endif
 
 #include <stdbool.h>
 #include <stdint.h>
-#include "cpu.h"
+#include "68000.h"
+
+#define INSTRUCTION_FUNCTION typedef uint8_t
+#define INSTRUCTION_NAME typedef char
+#define OPCODE typedef uint16_t
+
+struct CONDITION;
+struct INSTRUCTION;
+struct CPU;
+struct OPERAND;
 
 typedef struct
 {
-	struct CONDITION;
-	struct INSTRUCTION;
-	struct CPU;
-	struct OPERAND;
-
-} INSTR_SET;
-
-typedef uint8_t INSTR_FUNCTION(struct INSTRUCTION*, struct CPU*);
-
-typedef struct
-{
-
+	INSTRUCTION_NAME NAME;
+	INSTRUCTION_FUNCTION FUNCTION;
+	INSTRUCTION_SIZE SIZE;
+	OPCODE OP;
+	
 } INSTRUCTION;
 
