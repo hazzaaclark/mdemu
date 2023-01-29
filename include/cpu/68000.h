@@ -64,7 +64,7 @@ struct OPCODE;
 struct CPU;
 struct DECODED_OPCODE;
 struct MD;
-extern struct OPCODE** OPCODE_TABLE{};
+struct OPCODE* OPCODE_TABLE;
 
 #endif 
 
@@ -73,11 +73,12 @@ extern struct OPCODE** OPCODE_TABLE{};
 
 typedef struct
 {
-	MD* MD;
+	struct MD* MD;
 	uint32_t PROGRAM_COUNTER;
 	uint16_t STATUS_REGISTER;
 	uint32_t DATA_REG[8];
 	uint32_t ADDRESS_REG[8];
+	uint32_t PRE_ADDR;
 
 	/* DEPEDANT ON THE TYPE OF OPERATION */
 	/* THE CPU USES DIFFERENT STACK POINTERS VIA DEBUGGING */
