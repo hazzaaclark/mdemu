@@ -2,7 +2,6 @@
 
 #ifndef _INSTRUCTION_
 #define _INSTRUCTION_
-#endif
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -10,7 +9,7 @@
 
 #define INSTRUCTION_FUNCTION typedef uint8_t
 #define INSTRUCTION_NAME char*
-#define OPCODE typedef uint16_t
+#define OPCODE uint16_t
 #define BASE_CPU_CYCLES typedef uint8_t
 #define CONDITION_FUNCTION typedef bool
 #define CONDITION_MNEMONICS typedef char
@@ -46,6 +45,12 @@ typedef struct
 /* AND CONDITION MODES */
 
 INSTRUCTION* CREATE_INSTRUCTION(INSTRUCTION_NAME, INSTRUCTION::FUNCTION);
+INSTRUCTION* OPCODE_RELEVANCE(OPCODE);
 CONDITION* CREATE_CONDITION(CONDITION_PATTERN);
 
+/* PARAMS FOR INSTRUCTRION EXECUTION AND IMPLMENTATION */
 
+typedef uint8_t INSTRUCTION_EXE(INSTRUCTION*, struct CPU*);
+typedef uint8_t INSTRUCTION_NONE(INSTRUCTION*, struct CPU*);
+
+#endif
