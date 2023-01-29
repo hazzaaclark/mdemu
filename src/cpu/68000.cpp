@@ -1,4 +1,5 @@
-#include "cpu.h"
+#include "68000.h"
+#include "instruction.h"
 
 #ifdef DEBUG
 #define DEBUG_LOG() (__ARGS__)
@@ -6,10 +7,8 @@
 #define DEBUG_LOG()
 #endif
 
-#define OP_TABLE
 OPCODE* OPCODE_TABLE;
 
-#define PRE_ADDR 0xFFFFFFFF
 #define INSTRUCTION_INIT(NAME) *OPCODE _INIT_ NAME(uint16_t OP)
 #define MODE_MASK(mode) (1 << mode)
 
@@ -19,6 +18,7 @@ OPCODE* OPCODE_TABLE;
 static CPU* CREATE_CPU(MD* CONSOLE)
 {
 	calloc(1, sizeof(CPU));
+	return;
 }
 
 /* BASE CASE FOR DEALLOCATING OR REALLOCATING MEMORY */
@@ -40,7 +40,7 @@ static void CPU_INIT(CPU* CPU)
 	CPU->CYCLES_STOPPED = false;
 	CPU->REMAINING_CYCLES = 0;
 	CPU->PENDING_INTERRUPT = -1;
-	PRE_ADDR;
+	CPU->PRE_ADDR;
 }
 
 /* DECODE INSTRUCTION BASED ON THE INFORMATION THAT IS BEING */
