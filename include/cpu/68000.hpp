@@ -25,10 +25,6 @@
 
 #endif
 
-#ifndef INSTRUCTION_SIZE
-#define INSTRUCTION_SIZE enum
-#endif
-
 /* REGISTER TABLE */
 /* A REFACTOR TABLE TO INITIALISE THE STATUS OF EACH FLAG */
 /* RELATIVE TO THEIR DESIGNATED BIT */
@@ -36,11 +32,11 @@
 #ifndef REGISTERS
 #define REGISTERS
 
-#define CARRY(context) BIT(context->status, CARRY_BIT)
-#define OVERFLOW(context) BIT(context->status, OVERFLOW_BIT)
-#define ZERO(context) BIT(context->status, ZERO_BIT)
-#define NEGATIVE(context) BIT(context->status, NEGATIVE_BIT)
-#define EXTENDED(context) BIT(context->status, EXTENDED_BIT)
+#define CARRY() BIT(CARRY_BIT)
+#define OVERFLOW() BIT(OVERFLOW_BIT)
+#define ZERO() BIT(context->status, ZERO_BIT)
+#define NEGATIVE() BIT(NEGATIVE_BIT)
+#define EXTENDED() BIT(EXTENDED_BIT)
 
 #endif
 
@@ -50,8 +46,8 @@
 #ifndef REGISTER_SETS
 #define REGISTER_SETS
 
-#define CARRY_SET(context, byte) context->status = BIT_CHANGE(context->status, CARRY_BIT, byte)
-#define OVERFLOW_SET(context, byte) context->status = BIT_CHANGE(context->status, OVERFLOW_BIT, byte)
+#define CARRY_SET() BIT_CHANGE(CARRY_BIT)
+#define OVERFLOW_SET() BIT_CHANGE(OVERFLOW_BIT)
 
 #endif 
 
@@ -60,11 +56,12 @@
 #ifndef _INSTR
 #define INSTR
 
-struct OPCODE;
-struct CPU;
-struct DECODED_OPCODE;
-struct MD;
-struct OPCODE* OPCODE_TABLE;
+typedef struct OPCODE;
+typedef struct CPU;
+typedef struct DECODED_OPCODE;
+typedef struct MD;
+typedef struct OPCODE* OPCODE_TABLE;
+typedef char* SIZE_SYMBOL;
 
 #endif 
 
@@ -73,7 +70,7 @@ struct OPCODE* OPCODE_TABLE;
 
 typedef struct
 {
-	struct MD* MD;
+	MD* MD;
 	uint32_t PROGRAM_COUNTER;
 	uint16_t STATUS_REGISTER;
 	uint32_t DATA_REG[8];
@@ -126,12 +123,13 @@ static uint16_t CPU_FETCH_ADDR(CPU* CPU);
 static const uint32_t MAX_CYCLES_PER_COREFREQ = 7;
 static void CPU_FREE(CPU*);
 static void CPU_INIT(CPU*);
-CPU* CREATE_CPU(struct MD*);
+typedef CPU* CREATE_CPU(struct MD*);
+typedef SIZE_SYMBOL* SIZE;
 
 typedef struct
 {
-	char* BITS;
-	uint16_t E_ADDR;
+	static char* BITS;
+	static uint16_t E_ADDR;
 	uint16_t E_MODE;
 
 } INSTR_PATTERN;
@@ -139,7 +137,7 @@ typedef struct
 /* INSTRUCTION SIZE ENUM */
 /* USED FOR ASSIGNING VALUES TO THE DESIGNATED FUNCTION CALL */
 
-typedef INSTRUCTION_SIZE
+typedef enum INSTRUCTION_SIZE
 {
 	BYTE = 8,
 	LONG = 16,
