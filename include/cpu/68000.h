@@ -8,14 +8,12 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-#ifndef BIT_LOGIC
+#ifndef MASTER_BIT_LOGIC
 #define MASTER_BIT_LOGIC
 
 #define FULL_MASK_INTERRUPT ((uint64_t) 0xFFFFFFFF) /* AN 8 BYTE INTERRUPT FOR HANDLING INSTRUCTIONS */
 #define BIT(REG_X, REG_NTH_X) 
 #define BIT_CHANGE
-
-#define REGISTER_BIT_LOGIC
 
 #define CARRY_BIT 0
 #define OVERFLOW_BIT 1
@@ -32,11 +30,11 @@
 #ifndef REGISTERS
 #define REGISTERS
 
-#define CARRY() BIT(CARRY_BIT)
-#define OVERFLOW() BIT(OVERFLOW_BIT)
-#define ZERO() BIT(context->status, ZERO_BIT)
-#define NEGATIVE() BIT(NEGATIVE_BIT)
-#define EXTENDED() BIT(EXTENDED_BIT)
+#define CARRY() BIT(VALUE, RESULT, CARRY_BIT)
+#define OVERFLOW() BIT(VALUE, RESULT, OVERFLOW_BIT)
+#define ZERO() BIT(VALUE, RESULT, ZERO_BIT)
+#define NEGATIVE() BIT(VALUE, RESULT, NEGATIVE_BIT)
+#define EXTENDED() BIT(VALUE, RESULT, EXTENDED_BIT)
 
 #endif
 
@@ -46,8 +44,11 @@
 #ifndef REGISTER_SETS
 #define REGISTER_SETS
 
-#define CARRY_SET() BIT_CHANGE(CARRY_BIT)
-#define OVERFLOW_SET() BIT_CHANGE(OVERFLOW_BIT)
+#define CARRY_SET() static BIT_CHANGE(CARRY_BIT)
+#define OVERFLOW_SET() static BIT_CHANGE(OVERFLOW_BIT)
+#define ZERO_SET() static BIT_CHANGE(ZERO_BIT)
+#define NEGATIVE_SET() static BIT_CHANGE(NEGATIVE_BIT)
+#define EXTENDED_SET() static BIT_CHANGE(EXTENDED_BIT)
 
 #endif 
 
@@ -60,7 +61,7 @@ typedef struct OPCODE;
 typedef struct CPU;
 typedef struct DECODED_OPCODE;
 typedef struct MD;
-typedef struct OPCODE* OPCODE_TABLE;
+typedef struct OPCODE;
 typedef char* SIZE_SYMBOL;
 
 #endif 
@@ -70,12 +71,12 @@ typedef char* SIZE_SYMBOL;
 
 typedef struct
 {
-	MD* MD;
-	uint32_t PROGRAM_COUNTER;
-	uint16_t STATUS_REGISTER;
-	uint32_t DATA_REG[8];
-	uint32_t ADDRESS_REG[8];
-	uint32_t PRE_ADDR;
+	typedef MD* MEGA_DRIVE;
+	static uint32_t PROGRAM_COUNTER;
+	static uint16_t STATUS_REGISTER;
+	static uint32_t DATA_REG[8];
+	static uint32_t ADDRESS_REG[8];
+	static uint32_t PRE_ADDR;
 
 	/* DEPEDANT ON THE TYPE OF OPERATION */
 	/* THE CPU USES DIFFERENT STACK POINTERS VIA DEBUGGING */
@@ -94,16 +95,16 @@ typedef struct
 	int32_t REMAINING_CYCLES;
 	bool CYCLES_STOPPED;
 
-	uint32_t INSTRUCTION_COUNT{};
-	uint32_t INSTRUCTION_ADDRESS;
-	uint16_t INSTRUCTION_REGISTER;
-	uint32_t CURRENT_DECODED_INSTRUCTION;
+	static uint32_t INSTRUCTION_COUNT;
+	static uint32_t INSTRUCTION_ADDRESS;
+	static uint16_t INSTRUCTION_REGISTER;
+	static uint32_t CURRENT_DECODED_INSTRUCTION;
 
 } CPU;
 
 /* ARBITRARY READ AND WRITE FUNCTIONS FOR THE 68000 */
 
-struct IO
+typedef struct IO
 {
 	static uint32_t CPU_READ(CPU*, size_t SIZE, uint32_t ADDRESS); /* PARENT READ FUNCTION TO DISCERN THE DATA TYPES AND ADDRESSING MODE */
 	static uint8_t CPU_READ_BYTE(CPU*, uint32_t ADDRESS);
@@ -146,5 +147,8 @@ typedef enum INSTRUCTION_SIZE
 	INVALID = -1,
 	ZERO = 0
 };
+
+typedef uint16_t* CPU_STEP(MD* MD);
+typedef uint32_t* CPU_RUN_CYCLES(MD* MD);
 
 #endif
