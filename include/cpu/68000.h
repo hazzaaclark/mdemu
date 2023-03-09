@@ -8,10 +8,12 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+#include "common.h"
+
 #ifndef MASTER_BIT_LOGIC
 #define MASTER_BIT_LOGIC
 
-#define FULL_MASK_INTERRUPT ((uint64_t) 0xFFFFFFFF) /* AN 8 BYTE INTERRUPT FOR HANDLING INSTRUCTIONS */
+#define FULL_MASK_INTERRUPT U64(0xFFFFFFFF) /* AN 8 BYTE INTERRUPT FOR HANDLING INSTRUCTIONS */
 #define BIT(REG_X, REG_NTH_X) 
 #define BIT_CHANGE
 
@@ -71,7 +73,7 @@ typedef char* SIZE_SYMBOL;
 
 typedef struct
 {
-	typedef MD* MEGA_DRIVE;
+	MD* MEGA_DRIVE;
 	static uint32_t PROGRAM_COUNTER;
 	static uint16_t STATUS_REGISTER;
 	static uint32_t DATA_REG[8];
