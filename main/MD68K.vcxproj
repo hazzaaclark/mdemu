@@ -19,25 +19,17 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="68000.h" />
-    <ClInclude Include="bus.h" />
-    <ClInclude Include="mapper.h" />
-    <ClInclude Include="memory.h" />
-    <ClInclude Include="opcode.h" />
-    <ClInclude Include="ym2612.h" />
+    <ClCompile Include="68000.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="68000.cpp" />
-    <ClCompile Include="bus.cpp" />
-    <ClCompile Include="mapper.cpp" />
-    <ClCompile Include="memory.cpp" />
-    <ClCompile Include="opcode.cpp" />
-    <ClCompile Include="ym2612.cpp" />
+    <ClInclude Include="68000.h" />
+    <ClInclude Include="common.h" />
+    <ClInclude Include="instruction.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{efcacf77-cb65-4393-a657-4df74b575534}</ProjectGuid>
+    <ProjectGuid>{739bb789-b9ed-47e4-9303-ebfe1b414a4f}</ProjectGuid>
     <RootNamespace>MD68K</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
