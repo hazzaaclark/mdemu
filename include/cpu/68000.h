@@ -56,8 +56,8 @@
 
 #define ADDRESS_WIDTH 0xFFFFFFFF
 
-#ifndef INSTRUCTION
-#define INSTRUCTION
+#ifndef MEGA_DRIVE_DEFINES
+#define MEGA_DRIVE_DEFINES
 
 typedef struct OPCODE;
 typedef struct CPU;
