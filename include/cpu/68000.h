@@ -56,8 +56,8 @@
 
 #define ADDRESS_WIDTH 0xFFFFFFFF
 
-#ifndef _INSTR
-#define INSTR
+#ifndef INSTRUCTION
+#define INSTRUCTION
 
 typedef struct OPCODE;
 typedef struct CPU;
