@@ -12,5 +12,11 @@
 /* NESTED INCLUDES */
 
 #include "68000.h"
+#include "vdp.h"
 #include "common.h"
 
+static void VDP_INIT(VDP_MAIN* VDP_MAIN)
+{
+	VDP_REGISTERS::DISPLAY_HEIGHT* HEIGHT;
+	HEIGHT += VDP_DISPLAY_HEIGHT[0];
+}
