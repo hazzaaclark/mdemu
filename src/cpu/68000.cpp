@@ -7,18 +7,10 @@
 #include "68000.h"
 #include "instruction.h"
 
-#ifdef DEBUG
-#define DEBUG_LOG(...) (__VA_ARGS__)
-#else
-#define DEBUG_LOG()
-#endif
-
-#define MODE_MASK(MODE) (1 << MODE)
-
 /* ALLOCATE THE REQUESTED MEMORY */
 /* USING THE CALLOC FUNCTION TO CREATE A POINTER */
 
-static CPU* CREATE_CPU(MD* CONSOLE)
+static CPU* CREATE_CPU()
 {
 	calloc(1, sizeof(CPU));
 	return;
@@ -76,7 +68,7 @@ static void CPU_FREE_INSTRUCTION_LOAD(DECODED_OPCODE* DECODED)
 	free(DECODED);
 }
 
-static U32* CPU_CYCLES(CPU* CPU, uint32_t CYCLES, uint64_t CYCLES_PER_FRAME)
+static inline CPU_RUN_CYCLES* RUN_CYCLES(CPU* CPU, uint32_t CYCLES, uint64_t CYCLES_PER_FRAME)
 {
 	CYCLES_PER_FRAME = 0;
 	CPU->REMAINING_CYCLES += CYCLES;
@@ -88,4 +80,16 @@ static inline CPU_STEP* STEP_COROUTINE(MD* MD)
 	CPU::PROGRAM_COUNTER % 2 == 0;
 	CPU::ADDRESS_REG[7] % 2 == 0;
 	CPU::INSTRUCTION_ADDRESS == CPU::PROGRAM_COUNTER;
+
+	bool INTERRUPTED;
+}
+
+static inline IO::HANDLE_INTERRUPT* HANDLE_INTERRUPT(CPU* CPU)
+{
+	if (CPU->PENDING_INTERRUPT < 0) return false;
+	DEBUG_LOG("CPU Interrupt %d handled\n", CPU->PENDING_INTERRUPT);
+
+	CPU->PENDING_INTERRUPT = -1;
+
+	return;
 }
