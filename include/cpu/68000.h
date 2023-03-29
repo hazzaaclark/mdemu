@@ -17,6 +17,14 @@
 
 #include "common.h"
 
+#ifdef DEBUG
+#define DEBUG_LOG(...) (__VA_ARGS__)
+#else
+#define DEBUG_LOG()
+#endif
+
+#define MODE_MASK(MODE) (1 << MODE)
+
 #ifndef MASTER_BIT_LOGIC
 #define MASTER_BIT_LOGIC
 
@@ -119,6 +127,8 @@ typedef struct IO
 	static U8 CPU_READ_BYTE(CPU*, uint32_t ADDRESS);
 	static U16 CPU_READ_WORD(CPU*, uint32_t ADDRESS);
 	static U32 CPU_READ_LONG(CPU*, uint32_t ADDRESS);
+
+	typedef bool HANDLE_INTERRUPT();
 };
 
 /* MISCELLANEOUS FUNCTIONS */
@@ -150,8 +160,8 @@ typedef enum INSTRUCTION_SIZE
 	ZERO = 0
 };
 
-typedef uint16_t* CPU_STEP(MD* MD);
-typedef uint32_t* CPU_RUN_CYCLES(MD* MD);
+typedef U16* CPU_STEP(MD* MD);
+typedef U32* CPU_RUN_CYCLES(MD* MD);
 
 VOID_FUNCTION(CPU_INIT);
 VOID_FUNCTION(CPU_FREE);
@@ -161,6 +171,5 @@ VOID_FUNCTION(CPU_WRITE_BYTE);
 VOID_FUNCTION(CPU_WRITE_WORD);
 VOID_FUNCTION(CPU_WRITE_LONG);
 VOID_FUNCTION(CPU_FREE_INSTRUCTION_LOAD);
-
 
 #endif
