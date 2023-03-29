@@ -74,11 +74,11 @@
 #ifndef MEGA_DRIVE_DEFINES
 #define MEGA_DRIVE_DEFINES
 
-typedef struct OPCODE;
-typedef struct CPU;
-typedef struct DECODED_OPCODE;
-typedef struct MD;
-typedef struct OPCODE;
+typedef struct OPCODE{};
+typedef struct CPU{};
+typedef struct DECODED_OPCODE {};
+typedef struct MD{};
+typedef struct OPCODE{};
 typedef char* SIZE_SYMBOL;
 
 #endif 
@@ -88,7 +88,7 @@ typedef char* SIZE_SYMBOL;
 
 typedef struct
 {
-	MD* MEGA_DRIVE;
+	typedef MD* MEGA_DRIVE;
 	static U32 PROGRAM_COUNTER;
 	static U32 STATUS_REGISTER;
 	static U32 DATA_REG[8];
