@@ -27,6 +27,18 @@
 #define DEBUG_LOG()
 #endif
 
+/* THIS INFORMATION IS WITHIN ACCORDANCE TO THE BITWISE VALUE */
+/* OF WHAT THE PAL MEGA DRIVE CAN OUTPUT */
+
+#ifndef VDP_TYPES
+#define VDP_TYPES
+
+#define BUFFER_WIDTH 320
+#define BUFFER_HEIGHT 240
+#define BUFFER_SIZE (BUFFER_WIDTH * BUFFER_HEIGHT * 3)
+
+#endif
+
 /* USING THE RULE OF THE NTH VALUE + 4 */
 /* THIS HELPS TO CREATE THE CORRESPONDING COLOURS CHANNELS */
 /* TO CREATE AN 11 BIT COLOUR VALUE */
@@ -45,4 +57,23 @@
 static COLOUR_COMP(COLOUR * 32);
 
 #endif
+
+#ifndef REG
+#define REG
+
+typedef U8* REG_1;
+typedef U8* REG_2;
+typedef U8* REG_3;
+typedef U8* REG_4;
+
+typedef struct VDP_REGISTERS
+{
+	typedef REG_1* DISPLAY_ENABLED(bool);
+	typedef REG_1* INTERRUPT_ENABLED(bool);
+	typedef REG_1* DMA(bool);
+	typedef REG_1* DISPLAY_HEIGHT;
+};
+
+#endif
+
 #endif
