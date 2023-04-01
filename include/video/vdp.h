@@ -79,12 +79,15 @@ typedef U8* REG_3;
 typedef U8* REG_4;
 typedef U8* REG_0C;
 
-typedef struct VDP{};
+typedef struct VDP
+{
+	typedef MD* MEGA_DRIVE;
+	typedef U32* VDP_CLOCK;
+	typedef S32* REMAINING_CYCLES;
+};
 
 typedef struct VDP_REGISTERS
 {
-	typedef MD* MEGA_DRIVE;
-
 	typedef REG_1* DISPLAY_ENABLED(bool);
 	typedef REG_1* INTERRUPT_ENABLED(bool);
 	typedef REG_1* DMA(bool);
