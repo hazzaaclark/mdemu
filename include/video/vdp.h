@@ -85,6 +85,9 @@ typedef U8* REG_0C;
 /* ACCESSING THE METHODS FROM THE CONSOLE, AS WELL AS THE FUNCTIONALITY */
 /* FOR THE VDP'S READ AND WRITE CAPATIBILITIES */
 
+/* DOCUMENTATION PERTAINING TO THIS */
+/* https://megacatstudios.com/blogs/retro-development/sega-genesis-mega-drive-vdp-graphics-guide-v1-2a-03-14-17 */
+
 typedef struct VDP
 {
 	typedef MD* MEGA_DRIVE;
