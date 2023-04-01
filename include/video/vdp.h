@@ -9,8 +9,8 @@
 
 /* https://wiki.megadrive.org/index.php?title=VDP */
 
-#ifndef VDP
-#define VDP
+#ifndef VISUAL_DISPLAY_PORT
+#define VISUAL_DISPLAY_PORT
 
 /* NESTED INCLUDES */
 
@@ -33,6 +33,9 @@
 #ifndef VDP_TYPES
 #define VDP_TYPES
 
+#define HORIZONTAL_IRQ 4 
+#define VERTICAL_IRQ 6
+
 #define BUFFER_WIDTH 320
 #define BUFFER_HEIGHT 240
 #define BUFFER_SIZE (BUFFER_WIDTH * BUFFER_HEIGHT * 3)
@@ -44,6 +47,7 @@ static VDP_CYCLES_PER_CLOCK(4); const
 
 static U8 VDP_DISPLAY_HEIGHT[] = {28, 30};
 static U8 VDP_DISPLAY_WIDTH[] = { 32, 40 };
+static U8 VDP_PLANE_SIZE[] = { 32, 64, 0, 128 };
 
 #endif
 
@@ -73,17 +77,21 @@ typedef U8* REG_1;
 typedef U8* REG_2;
 typedef U8* REG_3;
 typedef U8* REG_4;
-
 typedef U8* REG_0C;
 
-typedef struct VDP_MAIN{};
+typedef struct VDP{};
 
-typedef struct VDP_REGISTERS : VDP_MAIN
+typedef struct VDP_REGISTERS
 {
+	typedef MD* MEGA_DRIVE;
+
 	typedef REG_1* DISPLAY_ENABLED(bool);
 	typedef REG_1* INTERRUPT_ENABLED(bool);
 	typedef REG_1* DMA(bool);
 	typedef REG_1* DISPLAY_HEIGHT;
+	typedef REG_2* PLANE_A_LOOKUP;
+	typedef REG_3* WINDOW_LOOKUP;
+	typedef REG_4* PLANE_B_LOOKUP;
 	typedef REG_0C* DISPLAY_WIDTH;
 };
 
