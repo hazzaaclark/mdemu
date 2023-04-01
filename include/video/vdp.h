@@ -79,7 +79,25 @@ typedef U32* REG_3;
 typedef U32* REG_4;
 typedef U32* REG_5;
 typedef U8* REG_7;
+typedef U8* REG_0A;
 typedef U8* REG_0C;
+typedef U8* REG_0D;
+typedef U32* REG_0F;
+typedef U8* REG_10;
+typedef U32* REG_11;
+typedef U32* REG_12;
+typedef U16* REG_13;
+typedef U16* REG_14;
+typedef U16* REG_15;
+typedef U8* REG_16;
+typedef U32* REG_17;
+
+/* VIDEO COUNTERS AND BUFFERS */
+
+typedef U16* HORIZONTAL_COUNTER;
+typedef U16* VERTICAL_COUNTER;
+typedef U8* HORIZONTAL_BLANK;
+typedef U8* OUTPUT_BUFFER;
 
 /* CREATE THE MAIN STRUCTURE FOR THE VDP */
 /* ACCESSING THE METHODS FROM THE CONSOLE, AS WELL AS THE FUNCTIONALITY */
@@ -106,13 +124,18 @@ typedef struct VDP_REGISTERS
 	typedef REG_1* INTERRUPT_ENABLED(bool);
 	typedef REG_1* DMA(bool);
 	typedef REG_1* DISPLAY_HEIGHT;
+
 	typedef REG_2* PLANE_A_LOOKUP;
 	typedef REG_3* WINDOW_LOOKUP;
 	typedef REG_4* PLANE_B_LOOKUP;
 	typedef REG_5* SPRITE_LOOKUP;
+
 	typedef REG_7* BG_COLOUR_PALETTE;
 	typedef REG_7* BG_COLOUR_ENTRY;
 	typedef REG_0C* DISPLAY_WIDTH;
+	typedef REG_0C* SHADOW_HIGHLIGHT(bool);
+
+	typedef REG_0C* INTERLACE_MODE(U32);
 };
 
 #endif
