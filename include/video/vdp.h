@@ -74,9 +74,11 @@ static COLOUR_COMP(COLOUR * 32);
 #define REG
 
 typedef U8* REG_1;
-typedef U8* REG_2;
-typedef U8* REG_3;
-typedef U8* REG_4;
+typedef U32* REG_2;
+typedef U32* REG_3;
+typedef U32* REG_4;
+typedef U32* REG_5;
+typedef U8* REG_7;
 typedef U8* REG_0C;
 
 /* CREATE THE MAIN STRUCTURE FOR THE VDP */
@@ -92,6 +94,7 @@ typedef struct VDP
 	typedef U8* VIDEO_MEMORY[0x100000];
 	typedef U16* VIDEO_SCROLL_MEMORY;
 	COLOUR_COMP(0x40); // USES THE STATIC OBJECT DECLARED (see line 69)
+	                   // 0x40 REPRESENTS THE VALUE TO EQUATE TO 4 PALETTE LINES CONSISTING OF 16 COLOR ENTRIES
 };
 
 typedef struct VDP_REGISTERS
@@ -103,6 +106,9 @@ typedef struct VDP_REGISTERS
 	typedef REG_2* PLANE_A_LOOKUP;
 	typedef REG_3* WINDOW_LOOKUP;
 	typedef REG_4* PLANE_B_LOOKUP;
+	typedef REG_5* SPRITE_LOOKUP;
+	typedef REG_7* BG_COLOUR_PALETTE;
+	typedef REG_7* BG_COLOUR_ENTRY;
 	typedef REG_0C* DISPLAY_WIDTH;
 };
 
