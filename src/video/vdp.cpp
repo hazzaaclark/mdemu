@@ -15,7 +15,14 @@
 #include "vdp.h"
 #include "common.h"
 
-static void VDP_INIT(VDP_MAIN* VDP_MAIN)
+/* CREATE AND ALLOCATE MEMORY ON THE HEAP FOR THE VDP */
+
+static VDP* VDP_MAKE_INSTANCE(MD* MD)
+{
+	calloc(1, sizeof(VDP));
+}
+
+static void VDP_INIT(VDP* VDP)
 {
 	VDP_REGISTERS::DISPLAY_HEIGHT* HEIGHT;
 	HEIGHT += VDP_DISPLAY_HEIGHT[0];
