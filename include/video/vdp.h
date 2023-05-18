@@ -8,6 +8,7 @@
 /* DOCUMENTATION INCLUDES: */
 
 /* https://wiki.megadrive.org/index.php?title=VDP */
+/* http://md.railgun.works/index.php?title=VDP */
 
 #ifndef VISUAL_DISPLAY_PORT
 #define VISUAL_DISPLAY_PORT
@@ -51,13 +52,41 @@ typedef struct VDP
 	static bool SAVE_STATE(const char* SAVE);
 };
 
-typedef struct GRAPHICS;
-
 typedef struct VDP_ARCHITECTURE
 {
 	static U8* VRAM[0x10000];
+	static U16* VSRAM[0x40];
 	static U16* CRAM[0x40];
+	static U8* REGS[0x20];
+	static U16* REGISTER_ADDR;
+	static bool HORIZONTAL_INTERUPT();
+
+	static U32 SPRITE_OVERFLOW;
+	static U32 LINE_INTERRUPT;
+	static U32 VERTICAL_COUNTER;
+	static U32 HORIZONTAL_COUNTER;
+	static bool DMA_FILL();
+	static bool HV_COUNTER();
+	static bool VBLANK();
+
+	static U16* STATUS_REGISTER_READ();
+	static U16* DATA_PORT_READ(void);
+	static U16* HV_COUNTER_READ(void);
+	static U32* IRQ(U32 IRQ_LEVEL);
 };
+
+typedef struct GRAPHICS{};
+
+VOID_FUNCTION(VDP_INIT);
+VOID_FUNCTION(VDP_SCANLINE);
+VOID_FUNCTION(VDP_DMA_INIT);
+VOID_FUNCTION(VDP_DMA_FILL);
+VOID_FUNCTION(VDP_DMA_COPY);
+VOID_FUNCTION(VDP_RESET);
+VOID_FUNCTION(VDP_CONTROL_PORT);
+VOID_FUNCTION(VDP_DATA_PORT);
+VOID_FUNCTION(VDP_WRITE_REGISTER);
+
 
 #endif
 #endif
