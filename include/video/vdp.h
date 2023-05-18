@@ -45,6 +45,32 @@
 #else
 #define USE_VDP
 
+#define REGS U8[0x20]
+#define REG5_H40_MODE               U32
+#define REG0_HV_LATCH               BIT(REGS[0], 1)
+#define REG0_LINE_IRQ               BIT(REGS[0], 4)
+#define REG1_PAL_MODE               BIT(REGS[1], 3)
+#define REG1_DMA_ENABLED            BIT(REGS[1], 4)
+#define REG1_VBLANK_IRQ             BIT(REGS[1], 5)
+#define REG1_DISP_ENABLED           BIT(REGS[1], 6)
+#define REG2_NAMETABLE_A            BIT(REGS[2], 3, 3) << 13
+#define REG3_NAMETABLE_W            BIT(REGS[3], 1, 5) << 11
+#define REG4_NAMETABLE_B            BIT(REGS[4], 0, 3) << 13
+#define REG5_SAT_ADDRESS            BIT(REGS[5] & REG5_H40_MODE ? 0x7E : 0x7F))
+#define REG5_SAT_SIZE               BIT(REGS[5], REG5_H40_MODE ? (1 << 10) : (1 << 9))
+#define REG10_LINE_COUNTER          BIT(REGS[10], 0, 8)
+#define REG12_H40_MODE              BIT(REGS[12], 0)
+#define REG15_DMA_INCREMENT         BIT(REGS[15])
+#define REG19_DMA_LENGTH            BIT(REGS[19] || (REGS[20] << 8))
+#define REG23_DMA_TYPE              BIT(REGS[23], 6, 2)
+
+#endif
+
+#if defined(VDP_MASTER)
+#define VDP_MASTER
+#else
+#define VDP_MASTER
+
 typedef struct VDP
 {
 	GRAPHICS* VDP_GRAPHICS;
@@ -52,12 +78,11 @@ typedef struct VDP
 	static bool SAVE_STATE(const char* SAVE);
 };
 
-typedef struct VDP_ARCHITECTURE
+typedef struct VDP_ARC
 {
 	static U8* VRAM[0x10000];
 	static U16* VSRAM[0x40];
 	static U16* CRAM[0x40];
-	static U8* REGS[0x20];
 	static U16* REGISTER_ADDR;
 	static bool HORIZONTAL_INTERUPT();
 
@@ -77,6 +102,8 @@ typedef struct VDP_ARCHITECTURE
 
 typedef struct GRAPHICS{};
 
+#endif
+
 VOID_FUNCTION(VDP_INIT);
 VOID_FUNCTION(VDP_SCANLINE);
 VOID_FUNCTION(VDP_DMA_INIT);
@@ -88,5 +115,4 @@ VOID_FUNCTION(VDP_DATA_PORT);
 VOID_FUNCTION(VDP_WRITE_REGISTER);
 
 
-#endif
 #endif
