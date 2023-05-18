@@ -21,6 +21,9 @@
 #define BIT(VALUE, INDEX)            (((VALUE) >> (INDEX)) & 1)
 #define BITS(VALUE, INDEX, RESULT)   (((VALUE) >> (INDEX)) & ((1 << (RESULT)) - 1)) 
 
+extern void MEM_INIT();
+extern U32 LOAD_BIN();
+
 #endif
 
 #if defined(M68K_INSTRUCTION)
