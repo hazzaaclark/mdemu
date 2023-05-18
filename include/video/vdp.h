@@ -45,24 +45,27 @@
 #else
 #define USE_VDP
 
+#define VDP_PAL 1
+#define VDP_NTSC
+
 #define REGS U8[0x20]
 #define REG5_H40_MODE               U32
-#define REG0_HV_LATCH               BIT(REGS[0], 1)
-#define REG0_LINE_IRQ               BIT(REGS[0], 4)
-#define REG1_PAL_MODE               BIT(REGS[1], 3)
-#define REG1_DMA_ENABLED            BIT(REGS[1], 4)
-#define REG1_VBLANK_IRQ             BIT(REGS[1], 5)
-#define REG1_DISP_ENABLED           BIT(REGS[1], 6)
-#define REG2_NAMETABLE_A            BIT(REGS[2], 3, 3) << 13
-#define REG3_NAMETABLE_W            BIT(REGS[3], 1, 5) << 11
-#define REG4_NAMETABLE_B            BIT(REGS[4], 0, 3) << 13
-#define REG5_SAT_ADDRESS            BIT(REGS[5] & REG5_H40_MODE ? 0x7E : 0x7F))
-#define REG5_SAT_SIZE               BIT(REGS[5], REG5_H40_MODE ? (1 << 10) : (1 << 9))
-#define REG10_LINE_COUNTER          BIT(REGS[10], 0, 8)
-#define REG12_H40_MODE              BIT(REGS[12], 0)
-#define REG15_DMA_INCREMENT         BIT(REGS[15])
-#define REG19_DMA_LENGTH            BIT(REGS[19] || (REGS[20] << 8))
-#define REG23_DMA_TYPE              BIT(REGS[23], 6, 2)
+#define REG0_HV_LATCH               BIT(REGS[0], 1) 1
+#define REG0_LINE_IRQ               BIT(REGS[0], 4) 4
+#define REG1_PAL_MODE               BIT(REGS[1], 3) 3
+#define REG1_DMA_ENABLED            BIT(REGS[1], 4) 4
+#define REG1_VBLANK_IRQ             BIT(REGS[1], 5) 5
+#define REG1_DISP_ENABLED           BIT(REGS[1], 6) 6
+#define REG2_NAMETABLE_A            BIT(REGS[2], 3, 3) << 13 13
+#define REG3_NAMETABLE_W            BIT(REGS[3], 1, 5) << 11 11
+#define REG4_NAMETABLE_B            BIT(REGS[4], 0, 3) << 13 13
+#define REG5_SAT_ADDRESS            BIT(REGS[5] & REG5_H40_MODE ? 0x7E : 0x7F)) 0x7E : 0x7F
+#define REG5_SAT_SIZE               BIT(REGS[5], REG5_H40_MODE ? (1 << 10) : (1 << 9)) 1 << 10 : 1 << 9
+#define REG10_LINE_COUNTER          BIT(REGS[10], 0, 8) 8 
+#define REG12_H40_MODE              BIT(REGS[12], 0) 12 
+#define REG15_DMA_INCREMENT         BIT(REGS[15]) 15
+#define REG19_DMA_LENGTH            BIT(REGS[19] || (REGS[20] << 8)) 8
+#define REG23_DMA_TYPE              BIT(REGS[23], 6, 2) 2
 
 #endif
 
@@ -89,15 +92,17 @@ typedef struct VDP_ARC
 	static U32 SPRITE_OVERFLOW;
 	static U32 LINE_INTERRUPT;
 	static U32 VERTICAL_COUNTER;
-	static U32 HORIZONTAL_COUNTER;
+	typedef U32 HORIZONTAL_COUNTER;
 	static bool DMA_FILL();
-	static bool HV_COUNTER();
+	typedef bool HV_COUNTER();
 	static bool VBLANK();
 
 	static U16* STATUS_REGISTER_READ();
 	static U16* DATA_PORT_READ(void);
 	static U16* HV_COUNTER_READ(void);
 	static U32* IRQ(U32 IRQ_LEVEL);
+	typedef U32 VDP_CYCLES;
+	typedef U32 VDP_PIXEL_CLOCK;
 };
 
 typedef struct GRAPHICS{};
