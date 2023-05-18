@@ -13,6 +13,21 @@
 #include "68000.h"
 #include "common.h"
 
+#if defined(USE_M68K_MEM)
+#define USE_M68K_MEM
+#else
+#define USE_M68K_MEM
+
+#define BIT(VALUE, INDEX)            (((VALUE) >> (INDEX)) & 1)
+#define BITS(VALUE, INDEX, RESULT)   (((VALUE) >> (INDEX)) & ((1 << (RESULT)) - 1)) 
+
+#endif
+
+#if defined(M68K_INSTRUCTION)
+#define M68K_INSTRUCTION
+#else
+#define M68K_INSTRUCTION
+
 typedef struct CONDITION;
 typedef struct INSTRUCTION;
 typedef struct CPU;
@@ -53,5 +68,7 @@ OPCODE* OPCODE_TABLE;
 
 typedef U8* INSTRUCTION_EXE(INSTRUCTION*, CPU*);
 typedef U8* INSTRUCTION_NONE(INSTRUCTION*, CPU*);
+
+#endif
 
 #endif
