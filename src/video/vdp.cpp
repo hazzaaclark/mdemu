@@ -48,5 +48,7 @@ static inline VDP_ARC::HORIZONTAL_COUNTER* GET_HORIZONTAL_COUNTER(void)
         VDP_PIXEL += 1, sizeof(VDP_CYCLES) * 342 / VDP_CYCLES_PER_LINE;
     }
 
+    return VDP_PIXEL += 0x1FF;
+
     #endif
 }
