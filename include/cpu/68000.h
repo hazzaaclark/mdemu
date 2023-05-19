@@ -6,8 +6,10 @@
 /* USING DOCUMENTATION, THE AMBITION IS TO FASHION THE BASE ARCHITECURE OF THE CONSOLES' */
 /* FUNCTIONS WHICH WILL CORRESPOND WITH THE ACTIONS CARRIED OUT BY THE RESPECTIVE CPP FILE */
 
-#ifndef M68K_H
-#define M68K_H
+#ifndef M68K
+#define M68K
+
+/* SYSTEM INCLUDES */
 
 #include <assert.h>
 #include <stdio.h>
@@ -15,7 +17,10 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+/* NESTED INCLUDES */
+
 #include "common.h"
+#include "instruction.h"
 
 #ifdef DEBUG
 #define DEBUG_LOG(...) (__VA_ARGS__)
@@ -27,6 +32,10 @@
 
 #ifndef MASTER_BIT_LOGIC
 #define MASTER_BIT_LOGIC
+
+#define FULL_MASK_INTERRUPT U64(0xFFFFFFFF) /* AN 8 BYTE INTERRUPT FOR HANDLING INSTRUCTIONS */
+#define BIT(REG_X, REG_NTH_X) 
+#define BIT_CHANGE
 
 #define CARRY_BIT 0
 #define OVERFLOW_BIT 1
@@ -43,11 +52,11 @@
 #ifndef REGISTERS
 #define REGISTERS
 
-#define CARRY() BIT(VALUE, RESULT, CARRY_BIT)
-#define OVERFLOW() BIT(VALUE, RESULT, OVERFLOW_BIT)
-#define ZERO() BIT(VALUE, RESULT, ZERO_BIT)
-#define NEGATIVE() BIT(VALUE, RESULT, NEGATIVE_BIT)
-#define EXTENDED() BIT(VALUE, RESULT, EXTENDED_BIT)
+#define CARRY() BIT(REGS[0], CARRY_BIT)
+#define OVERFLOW() BIT(REGS[1], OVERFLOW_BIT)
+#define ZERO() BIT(REGS[2], ZERO_BIT)
+#define NEGATIVE() BIT(REGS[3], NEGATIVE_BIT)
+#define EXTENDED() BIT(REGS[4], EXTENDED_BIT)
 
 #endif
 
