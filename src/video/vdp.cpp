@@ -27,7 +27,6 @@
 
 static inline VDP* VDP_INSTANCE(CPU* CPU, VDP* VDP, VDP_IMAGE* IMAGE)
 {
-
     #ifdef USE_VDP
 
 	calloc(1, sizeof(VDP));
