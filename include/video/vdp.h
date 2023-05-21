@@ -30,8 +30,10 @@
 #if defined(VDP_MASTER_FREQ)
 #define VDP_MASTER_FREQ
 #else
+
 #define VDP_MASTER_FREQ_NTSC        53693175
 #define VDP_MASTER_FREQ_PAL         53203424
+#define VDP_MASTER_CYCLES           4
 
 #define VDP_CYCLES_PER_LINE         4096
 #define VDP_FREQ_DIV                   7
@@ -111,6 +113,22 @@ typedef struct VDP_IMAGE
 };
 
 #endif
+
+/* EXTERNAL ARGS FOR DISPLAY VALUES */
+
+#if defined(USE_DISPLAY_ARGS)
+#define USE_DISPLAY_ARGS
+#else
+#define USE_DISPLAY_ARGS
+
+extern "C"
+{
+	extern U8 HEIGHT_VALUES[] = { 28, 30 };
+	extern U8 WIDTH_VALUES[] = { 32, 40 };
+}
+
+#endif
+
 
 VOID_FUNCTION(VDP_INIT);
 VOID_FUNCTION(VDP_FREE);
