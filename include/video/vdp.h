@@ -33,10 +33,10 @@
 
 #define VDP_MASTER_FREQ_NTSC        53693175
 #define VDP_MASTER_FREQ_PAL         53203424
-#define VDP_MASTER_CYCLES           4
+#define VDP_MASTER_CYCLES                  4
 
-#define VDP_CYCLES_PER_LINE         4096
-#define VDP_FREQ_DIV                   7
+#define VDP_CYCLES_PER_LINE             4096
+#define VDP_FREQ_DIV                       7
 
 #endif
 
@@ -49,22 +49,22 @@
 #else
 #define USE_VDP
 
-#define VDP_PAL 0
-#define VDP_NTSC 1
+#define VDP_PAL                            0
+#define VDP_NTSC                           1
 
-#define VDP_HBLANK_IRQ 4
-#define VDP_VBLANK_IRQ 6
+#define VDP_HBLANK_IRQ                     4
+#define VDP_VBLANK_IRQ                     6
 
-#define VDP_SCREEN_WIDTH 320
-#define VDP_SCREEN_HEIGHT 240
+#define VDP_SCREEN_WIDTH                 320
+#define VDP_SCREEN_HEIGHT                240
 #define VDP_SCREEN (VDP_SCREEN_WIDTH * VDP_SCREEN_HEIGHT * 3)
 
 #define VDP_HORIZONTAL_SCROLL
 #define VDP_VERTICAL_SCROLL
 
-#define VDP_NAMETABLE_A 0 
-#define VDP_NAMETABLE_W 1
-#define VDP_NAMETABLE_B 2
+#define VDP_NAMETABLE_A                    0 
+#define VDP_NAMETABLE_W                    1
+#define VDP_NAMETABLE_B                    2
 
 #define VDP_HORIZONTAL_SCROLL
 #define VDP_VERTICAL_SCROLL
