@@ -15,6 +15,7 @@
 
 /* NESTED INCLUDES */
 
+#include "68000.h"
 #include "common.h"
 #include "instruction.h"
 
@@ -46,71 +47,73 @@
 #else
 #define USE_VDP
 
-#define VDP_PAL 1
-#define VDP_NTSC
+#define VDP_PAL 0
+#define VDP_NTSC 1
 
-#define REGS U8[0x20]
-#define REG5_H40_MODE               U32
-#define REG0_HV_LATCH               0
-#define REG0_LINE_IRQ               0
-#define REG1_PAL_MODE               1
-#define REG1_DMA_ENABLED            1
-#define REG1_VBLANK_IRQ             1
-#define REG1_DISP_ENABLED           1
-#define REG2_NAMETABLE_A            2
-#define REG3_NAMETABLE_W            3
-#define REG4_NAMETABLE_B            4 
-#define REG5_SAT_ADDRESS            5, REG5_H40_MODE
-#define REG5_SAT_SIZE               5, REG5_H40_MODE 
-#define REG10_LINE_COUNTER          10
-#define REG12_H40_MODE              12
-#define REG15_DMA_INCREMENT         15
-#define REG19_DMA_LENGTH            20 << 8
-#define REG23_DMA_TYPE              23
+#define VDP_HBLANK_IRQ 4
+#define VDP_VBLANK_IRQ 6
 
-#endif
+#define VDP_SCREEN_WIDTH 320
+#define VDP_SCREEN_HEIGHT 240
+#define VDP_SCREEN (VDP_SCREEN_WIDTH * VDP_SCREEN_HEIGHT * 3)
 
-#if defined(VDP_MASTER)
-#define VDP_MASTER
-#else
-#define VDP_MASTER
+#define VDP_HORIZONTAL_SCROLL
+#define VDP_VERTICAL_SCROLL
+
+#define VDP_NAMETABLE_A 0 
+#define VDP_NAMETABLE_W 1
+#define VDP_NAMETABLE_B 2
+
+#define VDP_HORIZONTAL_SCROLL
+#define VDP_VERTICAL_SCROLL
+
+#define VDP_H_COUNTER
+#define VDP_V_COUNTER
+#define VDP_HBLANK_COUNTER
+#define VDP_VBLANK_COUNTER
 
 typedef struct VDP
 {
-	GRAPHICS* VDP_GRAPHICS;
-	static bool LOAD_STATE(const char* LOAD);
-	static bool SAVE_STATE(const char* SAVE);
+	static S32 REMAINING_CYCLES;
+	static U32 CLOCK_SPEED;
+	static U8 VRAM[0x10000];
+	static U8 CRAM[0x40];
+	static U32 RW_ACCESS;
+	static U16 RW_ACCESS_ADDR;
+	static U16 DMA_LENGTH;
+	static U16 DMA_SOURCE_LOW;
+	static U8 DMA_SOURCE_HIGH;
+	static U32 DMA_TYPE;
+	static U8 REG_VALUES[0x18];
 };
 
-typedef struct VDP_ARC
+typedef struct VDP_ARGS : VDP
 {
-	static U8* VRAM[0x10000];
-	static U16* VSRAM[0x40];
-	static U16* CRAM[0x40];
-	static U16* REGISTER_ADDR;
-	static bool HORIZONTAL_INTERUPT();
-
-	static U32 SPRITE_OVERFLOW;
-	static U32 LINE_INTERRUPT;
-	static U32 VERTICAL_COUNTER;
-	typedef U32 HORIZONTAL_COUNTER;
-	static bool DMA_FILL();
-	typedef bool HV_COUNTER();
-	static bool VBLANK();
-
-	static U16* STATUS_REGISTER_READ();
-	static U16* DATA_PORT_READ(void);
-	static U16* HV_COUNTER_READ(void);
-	static U32* IRQ(U32 IRQ_LEVEL);
-	typedef U32 VDP_CYCLES;
-	typedef U32 VDP_PIXEL_CLOCK;
+	static bool PENDING_INSTR;
+	static bool DMA_FILL;
+	static bool DMA_PROG;
+	static bool HBLANK_IRQ;
+	static bool VBLANK_IRQ;
+	static bool HBLANK_PROG;
+	static bool VBLANK_PROG;
+	static bool HV_COUNTER;
 };
 
-typedef struct GRAPHICS {};
+typedef struct VDP_IMAGE
+{
+	static U8* DISPLAY_HEIGHT;
+	static U8* DISPLAY_WIDTH;
+	static U8* PLANE_WIDTH;
+	static U8* PLANE_HEIGHT;
+	static U32 SPRITE_TABLE;
+	static U8 HBLANK_INTERLACE;
+	static U8 OUTPUT;
+};
 
 #endif
 
 VOID_FUNCTION(VDP_INIT);
+VOID_FUNCTION(VDP_FREE);
 VOID_FUNCTION(VDP_SCANLINE);
 VOID_FUNCTION(VDP_DMA_INIT);
 VOID_FUNCTION(VDP_DMA_FILL);
