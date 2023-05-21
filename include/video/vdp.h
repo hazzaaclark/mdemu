@@ -87,6 +87,8 @@ typedef struct VDP
 	static U8 DMA_SOURCE_HIGH;
 	static U32 DMA_TYPE;
 	static U8 REG_VALUES[0x18];
+
+	CPU* CPU;
 };
 
 typedef struct VDP_ARGS : VDP
@@ -109,7 +111,7 @@ typedef struct VDP_IMAGE
 	static U8* PLANE_HEIGHT;
 	static U32 SPRITE_TABLE;
 	static U8 HBLANK_INTERLACE;
-	static U8 OUTPUT;
+	static U8* OUTPUT;
 };
 
 #endif
