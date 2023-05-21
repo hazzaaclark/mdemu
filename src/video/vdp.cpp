@@ -35,3 +35,11 @@ static inline VDP* VDP_INSTANCE(CPU* CPU, VDP* VDP, VDP_IMAGE* IMAGE)
 
     #endif
 }
+
+static inline void VDP_FREE(VDP* VDP, VDP_IMAGE* IMAGE)
+{
+	if (VDP == NULL) return;
+
+	free(VDP);
+	free(IMAGE->OUTPUT);
+}
