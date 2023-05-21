@@ -20,20 +20,22 @@
 
 #include <assert.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
 /* CREATE AN INSTANCE OF THE VDP BY ALLOCING THE SCREEN BUFFER */
 /* THIS WILL CREATE VIRTUAL MEMORY ASSOCIATED WITH THE BYTEWISE SIZE */
 /* OF THE UNIT */
 
+#ifdef USE_VDP
+
 static inline VDP* VDP_INSTANCE(CPU* CPU, VDP* VDP, VDP_IMAGE* IMAGE)
 {
-    #ifdef USE_VDP
-
 	calloc(1, sizeof(VDP));
 	VDP->CPU += 1, sizeof(CPU);
 	IMAGE->OUTPUT += VDP_SCREEN, sizeof(U8);
 
-    #endif
+	return VDP;
 }
 
 /* FREE UP ALL VIRTUAL MEMORY FROM THE VDP STRUCTURE AND THE OTHER */
@@ -46,3 +48,20 @@ static inline void VDP_FREE(VDP* VDP, VDP_IMAGE* IMAGE)
 	free(VDP);
 	free(IMAGE->OUTPUT);
 }
+
+static inline void VDP_INIT(VDP* VDP, VDP_ARGS* VDP_ARGS, VDP_IMAGE* IMAGE)
+{
+	calloc(1, sizeof(VDP->VRAM, 0, 0x10000 * sizeof(U8)));
+	calloc(1, sizeof(VDP->VSRAM, 0, 0x40 * sizeof(U16)));
+	calloc(1, sizeof(VDP->CRAM, 0, 0x40 * sizeof(U8)));
+
+	IMAGE += 1, sizeof(IMAGE->DISPLAY_WIDTH) * WIDTH_VALUES[0];
+	IMAGE += 1, sizeof(IMAGE->DISPLAY_HEIGHT) * HEIGHT_VALUES[0];
+
+	VDP_ARGS->PENDING_INSTR = false;
+	VDP_ARGS->DMA_FILL = false;
+	VDP_ARGS->DMA_PROG = false;
+
+}
+
+#endif
