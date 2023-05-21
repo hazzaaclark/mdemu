@@ -36,6 +36,9 @@ static inline VDP* VDP_INSTANCE(CPU* CPU, VDP* VDP, VDP_IMAGE* IMAGE)
     #endif
 }
 
+/* FREE UP ALL VIRTUAL MEMORY FROM THE VDP STRUCTURE AND THE OTHER */
+/* PRE-REQUISITIES */
+
 static inline void VDP_FREE(VDP* VDP, VDP_IMAGE* IMAGE)
 {
 	if (VDP == NULL) return;
