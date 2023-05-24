@@ -87,6 +87,8 @@ static inline void VDP_INIT(VDP* VDP, VDP_ARGS* VDP_ARGS, VDP_IMAGE* IMAGE)
 /* CREATE AN INSTANCE OF THE DMA READ DATA SCHEMA */
 /* TAKING INTO L0-L7 AND H0-H7 BITS WHICH DETERMINE THE BIT SOURCE */
 
+/* SEE DMA LENGTH: https://md.railgun.works/index.php?title=VDP#DMA */
+
 static const U16* VDP_READ_DATA(VDP* VDP, VDP_ARGS* VDP_ARGS, U16* ACCESS_VALUE)
 {
 	VDP_ARGS->PENDING_INSTR = false;
@@ -99,15 +101,26 @@ static const U16* VDP_READ_DATA(VDP* VDP, VDP_ARGS* VDP_ARGS, U16* ACCESS_VALUE)
 
 	switch (VDP->RW_ACCESS & 0xF)
 	{
-	
+
 	case VDP_READ_VRAM:
 		ACCESS_VALUE += VDP->VRAM[VDP->RW_ACCESS_ADDR] << 8 | VDP->VRAM[VDP->RW_ACCESS_ADDR + 1];
+		break;
+
+	case VDP_READ_VSRAM:
+		ACCESS_VALUE += VDP->VSRAM[VDP->RW_ACCESS_ADDR >> 1 & 0x3F];
+		break;
+
+	case VDP_READ_CRAM:
+		ACCESS_VALUE += VDP->CRAM[VDP->RW_ACCESS_ADDR >> 1 & 0x3F];
 		break;
 
 	default:
 		printf("Inapplicable Access Mode\n");
 		break;
 	}
+
+	VDP->RW_ACCESS_ADDR += VDP->AUTO_INCREMENT;
+	return ACCESS_VALUE;
 
     #endif
 }
