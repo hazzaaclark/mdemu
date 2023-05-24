@@ -74,10 +74,6 @@
 #define VDP_HBLANK_COUNTER 
 #define VDP_VBLANK_COUNTER 
 
-#define VDP_READ_VRAM 0
-#define VDP_READ_VSRAM 4
-#define VDP_READ_CRAM 8
-
 typedef struct VDP
 {
 	static S32 REMAINING_CYCLES;
@@ -92,6 +88,7 @@ typedef struct VDP
 	static U8 DMA_SOURCE_HIGH;
 	static U32 DMA_TYPE;
 	static U8 REG_VALUES[0x18];
+	static U32 AUTO_INCREMENT;
 
 	CPU* CPU;
 };
@@ -119,6 +116,23 @@ typedef struct VDP_IMAGE
 	static U8 HBLANK_INTERLACE;
 	static U8* OUTPUT;
 };
+
+#endif
+
+#if defined(USE_DMA)
+#define USE_DMA
+#else
+#define USE_DMA_READ
+
+#define VDP_READ_VRAM 0
+#define VDP_READ_VSRAM 4
+#define VDP_READ_CRAM 8
+
+#define USE_DMA_WRITE
+
+#define VDP_WRITE_VRAM 1
+#define VDP_WRITE_VSRAM 5
+#define VDP_WRITE_CRAM 9
 
 #endif
 
