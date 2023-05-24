@@ -116,6 +116,13 @@ typedef struct VDP_IMAGE
 	static U8* OUTPUT;
 };
 
+typedef enum VDP_READ
+{
+	VRAM = 0,
+	VSRAM = 4,
+	CRAM = 8,
+};
+
 #endif
 
 /* EXTERNAL ARGS FOR DISPLAY VALUES */
