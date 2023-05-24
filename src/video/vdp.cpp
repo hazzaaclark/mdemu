@@ -95,6 +95,8 @@ static const U16* VDP_READ_DATA(VDP* VDP, VDP_ARGS* VDP_ARGS, U16* ACCESS_VALUE)
 	/* OF THE DMA LENGTH REGISTER AND DETERMINE WHICH INSTANCE OF THE VDP */
 	/* THE DMA WILL ACCESS; FROM THE PROVIDED HIGH AND LOW BITS */
 
+    #ifdef USE_VDP
+
 	switch (VDP->RW_ACCESS & 0xF)
 	{
 	
@@ -105,6 +107,8 @@ static const U16* VDP_READ_DATA(VDP* VDP, VDP_ARGS* VDP_ARGS, U16* ACCESS_VALUE)
 	default:
 		printf("Inapplicable Access Mode\n");
 	}
+
+    #endif
 }
 
 #endif
