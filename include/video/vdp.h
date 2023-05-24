@@ -74,6 +74,10 @@
 #define VDP_HBLANK_COUNTER 
 #define VDP_VBLANK_COUNTER 
 
+#define VDP_READ_VRAM 0
+#define VDP_READ_VSRAM 4
+#define VDP_READ_CRAM 8
+
 typedef struct VDP
 {
 	static S32 REMAINING_CYCLES;
@@ -114,13 +118,6 @@ typedef struct VDP_IMAGE
 	static U32 SPRITE_TABLE;
 	static U8 HBLANK_INTERLACE;
 	static U8* OUTPUT;
-};
-
-typedef enum VDP_READ
-{
-	VRAM = 0,
-	VSRAM = 4,
-	CRAM = 8,
 };
 
 #endif
