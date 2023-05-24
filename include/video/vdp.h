@@ -70,15 +70,16 @@
 #define VDP_VERTICAL_SCROLL
 
 #define VDP_H_COUNTER
-#define VDP_V_COUNTER
-#define VDP_HBLANK_COUNTER
-#define VDP_VBLANK_COUNTER
+#define VDP_V_COUNTER 
+#define VDP_HBLANK_COUNTER 
+#define VDP_VBLANK_COUNTER 
 
 typedef struct VDP
 {
 	static S32 REMAINING_CYCLES;
 	static U32 CLOCK_SPEED;
 	static U8 VRAM[0x10000];
+	static U8 VSRAM[0x40];
 	static U8 CRAM[0x40];
 	static U32 RW_ACCESS;
 	static U16 RW_ACCESS_ADDR;
@@ -100,6 +101,7 @@ typedef struct VDP_ARGS : VDP
 	static bool VBLANK_IRQ;
 	static bool HBLANK_PROG;
 	static bool VBLANK_PROG;
+	static bool VBLANK_PENDING;
 	static bool HV_COUNTER;
 };
 
