@@ -106,6 +106,7 @@ static const U16* VDP_READ_DATA(VDP* VDP, VDP_ARGS* VDP_ARGS, U16* ACCESS_VALUE)
 
 	default:
 		printf("Inapplicable Access Mode\n");
+		break;
 	}
 
     #endif
