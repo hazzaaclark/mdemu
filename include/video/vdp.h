@@ -96,6 +96,7 @@ typedef struct VDP
 typedef struct VDP_ARGS : VDP
 {
 	static bool PENDING_INSTR;
+	static bool DMA_ENABLED;
 	static bool DMA_FILL;
 	static bool DMA_PROG;
 	static bool HBLANK_IRQ;
@@ -131,8 +132,14 @@ typedef struct VDP_IMAGE
 #define USE_DMA_WRITE
 
 #define VDP_WRITE_VRAM 1
-#define VDP_WRITE_VSRAM 5
-#define VDP_WRITE_CRAM 9
+#define VDP_WRITE_VSRAM 3
+#define VDP_WRITE_CRAM 5
+
+#define USE_DMA_FILL
+
+#define VDP_FILL_VRAM 1
+#define VDP_FILL_VSRAM 3
+#define VDP_FILL_CRAM 5
 
 #endif
 
@@ -161,7 +168,7 @@ VOID_FUNCTION(VDP_DMA_COPY);
 VOID_FUNCTION(VDP_RESET);
 VOID_FUNCTION(VDP_CONTROL_PORT);
 VOID_FUNCTION(VDP_DATA_PORT);
-VOID_FUNCTION(VDP_WRITE_REGISTER);
+VOID_FUNCTION(VDP_WRITE);
 
 
 #endif
