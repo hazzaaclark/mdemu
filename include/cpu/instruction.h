@@ -18,8 +18,10 @@
 #else
 #define USE_M68K_MEM
 
-#define BIT(VALUE, INDEX)            (((VALUE) >> (INDEX)) & 1)
-#define BITS(VALUE, INDEX, RESULT)   (((VALUE) >> (INDEX)) & ((1 << (RESULT)) - 1)) 
+#define BIT (VALUE, INDEX)            ((VALUE) >> (INDEX))
+#define BITS (VALUE, INDEX, RESULT)   ((VALUE) >> (INDEX)) & ((1 << (RESULT)) - 1)) 
+#define BYTE_LO 0
+#define BYTE_HI 0
 
 extern void MEM_INIT();
 extern U32 LOAD_BIN();
