@@ -220,15 +220,15 @@ static U16* VDP_READ_CONTROL_DATA(VDP* VDP, VDP_ARGS* VDP_ARGS)
 	/* DECLARING ALL OF THE MACROS AS FALSE */
 	/* TO AS THE ENTRY POINT FOR THEIR EXECUTION */
 
-		false VDP_FIFO_EMPTY << 9 |
-		false VDP_FIFO_FULL << 8 |
-		false VDP_VIRQ_OCCURED << 7 |
-		false VDP_SPRITE_OF << 6 |
-		false VDP_SPRITE_COL << 5 |
-		false VDP_NULL_FRAME << 4 |
-		(VDP->CPU->REGION = VDP_PAL);
+	false VDP_FIFO_EMPTY << 9 |
+	false VDP_FIFO_FULL << 8 |
+	false VDP_VIRQ_OCCURED << 7 |
+	false VDP_SPRITE_OF << 6 |
+	false VDP_SPRITE_COL << 5 |
+	false VDP_NULL_FRAME << 4 |
+	(VDP->CPU->REGION = VDP_PAL);
 
-		return;
+	return;
 
     #endif
 };
