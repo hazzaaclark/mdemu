@@ -115,7 +115,7 @@ static const U16* VDP_READ_DATA(VDP* VDP, VDP_ARGS* VDP_ARGS, U16* ACCESS_VALUE)
 		break;
 
 	default:
-		printf("Inapplicable Access Mode\n");
+		printf("Unaccessible Access Mode\n");
 		break;
 	}
 
@@ -153,7 +153,7 @@ static inline void VDP_WRITE(VDP* VDP, VDP_ARGS* VDP_ARGS, U16* ACCESS_VALUE)
 		break;
 
 	default:
-		printf("Inapplicable Access Mode\n");
+		printf("Unaccessible Access Mode\n");
 		break;
 	}
 
@@ -166,6 +166,34 @@ static inline void VDP_WRITE(VDP* VDP, VDP_ARGS* VDP_ARGS, U16* ACCESS_VALUE)
 
 		case VDP_WRITE_VRAM:
 			VDP->VRAM[VDP->RW_ACCESS_ADDR] = 1, sizeof(BYTE_HI(ACCESS_VALUE));
+			VDP->VRAM[VDP->RW_ACCESS_ADDR ^ 1] = 1, sizeof(BYTE_LO(ACCESS_VALUE));
+
+			/* CREATED AN ASSERTION INSTANCE SUCH THAT WHEN THE DMA LENGTH */
+			/* REACHES THE 64KB LIMIT, THE PROGRAM WILL READ AND WRITE DATA */
+			/* TO AND FROM THE CORRESPONDING ARGS */
+
+			for (U32 i = 0; i < VDP->DMA_LENGTH; i++)
+			{
+				assert((VDP->RW_ACCESS_ADDR ^ 1) < 0x10000);
+				VDP->RW_ACCESS_ADDR += VDP->AUTO_INCREMENT;
+			}
+
+			break;
+
+		case VDP_WRITE_VSRAM:
+			VDP->VSRAM[VDP->RW_ACCESS_ADDR >> 1 & 0x3F] += 1, sizeof(BYTE_HI(ACCESS_VALUE));
+			VDP->RW_ACCESS_ADDR += VDP->AUTO_INCREMENT;
+			break;
+
+		case VDP_WRITE_CRAM:
+			VDP->CRAM[VDP->RW_ACCESS_ADDR >> 1 & 0x3F];
+			VDP->RW_ACCESS_ADDR += VDP->AUTO_INCREMENT;
+			break;
+
+		default:
+			printf("Unaccessible Access Mode\n");
+			break;
+
 		}
 	}
 }
