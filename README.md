@@ -40,4 +40,6 @@ https://github.com/OneLoneCoder/olcNES
 
 ● ```Sonic Retro ASM to Hex Opcode reference:``` http://info.sonicretro.org/SCHG:68000_ASM-to-Hex_Code_Reference
 
+# ```VDP:``` https://md.railgun.works/index.php?title=VDP
+
 
