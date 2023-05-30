@@ -61,7 +61,19 @@ typedef struct INSTRUCTION
 {
 	static char* NAME;
 	static U16* OPCODE;
+	static U8* CYCLES;
 };
+
+#define CONDITION_FUNCTION(VALUE) \
+static CONDITION* FUNCTION ## VALUE(bool CONDITION_MET);
+
+#define CONDITION_GET(VALUE) \
+static CONDITION* GET_SET ## VALUE(U32 PATTERN);
+
+#define CONDITION_MNEMONICS(VALUE) \
+static CONDITION MNEMOMIC ## VALUE(char* TYPE);
+
+typedef struct CONDITION;
 
 #endif
 
