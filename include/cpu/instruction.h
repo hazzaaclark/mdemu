@@ -8,10 +8,17 @@
 #ifndef INSTRUCTION_SET
 #define INSTRUCTION_SET
 
-#include <stdbool.h>
-#include <stdint.h>
+/* NESTED INCLUDES */
+
 #include "68000.h"
 #include "common.h"
+
+/* SYSTEM INCLUDES */
+
+#include <assert.h>
+#include <stdbool.h>
+#include <stdint.h>
+#include <stdlib.h>
 
 #if defined(USE_M68K_MEM)
 #define USE_M68K_MEM
