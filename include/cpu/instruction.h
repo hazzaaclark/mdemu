@@ -71,6 +71,8 @@ typedef struct INSTRUCTION
 	static U8* CYCLES;
 };
 
+typedef struct CONDITION;
+
 #define CONDITION_FUNCTION(VALUE) \
 static CONDITION* FUNCTION ## VALUE(bool CONDITION_MET);
 
@@ -78,9 +80,7 @@ static CONDITION* FUNCTION ## VALUE(bool CONDITION_MET);
 static CONDITION* GET_SET ## VALUE(U32 PATTERN);
 
 #define CONDITION_MNEMONICS(VALUE) \
-static CONDITION MNEMOMIC ## VALUE(char* TYPE);
-
-typedef struct CONDITION;
+static CONDITION* MNEMOMIC ## VALUE(char* TYPE);
 
 #endif
 
