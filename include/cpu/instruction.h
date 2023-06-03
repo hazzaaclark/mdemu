@@ -30,9 +30,6 @@
 #define BYTE_LO 0
 #define BYTE_HI 0
 
-extern void MEM_INIT();
-extern U32 LOAD_BIN();
-
 #endif
 
 #if defined(USE_ISA)
@@ -83,5 +80,33 @@ static CONDITION* GET_SET ## VALUE(U32 PATTERN);
 static CONDITION* MNEMOMIC ## VALUE(char* TYPE);
 
 #endif
+
+#if defined(USE_ISA_MODE)
+#define USE_ISA_MODE
+#else
+#define USE_ISA_MODE
+
+#define ISA_MODE(VALUE) \
+static MODE_PATTERN* MODE ## VALUE(U32 MODE);
+
+#define MODE_DATA          (ISA_MODE(DATA_REG))
+#define MODE_ADDR          (ISA_MODE(ADDRESS_REG))
+#define MODE_ADDR_INDEX    (ISA_MODE(ADDRESS_INDEX))
+#define MODE_ADDR_OFFSET   (ISA_MODE(ADDRESS_OFFSET))
+#define MODE_PC            (ISA_MODE(PROGRAM_COUNTER))
+
+typedef struct MODE_PATTERN
+{
+	static char* MODE_BITS;
+	static U16* LEGAL_MODE;
+};
+
+#endif
+
+extern "C"
+{
+	extern void MEM_INIT();
+	extern U32 LOAD_BIN();
+}
 
 #endif
