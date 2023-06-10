@@ -25,8 +25,8 @@
 #else
 #define USE_M68K_MEM
 
-#define BIT (VALUE, INDEX)            ((VALUE) >> (INDEX))
-#define BITS (VALUE, INDEX, RESULT)   ((VALUE) >> (INDEX)) & ((1 << (RESULT)) - 1)) 
+#define BIT(VALUE, INDEX)            (((VALUE) >> (INDEX)) & 1)
+#define BITS(VALUE, INDEX, RESULT)   ((VALUE) >> (INDEX)) & ((1 << (RESULT)) - 1)) 
 #define BYTE_LO 0
 #define BYTE_HI 0
 
@@ -104,6 +104,8 @@ typedef struct MODE_PATTERN
 	INSTRUCTION_GENERATE();
 	static char* MODE_BITS;
 	static U16* LEGAL_MODE;
+	static U16* ACCESS_MODE;
+	static U32 OPCODE_SEARCH;
 	static MODE_PATTERN* PATTERN[];
 };
 
