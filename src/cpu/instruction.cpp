@@ -8,6 +8,7 @@
 /* NESTED INCLUDES */
 
 #include "instruction.h"
+#include "opcode.h"
 
 #ifdef USE_ISA
 
@@ -158,12 +159,26 @@ static inline INSTRUCTION* INSTRUCTION_INIT(U16 OPCODE, U8 OPCODE_COUNT)
 
 static inline bool INSTRUCTION_MATCH(MODE_PATTERN* PATTERN, U16 OPCODE, U8 OPCODE_COUNT)
 {
+	assert(char(PATTERN->MODE_BITS) == 16);
+
 	PATTERN->ACCESS_MODE = PATTERN->LEGAL_MODE;
+
+	/* CHECK THE BITWISE LENGTH OF THE SCAN IN ACCORDANCE WITH THE LENGTH */
+	/* OF THE STATUS REGISTER */
 
 	while (PATTERN->OPCODE_SEARCH < 16)
 	{
 		switch (PATTERN->MODE_BITS[PATTERN->OPCODE_SEARCH])
 		{
+		case '0':
+			if (BIT(OPCODE, 15 - PATTERN->OPCODE_SEARCH) != 0) return false;
+			PATTERN->OPCODE_SEARCH++;
+			continue;
+
+		case '1':
+			if (BIT(OPCODE, 15 - PATTERN->OPCODE_SEARCH != 1)) return false;
+			PATTERN->OPCODE_SEARCH++;
+			continue;
 		}
 	}
 }
