@@ -179,6 +179,10 @@ static bool INSTRUCTION_MATCH(MODE_PATTERN* PATTERN, U16 OPCODE, U8 OPCODE_COUNT
 			if (BIT(OPCODE, 15 - PATTERN->OPCODE_SEARCH != 1)) return false;
 			PATTERN->OPCODE_SEARCH++;
 			continue;
+
+		default:
+			printf("");
+			break;
 		}
 	}
 }
