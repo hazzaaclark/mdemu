@@ -49,10 +49,20 @@
 
 #define		VDP_VRAM					0x10000
 #define		VDP_CRAM					(4 * 16)
-#define		VDP_VSRAM					64
+#define		VDP_VSRAM					[64]
 
-#define		VDP_SPRITE_LOOKUP			(1 << (1 + 2)][1 << (1 + 1 + 2 + 4)][1 << 4])
-#define		VDP_SPRITE_DETAIL_LOOKUP	(1 << (1 + 2)][1 << (1 + 1 + 2 + 4)][1 << 4])
+#define		VDP_SPRITE_LOOKUP			1 << 1 + 2 | 1 << 1 + 1 + 2 + 4 | 1 << 4 
+#define		VDP_SPRITE_DETAIL_LOOKUP	1 << 1 + 2 | 1 << 1 + 1 + 2 + 4 | 1 << 4
+
+#define		VDP_PALETTE_MASK			0x0F
+#define		VDP_COLOUR_MASK				0x3F
+#define		VDP_PRIORITY_MASK			0x40
+#define		VDP_NULL_MASK				0x80
+
+#define		VDP_SHADOW_NRM				(0 << 6)
+#define		VDP_SHADOW_BASE				(1 << 6)
+#define		VDP_SHADOW_HIGH				(2 << 6)
+
 
 #define		VDP_DMA_MODE_MEM_TO_VRAM		
 #define		VDP_DMA_MODE_FILL			
