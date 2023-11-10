@@ -21,8 +21,10 @@
 
 /* SYSTEM INCLUDES */
 
-#include <stdbool.h>
+#include <assert.h>
+#include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 /* DEFINED DIRECTIVE FOR THE VDP'S INTERLACE FREQUENCY */
 /* FOR BEING ABLE TO COMPUTE ENOUGH PIXELS PER REFRESH RATE */
@@ -31,12 +33,8 @@
 #define VDP_MASTER_FREQ
 #else
 
-#define VDP_MASTER_FREQ_NTSC        53693175
-#define VDP_MASTER_FREQ_PAL         53203424
-#define VDP_MASTER_CYCLES                  4
-
-#define VDP_CYCLES_PER_LINE             4096
-#define VDP_FREQ_DIV                       7
+#define		VDP_MAX_SCANLINE_FREQ	320
+#define		VDP_MAX_SCANLINES		(240 * 2)
 
 #endif
 
@@ -49,137 +47,105 @@
 #else
 #define USE_VDP
 
-#define VDP_PAL                            0
-#define VDP_NTSC                           1
+#define		VDP_VRAM					0x10000
+#define		VDP_CRAM					(4 * 16)
+#define		VDP_VSRAM					64
 
-#define VDP_HBLANK_IRQ                     4
-#define VDP_VBLANK_IRQ                     6
+#define		VDP_SPRITE_LOOKUP			(1 << (1 + 2)][1 << (1 + 1 + 2 + 4)][1 << 4])
+#define		VDP_SPRITE_DETAIL_LOOKUP	(1 << (1 + 2)][1 << (1 + 1 + 2 + 4)][1 << 4])
 
-#define VDP_SCREEN_WIDTH                 320
-#define VDP_SCREEN_HEIGHT                240
-#define VDP_SCREEN (VDP_SCREEN_WIDTH * VDP_SCREEN_HEIGHT * 3)
+#define		VDP_DMA_MODE_MEM_TO_VRAM		
+#define		VDP_DMA_MODE_FILL			
+#define		VDP_DMA_MODE_COPY			
 
-#define VDP_HORIZONTAL_SCROLL
-#define VDP_VERTICAL_SCROLL
+#define		VDP_HSCROLL_MODE_FULL		
+#define		VDP_HSCROLL_MODE_1CELL		
+#define		VDP_HSCROLL_MODE_1LINE		
 
-#define VDP_NAMETABLE_A                    0 
-#define VDP_NAMETABLE_W                    1
-#define VDP_NAMETABLE_B                    2
+#define		VDP_VSCROLL_MODE_FULL
+#define		VDP_VSCROLL_MODE_2CELL
 
-#define VDP_HORIZONTAL_SCROLL
-#define VDP_VERTICAL_SCROLL
+#define		VDP_ACCESS_VRAM				
+#define		VDP_ACCESS_VSRAM
+#define		VDP_ACCESS_CRAM
 
-#define VDP_H_COUNTER
-#define VDP_V_COUNTER 
-#define VDP_HBLANK_COUNTER 
-#define VDP_VBLANK_COUNTER 
+
+typedef struct VDP_CONFIG
+{
+	bool SPRITES_DISABLE;
+	bool WINDOW_DISABLE;
+	bool SPRITE_PLANES_DISABLED[2];
+};
+
+typedef struct VDP_STATE
+{
+	union
+	{
+		bool ENABLED;
+		bool PENDING;
+		U8 ADDRESS_MODE_HIGH;
+		U8 ADDRESS_MODE_LOW;
+		U16 ADDRESS_LENGTH;
+
+	} DMA;
+
+	union 
+	{
+		bool WRITE_PENDING;
+		bool READ_MODE;
+		enum BUFFER;
+		S16 CACHE;
+		S16 INDEXING;
+		S16 INCREMENT;
+
+	} ACCESS_MODE;
+
+	U16 PLANE_A_ADDRESS;
+	U16 PLANE_B_ADDRESS;
+	U16 WINDOW_ADDRESS;
+	U16 SPRITE_TABLE;
+	U16 HSCROLL_ADDRESS;
+
+	bool WINDOW_ALIGN_RIGHT;
+	bool WINDOW_ALIGN_BOTTOM;
+	U8 WINDOW_HORI;
+	U8 WINDOW_VERT;
+
+	U16 PLANE_WIDTH;
+	U16 PLANE_HEIGHT;
+	U16 PLANE_WIDTH_BITMASK;
+	U16 PLANE_HEIGHT_BITMASK;
+
+	bool DISPLAY_ENABLED;
+	bool VERTICAL_PLANE_ENABLED;
+	bool HORI_PLANE_ENABLED;
+	bool H40_ENABLED;
+	bool V30_ENABLED;
+	bool SHADOW_ENABLED;
+	bool SUPER_SAMPLING;
+
+	U8 BG_COLOUR;
+	U8 HORI_INTERVAL;
+	bool VBLANK;
+};
 
 typedef struct VDP
 {
-	static S32 REMAINING_CYCLES;
-	static U32 CLOCK_SPEED;
-	static U8 VRAM[0x10000];
-	static U8 VSRAM[0x40];
-	static U8 CRAM[0x40];
-	static U32 RW_ACCESS;
-	static U16 RW_ACCESS_ADDR;
-	static U16 DMA_LENGTH;
-	static U16 DMA_SOURCE_LOW;
-	static U8 DMA_SOURCE_HIGH;
-	static U32 DMA_TYPE;
-	static U8 REG_VALUES[0x18];
-	static U32 AUTO_INCREMENT;
-
-	CPU* CPU;
+	static VDP_CONFIG* CONFIG;
+	static VDP_STATE* STATE;
+	static struct LOOKUP{};
 };
 
-typedef struct VDP_ARGS : VDP
-{
-	static bool PENDING_INSTR;
-	static bool DMA_ENABLED;
-	static bool DMA_FILL;
-	static bool DMA_PROG;
-	static bool HBLANK_IRQ;
-	static bool VBLANK_IRQ;
-	static bool HBLANK_PROG;
-	static bool VBLANK_PROG;
-	static bool VBLANK_PENDING;
-	static bool HV_COUNTER;
-};
 
-typedef struct VDP_IMAGE
-{
-	static U8* DISPLAY_HEIGHT;
-	static U8* DISPLAY_WIDTH;
-	static U8* PLANE_WIDTH;
-	static U8* PLANE_HEIGHT;
-	static U32 SPRITE_TABLE;
-	static U8 HBLANK_INTERLACE;
-	static U8* OUTPUT;
-};
+void VDP_CONST_INIT(VDP* VDP);
+void VDP_STATE_INIT(VDP* VDP);
+void VDP_RENDER_SCANLINE(const VDP* VDP, U16* SCANLINE);
+void SCANLINE_CALLBACK(const void* USER_DATA, U16 SCANLINE, U8* PIXELS, U16 WIDTH, U16 HEIGHT);
+
+U16 VDP_READ(VDP* VDP);
+U16 VDP_WRITE(VDP* VDP);
+
 
 #endif
-
-#if defined(USE_DMA)
-#define USE_DMA
-#else
-#define USE_DMA_READ
-
-#define VDP_READ_VRAM 0
-#define VDP_READ_VSRAM 4
-#define VDP_READ_CRAM 8
-
-#define USE_DMA_WRITE
-
-#define VDP_WRITE_VRAM 1
-#define VDP_WRITE_VSRAM 3
-#define VDP_WRITE_CRAM 5
-
-#define USE_DMA_FILL
-
-#define VDP_FILL_VRAM 1
-#define VDP_FILL_VSRAM 3
-#define VDP_FILL_CRAM 5
-
-/* AS OPPOSED TO EVERYTHING ELSE IN THIS DIRECTIVE */
-/* THESE MACROS WON'T HAVE VALUES AS THEY ARE GOING TO BE */
-/* ASSIGNED VALUES AT RUNTIME */
-
-#define VDP_FIFO_EMPTY 
-#define VDP_FIFO_FULL 
-#define VDP_VIRQ_OCCURED 
-#define VDP_SPRITE_OF 
-#define VDP_SPRITE_COL 
-#define VDP_NULL_FRAME 
-
-#endif
-
-/* EXTERNAL ARGS FOR DISPLAY VALUES */
-
-#if defined(USE_DISPLAY_ARGS)
-#define USE_DISPLAY_ARGS
-#else
-#define USE_DISPLAY_ARGS
-
-extern "C"
-{
-	extern U8 HEIGHT_VALUES[] = { 28, 30 };
-	extern U8 WIDTH_VALUES[] = { 32, 40 };
-}
-
-#endif
-
-
-VOID_FUNCTION(VDP_INIT);
-VOID_FUNCTION(VDP_FREE);
-VOID_FUNCTION(VDP_SCANLINE);
-VOID_FUNCTION(VDP_DMA_INIT);
-VOID_FUNCTION(VDP_DMA_FILL);
-VOID_FUNCTION(VDP_DMA_COPY);
-VOID_FUNCTION(VDP_RESET);
-VOID_FUNCTION(VDP_CONTROL_PORT);
-VOID_FUNCTION(VDP_DATA_PORT);
-VOID_FUNCTION(VDP_WRITE);
-
 
 #endif
