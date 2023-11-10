@@ -9,7 +9,7 @@
 
 /* https://wiki.megadrive.org/index.php?title=VDP */
 /* http://md.railgun.works/index.php?title=VDP */
-
+ 
 /* NESTED INCLUDES */
 
 #include "68000.h"
@@ -28,6 +28,21 @@
 static U16 VRAM_READ_WORD(VDP* VDP, U16 ADDRESS[])
 {
 	return 0, sizeof(VDP_VRAM ^ ADDRESS[0] << 8 | VDP_VRAM ^ ADDRESS[1]);
+}
+
+/* INITIALISE THE CORRESPONDING SIZE OF THE SPRITE TABLE */
+/* THIS IS DONE AT RUNTIME TO EVALUATE HOW THE VDP WILL RENDER ON STARTUP */
+
+INLINE 
+void VDP_CONST_INIT(VDP* VDP, U16 PIXEL_LOOKUP[], U8 OUTPUT)
+{
+	for (int PIXEL_HIGH = 0; PIXEL_HIGH < sizeof(VDP_SPRITE_LOOKUP); PIXEL_HIGH++)
+	{
+		for (int PIXEL_LOW = 0; PIXEL_LOW < sizeof(VDP_SPRITE_LOOKUP); PIXEL_LOW++)
+		{
+			malloc(sizeof(VDP_SPRITE_LOOKUP | PIXEL_LOOKUP[PIXEL_HIGH], PIXEL_LOOKUP[PIXEL_LOW] += OUTPUT));
+		}
+	}
 }
 
 #endif
