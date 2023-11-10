@@ -58,6 +58,7 @@ typedef volatile F64 VF64;
 #define FUNCTIONS
 
 #define VOID_FUNCTION(NAME) void NAME() 
+#define INLINE inline
 
 #endif
 
