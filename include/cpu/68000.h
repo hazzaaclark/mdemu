@@ -70,26 +70,29 @@
 
 #endif 
 
-#define ADDRESS_WIDTH 0xFFFFFFFF
+#define         ADDRESS_WIDTH           0xFFFFFFFF
+#define         SYMBOL_WIDTH            ''
 
-#ifndef MEGA_DRIVE_DEFINES
-#define MEGA_DRIVE_DEFINES
+typedef struct DECODED_OPCODE
+{
 
-typedef struct OPCODE{};
-typedef struct CPU{};
-typedef struct DECODED_OPCODE {};
-typedef struct MD{};
-typedef struct OPCODE{};
-typedef char* SIZE_SYMBOL;
+} DECODED_OPCODE;
 
-#endif 
+typedef struct MD
+{
+
+} MD;
+
+typedef struct OPCODE
+{
+
+} OPCODE;
 
 /* CPU STRUCTURE */
 /* JUST BASIC IMPLEMENTATION OF THE M68K's FUNCTIONS */
 
-typedef struct
+typedef struct CPU
 {
-	typedef MD* MEGA_DRIVE;
 	static U32 PROGRAM_COUNTER;
 	static U32 STATUS_REGISTER;
 	static U32 DATA_REG[8];
@@ -130,7 +133,8 @@ typedef struct IO
 	static U32 CPU_READ_LONG(CPU*, uint32_t ADDRESS);
 
 	typedef bool HANDLE_INTERRUPT();
-};
+    
+} IO;
 
 /* MISCELLANEOUS FUNCTIONS */
 /* USED AS PUBLIC METHODS THAT ARE INHERITED BY THE CPU CLASS */
@@ -140,7 +144,7 @@ static const U32 MAX_CYCLES_PER_COREFREQ = 7;
 typedef CPU* CREATE_CPU(struct MD*);
 typedef SIZE_SYMBOL* SIZE;
 
-typedef struct
+typedef struct INSTRUCTION_PATTERN
 {
 	static char* BITS;
 	static U32 ADDRESS;
