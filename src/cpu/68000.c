@@ -14,7 +14,7 @@ static MD* MEGA_DRIVE;
 
 static CPU* CREATE_CPU(struct CPU* CPU)
 {
-    assert(sizeof(CPU));
+        assert(sizeof(CPU));
 	return CPU;
 }
 
