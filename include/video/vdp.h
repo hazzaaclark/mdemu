@@ -85,7 +85,8 @@ typedef struct VDP_CONFIG
 	bool SPRITES_DISABLE;
 	bool WINDOW_DISABLE;
 	bool SPRITE_PLANES_DISABLED[2];
-};
+
+} VDP_CONFIG;
 
 typedef struct VDP_STATE
 {
@@ -150,15 +151,11 @@ typedef struct VDP_STATE
 
 typedef struct VDP
 {
-	static VDP_CONFIG* CONFIG;
-	static VDP_STATE* STATE;
-	static struct LOOKUP{};
 
 } VDP;
 
-
-void VDP_CONST_INIT(VDP* VDP);
-void VDP_STATE_INIT(VDP* VDP);
+void VDP_CONST_INIT(VDP* VDP, VDP_STATE* STATE, U16 LOOKUP[0]);
+void VDP_STATE_INIT(VDP_STATE* STATE);
 void VDP_RENDER_SCANLINE(const VDP* VDP, U16* SCANLINE);
 void SCANLINE_CALLBACK(const void* USER_DATA, U16 SCANLINE, U8* PIXELS, U16 WIDTH, U16 HEIGHT);
 
