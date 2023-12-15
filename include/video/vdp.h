@@ -79,6 +79,13 @@
 #define		VDP_ACCESS_VSRAM            1
 #define		VDP_ACCESS_CRAM             2
 
+/* PARSE THE CONTENTS BASED ON THE LENGTH OF THE WORD-WISE */
+/* OPERATION, EVALUATE THE SIZE THEN AFTER */
+
+static U16 VRAM_READ_WORD(struct VDP* VDP, U16 ADDRESS[])
+{
+	return sizeof(VDP_VRAM ^ ADDRESS[0] << 8 | VDP_VRAM ^ ADDRESS[1]);
+}
 
 typedef struct VDP_CONFIG
 {
@@ -149,6 +156,13 @@ typedef struct VDP_STATE
 
 } VDP_STATE;
 
+typedef struct VDP_TILE
+{
+	U16 TILE_X;
+	U16 TILE_Y;
+
+} VDP_TILE;
+
 typedef struct VDP
 {
 
@@ -156,6 +170,7 @@ typedef struct VDP
 
 void VDP_CONST_INIT(VDP* VDP, VDP_STATE* STATE, U16 LOOKUP[0]);
 void VDP_STATE_INIT(VDP_STATE* STATE);
+void VDP_RENDER_TILE(VDP* VDP, VDP_STATE* STATE);
 void VDP_RENDER_SCANLINE(const VDP* VDP, U16* SCANLINE);
 void SCANLINE_CALLBACK(const void* USER_DATA, U16 SCANLINE, U8* PIXELS, U16 WIDTH, U16 HEIGHT);
 
