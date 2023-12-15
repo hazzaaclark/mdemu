@@ -64,20 +64,20 @@
 #define		VDP_SHADOW_HIGH				(2 << 6)
 
 
-#define		VDP_DMA_MODE_MEM_TO_VRAM		
-#define		VDP_DMA_MODE_FILL			
-#define		VDP_DMA_MODE_COPY			
+#define		VDP_DMA_MODE_MEM_TO_VRAM	0	
+#define		VDP_DMA_MODE_FILL			1
+#define		VDP_DMA_MODE_COPY			2
 
-#define		VDP_HSCROLL_MODE_FULL		
-#define		VDP_HSCROLL_MODE_1CELL		
-#define		VDP_HSCROLL_MODE_1LINE		
+#define		VDP_HSCROLL_MODE_FULL		0
+#define		VDP_HSCROLL_MODE_1CELL		1    
+#define		VDP_HSCROLL_MODE_1LINE		2
 
-#define		VDP_VSCROLL_MODE_FULL
-#define		VDP_VSCROLL_MODE_2CELL
+#define		VDP_VSCROLL_MODE_FULL       0
+#define		VDP_VSCROLL_MODE_2CELL      1
 
-#define		VDP_ACCESS_VRAM				
-#define		VDP_ACCESS_VSRAM
-#define		VDP_ACCESS_CRAM
+#define		VDP_ACCESS_VRAM		        0		
+#define		VDP_ACCESS_VSRAM            1
+#define		VDP_ACCESS_CRAM             2
 
 
 typedef struct VDP_CONFIG
@@ -99,11 +99,11 @@ typedef struct VDP_STATE
 
 	} DMA;
 
-	union 
+	union
 	{
 		bool WRITE_PENDING;
 		bool READ_MODE;
-		enum BUFFER;
+		S16 BUFFER;
 		S16 CACHE;
 		S16 INDEXING;
 		S16 INCREMENT;
@@ -134,17 +134,27 @@ typedef struct VDP_STATE
 	bool SHADOW_ENABLED;
 	bool SUPER_SAMPLING;
 
+    U16 PIXEL_OUTPUT;
+    U16 PIXEL_NO_SHADOW;
+    U16 PIXEL_NO_SHADOW_MASK;
+    U16 HSCROLL_MODE;
+    U16 VSCROLL_MODE;
+    U8 DRAW_PIXEL;
+    U16 NEW_PIXEL;
+    U16 OLD_PIXEL;
 	U8 BG_COLOUR;
 	U8 HORI_INTERVAL;
 	bool VBLANK;
-};
+
+} VDP_STATE;
 
 typedef struct VDP
 {
 	static VDP_CONFIG* CONFIG;
 	static VDP_STATE* STATE;
 	static struct LOOKUP{};
-};
+
+} VDP;
 
 
 void VDP_CONST_INIT(VDP* VDP);
