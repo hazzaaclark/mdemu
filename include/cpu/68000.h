@@ -21,7 +21,7 @@
 
 /* NESTED INCLUDES */
 
-#include "common.h"
+#include "common.h" 
 #include "instruction.h"
 
 #ifdef DEBUG
@@ -74,7 +74,7 @@
 #define     M68K_READ_32(DATA, ADDRESS)             (((BASE)[ADDRESS + 1] <<24 | (((BASE)[ADDRESS + 3] >> 8))))
 #define     M68K_WRITE_32(DATA, ADDRESS, PTR)       *(U32*)((DATA + (ADDRESS)) = PTR & ADDRESS_WIDTH_32)
 
-#define     M68K_RETURN_ADDRESS(ADDRESS)            ((ADDRESS) & 0xFFFFFFFFFF)
+#define     M68K_RETURN_ADDRESS(ADDRESS)            ((ADDRESS) & 0xFFFFFFFFFF)                       
 
 typedef struct CPU_68K
 {
@@ -153,6 +153,8 @@ unsigned CPU_ACCESS_REGISTERS(CPU_68K_REGS REGISTER,
 
 void M68K_INIT(void);
 void M68K_INIT_OPCODE(unsigned CALLBACK(void));
+void M68K_SET_INT_CALLBACK(unsigned CALLBACK(void));
+void M68K_SET_FUNC_CALLBACK(unsigned CALLBACK(void));
 
 #endif
 #endif
