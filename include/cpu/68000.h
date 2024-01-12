@@ -12,6 +12,7 @@
 /* SYSTEM INCLUDES */
 
 #include <assert.h>
+#include <malloc.h>
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdint.h>
@@ -42,11 +43,11 @@
 
 /* I WILL KEEP THEM HERE JUST IN CASE */
 
-#define CARRY() BIT(REGS[0], CARRY_BIT)
-#define OVERFLOW() BIT(REGS[1], OVERFLOW_BIT)
-#define ZERO() BIT(REGS[2], ZERO_BIT)
-#define NEGATIVE() BIT(REGS[3], NEGATIVE_BIT)
-#define EXTENDED() BIT(REGS[4], EXTENDED_BIT)
+#define         CARRY() BIT(REGS[0], CARRY_BIT)
+#define         OVERFLOW() BIT(REGS[1], OVERFLOW_BIT)
+#define         ZERO() BIT(REGS[2], ZERO_BIT)
+#define         NEGATIVE() BIT(REGS[3], NEGATIVE_BIT)
+#define         EXTENDED() BIT(REGS[4], EXTENDED_BIT)
 
 #define         ADDRESS_WIDTH_8             0xFF
 #define         ADDRESS_WIDTH_16            0xFFFF
@@ -73,11 +74,15 @@
 #define     M68K_READ_32(DATA, ADDRESS)             (((BASE)[ADDRESS + 1] <<24 | (((BASE)[ADDRESS + 3] >> 8))))
 #define     M68K_WRITE_32(DATA, ADDRESS, PTR)       *(U32*)((DATA + (ADDRESS)) = PTR & ADDRESS_WIDTH_32)
 
+#define     M68K_RETURN_ADDRESS(ADDRESS)            ((ADDRESS) & 0xFFFFFFFFFF)
+
 typedef struct CPU_68K
 {
-    unsigned int* PC;
+    unsigned int PC;
     unsigned int* INSTRUCTION_CYCLES;
     unsigned int* INSTRUCTION_CYCLES_NULL;
+    unsigned char* MEMORY_BASE;
+    unsigned char* MEMORY_MAP[256];
 
     U32* REGISTER_BASE[16];
     U32* PREVIOUS_PC;
@@ -94,22 +99,60 @@ typedef struct CPU_68K
     unsigned char* ERROR_PC;
     UNK* ERROR_JUMP;
 
-    union MEMORY_MAP
-    {
-        char* MEMORY_BASE;
-        void(*WRITE_8_BIT)(S32 ADDRESS, S32 DATA);
-        void(*READ_8_BIT)(S32 ADDRESS);
-        void(*WRITE_16_BIT)(S32 ADDRESS, S32 DATA);
-        void(*READ_16_BIT)(S32 ADDRESS);
-
-    } MEMORY_MAP[256];
-
     S32(*INTERRUPT_CALLBACK)(unsigned INTERRUPT);
     S32(*RESET_INTERRUPT)(void);
     S32(*CPU_FUNC_CALLBACK)(unsigned FUNCTION);
 
 } CPU_68K;
 
+typedef enum CPU_68K_REGS
+{
+    M68K_REG_D0,    
+    M68K_REG_D1,
+    M68K_REG_D2,
+    M68K_REG_D3,
+    M68K_REG_D4,
+    M68K_REG_D5,
+    M68K_REG_D6,
+    M68K_REG_D7,
+    M68K_REG_A0,    
+    M68K_REG_A1,
+    M68K_REG_A2,
+    M68K_REG_A3,
+    M68K_REG_A4,
+    M68K_REG_A5,
+    M68K_REG_A6,
+    M68K_REG_A7,
+    M68K_REG_PC,    
+    M68K_REG_SR,    
+    M68K_REG_SP,    
+    M68K_REG_USP,   
+    M68K_REG_ISP, 
+
+} CPU_68K_REGS;
+
+typedef enum CPU_68K_FLAGS 
+{
+    FLAG_S,
+    FLAG_X,
+    FLAG_Z,
+    FLAG_N,
+    FLAG_C,
+    FLAG_V,
+    FLAG_T1,
+
+} CPU_68K_FLAGS;
+
+#ifndef BUILD_68K_TABLES
+void(*INITIALISE_68K_CYCLES)(char* CPU_68K_CYCLES[0x10000]);
 #endif
 
+STATIC
+unsigned CPU_ACCESS_REGISTERS(CPU_68K_REGS REGISTER,
+                              CPU_68K_FLAGS FLAGS, unsigned VALUE);
+
+void M68K_INIT(void);
+void M68K_INIT_OPCODE(unsigned CALLBACK(void));
+
+#endif
 #endif
