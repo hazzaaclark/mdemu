@@ -53,6 +53,7 @@
 #define         ADDRESS_WIDTH_16            0xFFFF
 #define         ADDRESS_WIDTH_32            0xFFFFFFFF
 #define         SYMBOL_WIDTH                ''
+#define         ADDRESS_ILLEGAL_ACCESS      (0x8000000 << 0xDFFFFF)
 
 #if defined(USE_CPU)
 #define USE_CPU
@@ -65,16 +66,18 @@
 /* DATA AND ADDRESS ARE PARSED AS PER THE STATUS QUO OF ARCHITECURE */
 /* PTR IS DISCERNED TO OUTPUT A BITWISE AND OPERAND */
 
-#define     M68K_READ_8(DATA, ADDRESS)              (DATA)[(ADDRESS) ^ 1] 
-#define     M68K_WRITE_8(DATA, ADDRESS, PTR)        (DATA)[(ADDRESS) ^ 1] = (PTR & ADDRESS_WIDTH_8)
+#define     M68K_READ_8(DATA, ADDRESS)                  (DATA)[(uintptr_t)(ADDRESS) ^ 1] 
+#define     M68K_WRITE_8(DATA, ADDRESS, PTR)            ((DATA)[(*(ADDRESS)) ^ 1] = (*(PTR)) & ADDRESS_WIDTH_8)
 
-#define     M68K_READ_16(DATA, ADDRESS)             (((BASE)[ADDRESS]<<8) | (DATA)[(ADDRESS) +1])
-#define     M68K_WRITE_16(DATA, ADDRESS, PTR)       *(U16*)((DATA + (ADDRESS)) = PTR & ADDRESS_WIDTH_16)
+#define     M68K_READ_16(DATA, ADDRESS)                 (DATA)[(uintptr_t)(ADDRESS) ^ 2] 
+#define     M68K_WRITE_16(DATA, ADDRESS, PTR)           ((DATA)[(*(ADDRESS)) ^ 2] = (*(PTR)) & ADDRESS_WIDTH_16)
 
-#define     M68K_READ_32(DATA, ADDRESS)             (((BASE)[ADDRESS + 1] <<24 | (((BASE)[ADDRESS + 3] >> 8))))
-#define     M68K_WRITE_32(DATA, ADDRESS, PTR)       *(U32*)((DATA + (ADDRESS)) = PTR & ADDRESS_WIDTH_32)
+#define     M68K_READ_32(DATA, ADDRESS)                 (DATA)[(uintptr_t)(ADDRESS) ^ 4] 
+#define     M68K_WRITE_32(DATA, ADDRESS, PTR)           ((DATA)[(*(ADDRESS)) ^ 4] = (*(PTR)) & ADDRESS_WIDTH_32)
 
-#define     M68K_RETURN_ADDRESS(ADDRESS)            ((ADDRESS) & 0xFFFFFFFFFF)                       
+#define     M68K_RETURN_ADDRESS(ADDRESS)                ((ADDRESS) & 0xFFFFFFFFFF)                       
+
+#define     Z80_READ(DATA, ADDRESS)                     (DATA)[(uintptr_t)(ADDRESS)]
 
 typedef struct CPU_68K
 {
@@ -82,7 +85,29 @@ typedef struct CPU_68K
     unsigned int* INSTRUCTION_CYCLES;
     unsigned int* INSTRUCTION_CYCLES_NULL;
     unsigned char* MEMORY_BASE;
-    unsigned char* MEMORY_MAP[256];
+
+    unsigned(*MEMORY_DATA);
+    unsigned(*MEMORY_ADDRESS);
+    unsigned(*MEMORY_POINTER);
+    
+    union MEMORY_MAP
+    {
+        char* BASE;
+        unsigned(*MEMORY_READ_8)(unsigned ADDRESS);
+        unsigned(*MEMORY_READ_16)(unsigned ADDRESS);
+        unsigned(*MEMORY_WRITE_8)(unsigned ADDRESS);
+        unsigned(*MEMORY_WRITE_16)(unsigned ADDRESS);
+
+    } MEMORY_MAP[256];
+
+    /* PUTTING THE Z80 MEMORY BANK FUNCTIONALITY */
+    /* IN HERE FOR NOW UNTIL MODULARISATION WOULD BETTER SUIT */
+
+    union Z80_MEM
+    {
+        unsigned(*READ)(unsigned ADDRESS);
+
+    } Z80_MEM[256];
 
     U32* REGISTER_BASE[16];
     U32* PREVIOUS_PC;
@@ -94,6 +119,7 @@ typedef struct CPU_68K
 
     unsigned int* PREVIOUS_DATA;
     unsigned int* PREVIOUS_ADDRESS;
+    unsigned int* ADDRESS_RT_CHECK;
     unsigned char* ERROR_ADDRESS;
     unsigned char* ERROR_WRITE_MODE;
     unsigned char* ERROR_PC;
@@ -153,8 +179,8 @@ unsigned CPU_ACCESS_REGISTERS(CPU_68K_REGS REGISTER,
 
 void M68K_INIT(void);
 void M68K_INIT_OPCODE(unsigned CALLBACK(void));
-void M68K_SET_INT_CALLBACK(unsigned CALLBACK(void));
-void M68K_SET_FUNC_CALLBACK(unsigned CALLBACK(void));
+void M68K_SET_INT_CALLBACK(unsigned CALLBACK);
+void M68K_SET_FUNC_CALLBACK(unsigned CALLBACK);
 
 #endif
 #endif
