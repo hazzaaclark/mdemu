@@ -25,10 +25,6 @@ void MD_INIT(void)
     struct MD* MD_CONSOLE;
     struct CPU_68K* CPU_68K;
 
-    int* MD_DATA;
-    int* MD_ADDRESS;
-    int* MD_PTR;
-
     if((MD_CONSOLE->SYSTEM_TYPE == SYSTEM_MD))
     {
         M68K_INIT();
@@ -40,7 +36,7 @@ void MD_INIT(void)
         /* THIS FUNCTIONALITY IS SIMILAR TO THE WAY IN WHICH IT WORKS */
         /* ON REAL HARDWARE WITH THE WAY IN WHICH THE VECTOR TABLE INITIALISES */ 
 
-        for (int i = 0; i < 0xe0; i++)
+        for (int i = 0; i < 0xFF; i++)
         {
             CPU_68K->MEMORY_MAP[i].BASE = (U8*)malloc(sizeof(MD_CONSOLE->BOOT_RAM));
             CPU_68K->MEMORY_MAP[i].MEMORY_READ_8 = M68K_READ_8(CPU_68K->MEMORY_DATA, CPU_68K->MEMORY_ADDRESS);
@@ -49,7 +45,15 @@ void MD_INIT(void)
             CPU_68K->MEMORY_MAP[i].MEMORY_WRITE_16 = M68K_WRITE_16(CPU_68K->MEMORY_DATA, CPU_68K->MEMORY_ADDRESS, CPU_68K->MEMORY_POINTER);
 
             CPU_68K->Z80_MEM[i].READ = Z80_READ(CPU_68K->MEMORY_DATA, CPU_68K->MEMORY_ADDRESS);
+            CPU_68K->Z80_MEM[i].WRITE = Z80_WRITE(CPU_68K->MEMORY_DATA, CPU_68K->MEMORY_ADDRESS, CPU_68K->MEMORY_POINTER);
         }
+
+        for (int i = 0xC; i < 0xFF; i++)
+        {
+            CPU_68K->MEMORY_MAP[i].MEMORY_READ_8 = VDP_READ_BYTE(CPU_68K->MEMORY_DATA, CPU_68K->MEMORY_ADDRESS);
+            CPU_68K->MEMORY_MAP[i].MEMORY_READ_8 = VDP_WRITE_BYTE(CPU_68K->MEMORY_DATA, CPU_68K->MEMORY_ADDRESS, CPU_68K->MEMORY_POINTER);
+        }
+        
     }
 }
 
