@@ -21,8 +21,7 @@
 
 /* NESTED INCLUDES */
 
-#include "common.h" 
-#include "instruction.h"
+#include "common.h"
 
 #ifdef DEBUG
 #define DEBUG_LOG(...) (__VA_ARGS__)
@@ -77,12 +76,19 @@
 
 #define     M68K_RETURN_ADDRESS(ADDRESS)                ((ADDRESS) & 0xFFFFFFFFFF)                       
 
-#define     Z80_READ(DATA, ADDRESS)                     (DATA)[(uintptr_t)(ADDRESS)]
+#define     Z80_READ(DATA, ADDRESS)                             (DATA)[(uintptr_t)(ADDRESS)]
+#define     Z80_WRITE(DATA, ADDRESS, PTR)                       ((DATA)[(*(ADDRESS)) ^ 4] = (*(PTR)) & ADDRESS_WIDTH_32)
+
+#define		CTRL_READ_BYTE(DATA, ADDRESS)				(DATA)[(U8)(ADDRESS) ^ 1]
+#define		CTRL_WRITE_BYTE(DATA, ADDRESS, PTR)			((DATA)[(*(ADDRESS)) ^ 1] = (*(PTR)) & ADDRESS_WIDTH_8)
+
+#define		CTRL_READ_WORD(DATA, ADDRESS)				(DATA)[(U16)(ADDRESS) ^ 2]
+#define		CTRL_WRITE_WORD(DATA, ADDRESS, PTR)			((DATA)[(*(ADDRESS)) ^ 2] = (*(PTR)) & ADDRESS_WIDTH_16)
 
 typedef struct CPU_68K
 {
     unsigned int PC;
-    unsigned int* INSTRUCTION_CYCLES;
+    unsigned int INSTRUCTION_CYCLES;
     unsigned int* INSTRUCTION_CYCLES_NULL;
     unsigned char* MEMORY_BASE;
 
@@ -106,6 +112,9 @@ typedef struct CPU_68K
     union Z80_MEM
     {
         unsigned(*READ)(unsigned ADDRESS);
+        unsigned(*WRITE)(unsigned ADDRESS);
+
+        unsigned int CYCLES;
 
     } Z80_MEM[256];
 
@@ -133,22 +142,22 @@ typedef struct CPU_68K
 
 typedef enum CPU_68K_REGS
 {
-    M68K_REG_D0,    
-    M68K_REG_D1,
-    M68K_REG_D2,
-    M68K_REG_D3,
-    M68K_REG_D4,
-    M68K_REG_D5,
-    M68K_REG_D6,
-    M68K_REG_D7,
-    M68K_REG_A0,    
-    M68K_REG_A1,
-    M68K_REG_A2,
-    M68K_REG_A3,
-    M68K_REG_A4,
-    M68K_REG_A5,
-    M68K_REG_A6,
-    M68K_REG_A7,
+    M68K_REG_D0 = 0,    
+    M68K_REG_D1 = 1,
+    M68K_REG_D2 = 2,
+    M68K_REG_D3 = 3,
+    M68K_REG_D4 = 4,
+    M68K_REG_D5 = 5,
+    M68K_REG_D6 = 6,
+    M68K_REG_D7 = 7,
+    M68K_REG_A0 = 8,    
+    M68K_REG_A1 = 9,
+    M68K_REG_A2 = 10,
+    M68K_REG_A3 = 11,
+    M68K_REG_A4 = 12,
+    M68K_REG_A5 = 13,
+    M68K_REG_A6 = 14,
+    M68K_REG_A7 = 15,
     M68K_REG_PC,    
     M68K_REG_SR,    
     M68K_REG_SP,    
@@ -169,18 +178,16 @@ typedef enum CPU_68K_FLAGS
 
 } CPU_68K_FLAGS;
 
-#ifndef BUILD_68K_TABLES
-void(*INITIALISE_68K_CYCLES)(char* CPU_68K_CYCLES[0x10000]);
-#endif
-
-STATIC
-unsigned CPU_ACCESS_REGISTERS(CPU_68K_REGS REGISTER,
-                              CPU_68K_FLAGS FLAGS, unsigned VALUE);
+void INITIALISE_68K_CYCLES(char* CPU_68K_CYCLES);
+void CPU_ACCESS_REGISTERS(CPU_68K_REGS REGISTER, unsigned VALUE);
 
 void M68K_INIT(void);
 void M68K_INIT_OPCODE(unsigned CALLBACK(void));
-void M68K_SET_INT_CALLBACK(unsigned CALLBACK);
-void M68K_SET_FUNC_CALLBACK(unsigned CALLBACK);
+void M68K_SET_INT_CALLBACK();
+void M68K_SET_FUNC_CALLBACK();
+
+int M68K_CALLBACK_INT(unsigned VALUE);
+int M68K_FUNC_CALLBACK(unsigned VALUE);
 
 #endif
 #endif
