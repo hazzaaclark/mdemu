@@ -93,6 +93,8 @@ void MD_INIT(void)
 
 /* D7 ACTS AS THE STACK POINTER TO DETERMINE WHERE THE DATA SHOULD GO TOWARDS */
 
+/* SEE 68K INSTRUCTION REF. https://md.railgun.works/index.php?title=68k_Instruction_Reference */
+
 STATIC
 void MD_RESET(void)
 {
