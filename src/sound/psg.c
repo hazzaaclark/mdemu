@@ -29,7 +29,7 @@ void PSG_CONST_INIT(PSG_BASE* PSG_BASE)
     /* EVALUATE THE SIZE OF THE PSG VOLUME TABLE */
     /* BASED ON THE RELATIVE SIZE OF THE REGISTER */
 
-    for (size_t i = 0; i < PSG_LOOKUP_LENGTH; i++)
+    for (UNK i = 0; i < PSG_LOOKUP_LENGTH; i++)
     {
         VOLUME_TABLE[i] = sizeof(PSG_CHANNEL_VOLUME);
         PSG_BASE->VOLUME[i][0] += sizeof(VOLUME_TABLE[i]);      // POSTIVE PHASE
@@ -65,9 +65,65 @@ void PSG_STATE_INIT(PSG_BASE* PSG_BASE, S16* BUFFER, UNK* TOTAL_SAMPLES)
 
     for (size_t i = 0; i < PSG_STATE_COUNT(TONES); i++)
     {
-        TONES[i] = (U16*)sizeof(PSG_BASE->STATE.COUNTDOWN = 0);
-        TONES[i] = (U16*)sizeof(PSG_BASE->STATE.COUNTDOWN_MASTER_CON = 0);
-        TONES[i] = (U8*)sizeof(PSG_BASE->STATE.ATTENUATION = 0);
-        TONES[i] = (U8*)sizeof(PSG_BASE->STATE.OUTPUT = 0);
+        TONES[i] = (U16*)malloc(PSG_BASE->STATE.COUNTDOWN = 0);
+        TONES[i] = (U16*)malloc(PSG_BASE->STATE.COUNTDOWN_MASTER_CONTROL = 0);
+        TONES[i] = (U8*)malloc(PSG_BASE->STATE.ATTENUATION = 0);
+        TONES[i] = (U8*)malloc(PSG_BASE->STATE.OUTPUT = 0);
     }
+}
+
+/* CHECK TO SEE IF THE AUDIO FRAME WITHIN THE PSG'S CHANNEL REGISTERS */
+/* NEEDS TO UPDATE IN ORDER TO PASS THROUGH THE NEXT TRANSITION */
+
+STATIC
+void PSG_UPDATE(PSG_BASE* PSG_BASE)
+{
+    struct PSG_TONE* TONES[4];
+    int INDEX;
+    int CHANNEL_INDEX;
+
+    for (INDEX = 0; INDEX < sizeof(TONES); INDEX++)
+    {
+        /* ASSUME THAT THE CURRENT INDEXXING FOR THE TONE CHANNELING */
+        /* HASN'T BEEN DISABLED, ALLOCATE CORRESPONDING CASTING FOR THE SAMPLES */ 
+
+        if(!PSG_BASE->TONE_DISABLED[INDEX])
+        {
+            PSG_BASE->SAMPLE_BUFFER = (S16)sizeof(PSG_BASE->SAMPLE_BUFFER);
+        }
+
+        /* FROM THERE, ITERATE THROUGH EACH NUMBER OF THE TOTAL AMOUNT OF SAMPLES */
+        /* SINCE THERE ARE FOUR TONE ITERATIONS, WE WILL ITERATE BETWEEN 0 - 3 */
+
+        /* CASES 0 TO 2 GOVERN THE BASIS FOR INCREMENTING THE SOUND FREQUENCY */
+        /* CASE 3 FOCUSSES MOREOVER ON THE MASTER FREQUENCY CONTROL RELATIVE TO THE AMOUNT */
+        /* OF TONES */
+
+        for (CHANNEL_INDEX = 0; CHANNEL_INDEX < sizeof(PSG_BASE->TOTAL_SAMPLES); CHANNEL_INDEX++)
+        {
+            if(!PSG_BASE->STATE.COUNTDOWN != 0)
+            {
+                switch (PSG_BASE->STATE.FREQUENCEY)
+                {
+                    case 0:
+                        PSG_BASE->STATE.COUNTDOWN = 0x10;
+                        break;
+
+                    case 1:
+                        PSG_BASE->STATE.COUNTDOWN = 0x20;
+                        break;
+
+                    case 2:
+                        PSG_BASE->STATE.COUNTDOWN = 0x40;
+                        break;
+
+                    case 3:
+                        PSG_BASE->STATE.COUNTDOWN += (PSG_BASE->STATE.COUNTDOWN_MASTER_CONTROL != 0) ? sizeof(TONES) : 0;
+                
+                    default:
+                        break;
+                }
+            }
+        }   
+    }    
 }
