@@ -124,6 +124,11 @@ void PSG_UPDATE(PSG_BASE* PSG_BASE)
                         break;
                 }
             }
-        }   
+        }
+
+        /* OUTPUT THE CORRESPONDING SAMPLES IN RELATION TO THE OFFSET OF */
+        /* THE VOLUME, ATTENUATION, AND REALTIME OUTPUT */
+
+        PSG_BASE->SAMPLE_BUFFER = PSG_BASE->VOLUME[sizeof(PSG_BASE->STATE.ATTENUATION)] ? sizeof(PSG_BASE->STATE.OUTPUT) : 0;
     }    
 }
