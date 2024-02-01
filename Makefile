@@ -2,9 +2,9 @@
 # SEGA MEGA DRIVE EMULATOR
 
 CC = gcc
-CFLAGS = -std=c90 -Wall -Wextra
+CFLAGS = -std=c99 -Wall -Wextra
 
-SRCS = 68000.c instruction.c vdp.c psg.c
+SRCS = 68000.c md.c vdp.c psg.c ym2612.c
 OBJS = $(SRCS:.c=.o)
 
 TARGET = mdemu
