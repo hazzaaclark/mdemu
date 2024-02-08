@@ -135,7 +135,42 @@ void MD_RESET(void)
             memset(MD_CONSOLE->BOOT_RAM, 0x00, sizeof(MD_CONSOLE->BOOT_RAM));
             memset(MD_CONSOLE->ZRAM, 0x00, sizeof(MD_CONSOLE->ZRAM));
             break;
+
+        default:
+            free(&CPU_68K);
     }
+}
+
+/* THE BANK SWITCH FUNCTIONS LOOKS INTO THE CORRESPODENCE STORED IN */
+/* THE ZBUFFER TO DETERMINE THE OFFSET OF MEMORY ALLOCATIONS */
+
+/* THIS WILL CHECK TO SEE IF THE BOOT ROM HAS BEEN LOADED AND IF SO */
+/* MIMMICK THE FUNCTIONALITY OF THE JUMP COROUTINE TO INITIALISE THE START OF THE CART */
+
+U32* MD_BANKSWITCH(unsigned int VALUE)
+{
+    static struct MD MD_CONSOLE;
+    struct CPU_68K* CPU_68K;
+
+    /* IS THE ROM LOADED IN THE MEMORY MAP? */
+
+    switch (MD_CONSOLE.SYSTEM_BIOS)
+    {
+    case 1:
+        CPU_68K->MEMORY_MAP[0].BASE = MD_CONSOLE.MD_CART->ROM_BASE;
+        break;
+
+    /* IS THE BOOT ROM INITIALISED? */
+
+    case 0:
+        CPU_68K->MEMORY_MAP[0].BASE = MD_CONSOLE.BOOT_ROM;
+    
+    default:
+        if(MD_CONSOLE.SYSTEM_BIOS == SYSTEM_MD)
+            return (&CPU_68K->MEMORY_MAP[0].BASE == MD_CONSOLE.MD_CART->ROM_BASE);
+    }
+
+    return ZBUFFER_MAX;
 }
 
 #endif
