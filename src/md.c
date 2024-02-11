@@ -138,6 +138,7 @@ void MD_RESET(void)
 
         default:
             free(&MD_CONSOLE->MD_CART);
+            free(&CPU_68K->Z80_MEM);
             free(&CPU_68K);
     }
 }
@@ -201,8 +202,9 @@ void MD_BUS_REQ(unsigned STATE, unsigned CYCLES)
         CPU_68K->MEMORY_MAP[0xA0].MEMORY_WRITE_8 = Z80_WRITE(CPU_68K->MEMORY_DATA, CPU_68K->MEMORY_ADDRESS, CPU_68K->MEMORY_POINTER);
         CPU_68K->MEMORY_MAP[0xA0].MEMORY_READ_16 = Z80_READ(CPU_68K->MEMORY_DATA, CPU_68K->MEMORY_ADDRESS);
         CPU_68K->MEMORY_MAP[0xA0].MEMORY_WRITE_16 = Z80_WRITE(CPU_68K->MEMORY_DATA, CPU_68K->MEMORY_ADDRESS, CPU_68K->MEMORY_POINTER);
-        
     }
+
+    STATE |= 2;
 }
 
 #endif
