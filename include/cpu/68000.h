@@ -79,10 +79,10 @@
 #define     Z80_READ(DATA, ADDRESS)                             (DATA)[(uintptr_t)(ADDRESS)]
 #define     Z80_WRITE(DATA, ADDRESS, PTR)                       ((DATA)[(*(ADDRESS)) ^ 4] = (*(PTR)) & ADDRESS_WIDTH_32)
 
-#define		CTRL_READ_BYTE(DATA, ADDRESS)				(DATA)[(U8)(ADDRESS) ^ 1]
+#define		CTRL_READ_BYTE(DATA, ADDRESS)				(DATA)[(uintptr_t)(ADDRESS) ^ 1]
 #define		CTRL_WRITE_BYTE(DATA, ADDRESS, PTR)			((DATA)[(*(ADDRESS)) ^ 1] = (*(PTR)) & ADDRESS_WIDTH_8)
 
-#define		CTRL_READ_WORD(DATA, ADDRESS)				(DATA)[(U16)(ADDRESS) ^ 2]
+#define		CTRL_READ_WORD(DATA, ADDRESS)				(DATA)[(uintptr_t)(ADDRESS) ^ 2]
 #define		CTRL_WRITE_WORD(DATA, ADDRESS, PTR)			((DATA)[(*(ADDRESS)) ^ 2] = (*(PTR)) & ADDRESS_WIDTH_16)
 
 #ifdef M68K_CYCLE_CLOCK
@@ -106,10 +106,10 @@ typedef struct CPU_68K
     union MEMORY_MAP
     {
         char* BASE;
-        unsigned(*MEMORY_READ_8)(unsigned ADDRESS);
-        unsigned(*MEMORY_READ_16)(unsigned ADDRESS);
-        unsigned(*MEMORY_WRITE_8)(unsigned ADDRESS);
-        unsigned(*MEMORY_WRITE_16)(unsigned ADDRESS);
+        U8 MEMORY_READ_8;
+        U16 MEMORY_READ_16;
+        U8 MEMORY_WRITE_8;
+        U16 MEMORY_WRITE_16;
 
     } MEMORY_MAP[256];
 
@@ -125,9 +125,14 @@ typedef struct CPU_68K
 
     } Z80_MEM[256];
 
+	U16 STATUS_REGISTER;
     U32* REGISTER_BASE[16];
+	U32* DATA_REGISTER[8];
+	U32* ADDRESS_REGISTER[8];
     U32* PREVIOUS_PC;
-    U32* STACK_POINTER;
+    U32 STACK_POINTER;
+	U32 USER_STACK;
+	U32 ADDRESS_STACK_POINTER;
     U32* INSTRUCTION_REGISTER;
 
     char* INSTRUCTION_MODE;
@@ -223,8 +228,6 @@ typedef enum CPU_68K_FLAGS
 typedef struct OPCODE
 {
 	U16* PATTERN;
-	OPCODE_TYPE* OPCODE_TYPE;
-	CONDITION* CONDITION_TYPE;
 	size_t* OPCODE_SIZE;
 
 	union 
@@ -380,7 +383,7 @@ typedef enum OPCODE_TYPE
 } OPCODE_TYPE;
 
 void INITIALISE_68K_CYCLES(char* CPU_68K_CYCLES);
-unsigned int CPU_ACCESS_REGISTERS(CPU_68K_REGS REGISTER, unsigned VALUE);
+U32 CPU_ACCESS_REGISTERS(CPU_68K_REGS REGISTER, unsigned VALUE);
 
 void M68K_INIT(void);
 void M68K_INIT_OPCODE(unsigned CALLBACK(void));
