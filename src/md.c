@@ -245,6 +245,8 @@ void MD_SAVE_REGISTER_STATE(struct CPU_68K* CPU_68K)
 
     CPU_68K->PC += (int)malloc(sizeof(CPU_68K->PC));
     CPU_68K->STATUS_REGISTER += (U16)malloc(sizeof(CPU_68K->STATUS_REGISTER));
+
+    memset(CPU_68K, 0x00, sizeof(*CPU_68K));
 }
 
 
