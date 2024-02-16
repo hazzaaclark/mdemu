@@ -150,6 +150,8 @@ typedef struct CPU_68K
     S32(*RESET_INTERRUPT)(void);
     S32(*CPU_FUNC_CALLBACK)(unsigned FUNCTION);
 
+	U32 TMSS[4];
+
 } CPU_68K;
 
 typedef enum CPU_68K_REGS
