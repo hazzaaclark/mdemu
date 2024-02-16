@@ -102,6 +102,10 @@ typedef struct CPU_68K
     unsigned(*MEMORY_DATA);
     unsigned(*MEMORY_ADDRESS);
     unsigned(*MEMORY_POINTER);
+
+	unsigned(*LOW_ADDR);
+	unsigned(*HIGH_ADDR);
+	void(*USER_DATA);
     
     union MEMORY_MAP
     {
