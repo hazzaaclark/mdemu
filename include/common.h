@@ -1,6 +1,6 @@
-/* Copyright (C) 2023 Harry Clark */
+/* COPYRIGHT (C) HARRY CLARK 2024 */
 
-/* SEGA Mega Drive Emulator */
+/* SEGA MEGA DRIVE EMULATOR */
 
 /* THIS FILE IS ABOUT COMMON DATA TYPES USED THROUGHOUT THE PROJECT */
 /* CREATING TYPE DEFINED METHODS TO INSTANTIATE RAW POINTERS FOR MY */
@@ -40,7 +40,7 @@ typedef unsigned char UNK_8;
 typedef unsigned short UNK_16;
 typedef unsigned int UNK_32;
 typedef unsigned long UNK_64;
-typedef unsigned long UNK_;
+typedef size_t UNK;
 
 #endif
 
@@ -59,6 +59,7 @@ typedef volatile F64 VF64;
 
 #define VOID_FUNCTION(NAME) void NAME() 
 #define INLINE inline
+#define STATIC static
 
 #endif
 
