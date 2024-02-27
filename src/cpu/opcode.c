@@ -75,12 +75,15 @@ void M68K_BUILD_OPCODE_TABLE(void)
 {
     OPCODE_MASK_MODE MASK_MODE;
     struct OPCODE* OPCODE_HANDLER;
+    struct CPU_68K* CPU_68K;
     int INDEX;
 
-    for (INDEX = 0; INDEX < M68K_MAX_INSTR_LENGTH; INDEX++)
-    {
-        M68K_OPCODE_HANDLER[INDEX] = OPCODE_ILLEGAL;
-    }
+    /* FOR EVERY SUBSEQUENT MASK MODE OF THE OPCODE TABLE */
+    /* SORT BETWEEN THE RESPECTIVE ELEMENTS AND DISCERN THEIR CORRESPONDENCE */
+    /* IN RELATION TO WHICH INSTRUCTION IS BEING USED */
+
+    /* THIS EMPOSES THE ASSUMPTION THAT THE OPCODE'S WILL BE ALLOCATED */
+    /* TO A RESPECTIVE REGISTER TO GOVERN A SPECIFIC AREA */
 
     switch (MASK_MODE)
     {
@@ -88,11 +91,37 @@ void M68K_BUILD_OPCODE_TABLE(void)
             if(INDEX = 0 && INDEX < M68K_MAX_INSTR_LENGTH)
             {
                 M68K_OPCODE_HANDLER[INDEX] = OPCODE_HANDLER->HANDLER;
+                CPU_68K->INSTRUCTION_CYCLES[INDEX][OPCODE_HANDLER->PATTERN];
+            }
+            break;
+
+        case OPCODE_LOG_BIT:
+            for (INDEX = 0; INDEX < 8; INDEX++)
+            {
+                M68K_OPCODE_HANDLER[OPCODE_HANDLER->INSTRUCTION] = OPCODE_HANDLER->HANDLER;
+
+                if(!OPCODE_HANDLER->INSTRUCTION && M68K_MAX_INSTR_LENGTH == 0)
+                {
+                    CPU_68K->INSTRUCTION_CYCLES[0] = (CPU_68K->INSTRUCTION_CYCLES[1], OPCODE_HANDLER->INSTRUCTION + INDEX);
+                }
             }
 
             break;
+
+        case OPCODE_LOG_OR:
+            for (INDEX = 0; INDEX < 0xF; INDEX++)
+            {
+                M68K_OPCODE_HANDLER[OPCODE_HANDLER->INSTRUCTION] = OPCODE_HANDLER->HANDLER;
+                CPU_68K->INSTRUCTION_CYCLES[INDEX] = OPCODE_HANDLER->PATTERN[INDEX] | CPU_68K->INSTRUCTION_CYCLES[INDEX];
+            }
+            
+            
     
     default:
+        for (INDEX = 0; INDEX < M68K_MAX_INSTR_LENGTH; INDEX++)
+        {
+            M68K_OPCODE_HANDLER[INDEX] = OPCODE_ILLEGAL;
+        }
         break;
     }
     
