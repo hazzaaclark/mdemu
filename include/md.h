@@ -23,7 +23,7 @@
 #else
 #define USE_MD
 
-#define     SYSTEM_MD           0x80        // THE TYPICAL ENTRY POINT OF A MD CART
+#define     SYSTEM_MD           0x80        /* THE TYPICAL ENTRY POINT OF A MD CART */
 #define     SYSTEM_MISC         0x81
 #define     ZBUFFER_MAX         256
 #define     ZBANK_MAX_RAM       4096
