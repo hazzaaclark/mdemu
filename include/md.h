@@ -27,6 +27,7 @@
 #define     SYSTEM_MISC         0x81
 #define     ZBUFFER_MAX         256
 #define     ZBANK_MAX_RAM       4096
+#define     CART_MAX_SIZE       32 * 1024 * 1024
 
 typedef struct MD_CART
 {
@@ -38,10 +39,18 @@ typedef struct MD_CART
     U32 CARTRIDGE_MASK[4];
     U32 CARTRIDGE_ADDRESS[4];
     U32 ROM_SIZE;
+    U32* ROM_DATA;
 
     unsigned(*TICK_TIMER)(unsigned ADRRESS);
     unsigned(*REGISTER_READ)(unsigned ADDRESS);
     void(*REGISTER_WRITE)(unsigned ADDRESS, unsigned DATA);
+
+    const char* ROM_SERIAL;
+    const char* ROM_DOMESTIC;
+    const char* ROM_INTER;
+
+    U32(*ROM_LOAD_CRC)(void);
+    U32(*ROM_SRAM_INIT)(U32* INFO, U32* START, U32* END);
 
 } MD_CART;
 
@@ -49,8 +58,10 @@ typedef struct MD
 {
     MD_CART* MD_CART;
     U8* BOOT_ROM[0x800];
-    U8* BOOT_RAM[0X10000];
-    U8 ZRAM[0x2000];
+    U8* BOOT_RAM[0x10000];
+    U8* SYS_ROM;
+    U8* SYS_RAM;
+    U8* ZRAM[0x2000];
     U8 ZSTATE;
     U8 SYSTEM_BIOS;
     U32* ZBANK[ZBANK_MAX_RAM];
@@ -70,7 +81,7 @@ typedef enum MD_RESET_MODE
 
 } MD_RESET_MODE;
 
-
+typedef MD* MD_MAKE();
 
 void MD_INIT(void);
 void MD_RESET(void);
@@ -78,12 +89,13 @@ void MD_ADDRESS_BANK_WRITE(unsigned DATA);
 void MD_ADDRESS_BANK_READ(void);
 void MD_BUS_REQ(unsigned STATE, unsigned CYCLES);
 void MD_SAVE_REGISTER_STATE(struct CPU_68K* CPU_68K);
-void MD_CART_INIT(void);
-void MD_CARD_RESET(int const RESET_TYPE);
+int MD_CART_INIT(void);
+void MD_CART_RESET(int const RESET_TYPE);
 S32(*MD_CART_CONTEXT(U8* STATE))(void);
 U32(*MD_BANKSWITCH(unsigned int VALUE));
 int MD_UPDATE_BANKING(struct CPU_68K* CPU_68K, int BANKS);
 int MD_CART_UPDATE_BANKING(struct CPU_68K* CPU_68K, int BANKS);
+void MD_CART_MEMORY_MAP(void);
 
 #endif
 
