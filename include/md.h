@@ -29,6 +29,10 @@
 #define     ZBANK_MAX_RAM       4096
 #define     CART_MAX_SIZE       32 * 1024 * 1024
 
+#define     MD_CART_BANK_DEFAULT        0
+#define     MD_CART_BANK_UNUSED         0xFF
+#define     MD_CART_BANK_RO             1
+
 typedef struct MD_CART
 {
     U8* ROM_BASE;
@@ -51,6 +55,8 @@ typedef struct MD_CART
 
     U32(*ROM_LOAD_CRC)(void);
     U32(*ROM_SRAM_INIT)(U32* INFO, U32* START, U32* END);
+
+    int* ROM_MAP;
 
 } MD_CART;
 
@@ -80,6 +86,14 @@ typedef enum MD_RESET_MODE
     NONE,
 
 } MD_RESET_MODE;
+
+typedef enum MD_CART_MAP_MODE
+{
+    MAPPER_NORMAL,
+    MAPPER_READONLY,
+    MAPPER_UNUSED,
+
+} MD_CART_MAP_MODE;
 
 typedef MD* MD_MAKE();
 
