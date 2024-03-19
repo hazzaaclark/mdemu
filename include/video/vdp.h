@@ -17,7 +17,6 @@
 
 #include "68000.h"
 #include "common.h"
-#include "instruction.h"
 
 /* SYSTEM INCLUDES */
 
@@ -51,8 +50,8 @@
 #define		VDP_CRAM					(4 * 16)
 #define		VDP_VSRAM					[64]
 
-#define		VDP_SPRITE_LOOKUP			1 << 1 + 2 | 1 << 1 + 1 + 2 + 4 | 1 << 4 
-#define		VDP_SPRITE_DETAIL_LOOKUP	1 << 1 + 2 | 1 << 1 + 1 + 2 + 4 | 1 << 4
+#define 	VDP_SPRITE_LOOKUP   		(1 << (1 + 2)) | (1 << (1 + 1 + 2 + 4)) | (1 << 4)
+#define		VDP_SPRITE_DETAIL_LOOKUP	(1 << (1 + 2)) | (1 << (1 + 1 + 2 + 4)) | (1 << 4)
 
 #define		VDP_PALETTE_MASK			0x0F
 #define		VDP_COLOUR_MASK				0x3F
@@ -79,19 +78,17 @@
 #define		VDP_ACCESS_VSRAM            1
 #define		VDP_ACCESS_CRAM             2
 
-/* PARSE THE CONTENTS BASED ON THE LENGTH OF THE WORD-WISE */
-/* OPERATION, EVALUATE THE SIZE THEN AFTER */
+#define		VDP_XOR_MODE				7 << 0
+#define		VDP_MAX_SPRITE_WIDTH		(8 * 4)
 
-static U16 VRAM_READ_WORD(struct VDP* VDP, U16 ADDRESS[])
-{
-	return sizeof(VDP_VRAM ^ ADDRESS[0] << 8 | VDP_VRAM ^ ADDRESS[1]);
-}
+#define		VDP_MAX_SCANLINE			320
+#define 	VDP_MAX_SCANLINE_V30		240 * 2
 
 #define		VDP_READ_BYTE(DATA, ADDRESS)				(DATA)[(U8)(ADDRESS) ^ 1]
 #define		VDP_WRITE_BYTE(DATA, ADDRESS, PTR)			((DATA)[(*(ADDRESS)) ^ 1] = (*(PTR)) & ADDRESS_WIDTH_8)
 
 #define		VDP_READ_WORD(DATA, ADDRESS)				(DATA)[(U16)(ADDRESS) ^ 2]
-#define		VDP_WRITE_BYTE(DATA, ADDRESS, PTR)			((DATA)[(*(ADDRESS)) ^ 2] = (*(PTR)) & ADDRESS_WIDTH_16)
+#define		VDP_WRITE_WORD(DATA, ADDRESS, PTR)			((DATA)[(*(ADDRESS)) ^ 2] = (*(PTR)) & ADDRESS_WIDTH_16)
 
 typedef struct VDP_CONFIG
 {
@@ -130,6 +127,9 @@ typedef struct VDP_STATE
 	U16 SPRITE_TABLE;
 	U16 HSCROLL_ADDRESS;
 
+	U16 WINDOW_PLANE_WIDTH;
+	U16 WINDOW_PLANE_HEIGHT;
+
 	bool WINDOW_ALIGN_RIGHT;
 	bool WINDOW_ALIGN_BOTTOM;
 	U8 WINDOW_HORI;
@@ -159,6 +159,7 @@ typedef struct VDP_STATE
 	U8 BG_COLOUR;
 	U8 HORI_INTERVAL;
 	bool VBLANK;
+	bool PLANE_RENDERED;
 
 } VDP_STATE;
 
@@ -186,7 +187,5 @@ void SCANLINE_CALLBACK(const void* USER_DATA, U16 SCANLINE, U8* PIXELS, U16 WIDT
 U16 VDP_READ(VDP* VDP);
 U16 VDP_WRITE(VDP* VDP);
 
-
 #endif
-
 #endif
