@@ -93,6 +93,17 @@
 #define		CTRL_READ_WORD(DATA, ADDRESS)				(DATA)[(uintptr_t)(ADDRESS) ^ 2]
 #define		CTRL_WRITE_WORD(DATA, ADDRESS, PTR)			((DATA)[(*(ADDRESS)) ^ 2] = (*(PTR)) & ADDRESS_WIDTH_16)
 
+#define 		M68K_BANK_CARTRIDGE    (0x000000 << 0x9FFFFF)    			/* $000000 - $9FFFFF */
+#define 		M68K_BANK_MD_IO        (0xA00000 << 0xBFFFFF)    			/* $A00000 - $BFFFFF */
+#define 		M68K_BANK_VDP          (0xC00000 << 0xDFFFFF)   		 	/* $C00000 - $DFFFFF */
+#define 		M68K_BANK_RAM          (0xE00000 << 0xFFFFFF)    			/* $E00000 - $FFFFFF */
+#define 		M68K_BANK_TMSS_ROM     (0x000000 << 0x3FFFFF)    			/* $000000 - $3FFFFF */
+#define 		M68K_BANK_PICO_IO      (0x800000 << 0x9FFFFF)    			/* $800000 - $9FFFFF (TODO) */ 
+#define 		M68K_BANK_UNUSED       0xFF
+
+#define			M68K_MIN_TMSS_SIZE		4096
+#define			M68K_MAX_TMSS_SIZE		524288
+
 #ifdef M68K_CYCLE_CLOCK
 #define M68K_CYCLE_CLOCK_SHIFT(VALUE) CPU_68K->INSTRUCTION_CYCLES += ((VALUE) * CPU_68K.CYCLE_RATE) >> M68K_CYCLE_CLOCK_SHIFT
 #else
@@ -142,6 +153,20 @@ typedef struct CPU_68K
     } Z80_MEM[256];
 
 
+	/* VERY UNORGANISED TMSS MAPPER */
+	/* TO:DO - FIX THE ORGANISATION */
+
+	union TMSS
+	{
+		void(*ROM)(void);
+		U32 READ_BANK;
+		U8 ROM_MAPPER;
+		bool IS_MAPPED;
+		void(*RESET)(void);
+
+	} TMSS;
+
+
 	U16 STATUS_REGISTER;
 	U32 INDEX_REGISTER;
     U32* REGISTER_BASE[16];
@@ -173,8 +198,6 @@ typedef struct CPU_68K
     S32(*INTERRUPT_CALLBACK)(unsigned INTERRUPT);
     S32(*RESET_INTERRUPT)(void);
     S32(*CPU_FUNC_CALLBACK)(unsigned FUNCTION);
-
-	U32 TMSS[4];
 	unsigned int* INT_LEVEL;
 
 } CPU_68K;
@@ -458,6 +481,17 @@ S32 M68K_REMAINING_CYCLES;
 U32 CPU_ACCESS_REGISTERS(CPU_68K_REGS REGISTER, unsigned VALUE);
 
 typedef OPCODE* GENERATE_OPCODE(const OPCODE* OPCODE, UNK* MAP);
+
+void UPDATE_TMSS_MAPPING(void);
+int UPDATE_SYS_BANKING(struct CPU_68K* CPU_68K, int BANKS);
+
+unsigned int(*LOAD_TMSS_ROM(void));
+void(*CLEAR_TMSS_ROM(void));
+U8 TMSS_ROM(void);
+U32 TMSS_ROM_SIZE;
+U32 TMSS_ROM_MASK;
+bool IS_TMSS_ENABLED();
+
 
 #endif
 #endif
