@@ -83,12 +83,12 @@ U8 M68K_EXECEPTION_TABLE[4][256] =
 		  4, /* 56: MMU CONFIG ERROR               						*/
 		  4, /* 57: MMU ILLEGAL OP ERROR           						*/
 		  4, /* 58: MMU ACCESS LEVEL VIOLATION      					*/
-		  4, /* 59: RESERVED                                           */
-		  4, /* 60: RESERVED                                           */
-		  4, /* 61: RESERVED                                           */
-		  4, /* 62: RESERVED                                           */
-		  4, /* 63: RESERVED                                           */
-		     /* 64-255: USER DEFINED                                   */
+		  4, /* 59: RESERVED                                           	*/
+		  4, /* 60: RESERVED                                           	*/
+		  4, /* 61: RESERVED                                           	*/
+		  4, /* 62: RESERVED                                           	*/
+		  4, /* 63: RESERVED                                           	*/
+		     /* 64-255: USER DEFINED                                   	*/
 		  4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,
 		  4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,
 		  4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,
@@ -378,4 +378,28 @@ void M68K_STATE_REGISTER(const char* TYPE, int* CPU_BASE)
 	M68K_SAVE_REGISTER(TYPE, CPU_BASE, "CACR", M68K_REG_CACR, 1);
 	M68K_SAVE_REGISTER(TYPE, CPU_BASE, "INT_LVL", M68K_INT_LEVEL(*CPU_68K->INT_LEVEL), 1);
 	M68K_SAVE_REGISTER(TYPE, CPU_BASE, "INT_CYC", M68K_INT_LEVEL(*CPU_68K->INSTRUCTION_CYCLES), 1);
+}
+
+/* FINALLY, ESTABLISH AN EXECUTION ENTRY POINTER FOR THE MASTER CPU LOGIC */
+/* THIS ASSUMES THE ROLE OF WHEN THE CPU IS NOT HALTED AND OR STOPPED */
+
+/* IT WILL LOOK INTO THE PREVIOUS PROGRAM COUNTER STATE TO DETERMINE */
+/* WHICH INSTRUCTION TO COMPUTE */
+
+int M68K_EXEC(int CYCLES)
+{
+	struct CPU_68K* CPU_68K;
+
+	if(!CPU_68K->STOPPED)
+	{
+		while(M68K_REMAINING_CYCLES > 0)
+		{
+			/* TO-DO: */
+			/* INITIALISE M68K MEMORY MAP   					*/
+			/* CREATE EXTERNAL CPU HOOK							*/
+			/* DETERMINE TRACE MODE FOR EXCEPTION HANDLES		 */
+
+			CPU_68K->PREVIOUS_PC = M68K_REG_PC;
+		}
+	}
 }
