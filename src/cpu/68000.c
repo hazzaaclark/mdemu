@@ -455,4 +455,11 @@ unsigned int* LOAD_TMSS_ROM(void)
 		return -3;
 	}
 
+	/* CLEAR THE EMPTY STACK MEMORY OF THE ROM BUFFER ASSUMING WHEN */
+	/* IT ISN'T BEING USED */
+
+	memset(&CPU_68K->TMSS.ROM, 0xFF, 0);
+	free(CPU_68K->TMSS.ROM);
+	return 0;
+
 }
