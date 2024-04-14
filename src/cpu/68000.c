@@ -414,7 +414,7 @@ int M68K_EXEC(int CYCLES)
 }
 
 /*===============================================================================*/
-/*							68000 MEMORY FUNCTIONALIY							 */
+/*			     68000 MEMORY FUNCTIONALIY				 */
 /*===============================================================================*/
 
 /* LOAD THE TMSS ROM HEADER SUCH THAT THE MEMORY MAP IS ABLE TO DISCERN */
