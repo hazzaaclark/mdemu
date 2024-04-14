@@ -19,7 +19,7 @@
 #endif
 
 /*===============================================================================*/
-/*							68000 MAIN CPU FUNCTIONALIY							 */
+/*                        68000 MAIN CPU FUNCTIONALIY				 */
 /*===============================================================================*/
 
 /* DISCERN THE EXCEPTION HANDLER TABLE WHICH ENCOMPASSES THE */
@@ -27,13 +27,13 @@
 
 U8 M68K_EXECEPTION_TABLE[4][256] =
 {
-	{ 	  0,	 /* NULL	 										 	*/
+	{ 	  0,	 /* NULL							*/
 		  4, /*  0: RESET - STACK POINTER 		                     	*/
 		  4, /*  1: RESET - PROGRAM COUNTER                    			*/
-		 50, /*  2: BUS ERROR                             				*/
-		 50, /*  3: ADDRESS ERROR 										*/
-		 34, /*  4: ILLEGAL OP/INSTR                                	*/
-		 38, /*  5: ZERO DIV							             	*/
+		 50, /*  2: BUS ERROR                             			*/
+		 50, /*  3: ADDRESS ERROR 						*/
+		 34, /*  4: ILLEGAL OP/INSTR                                		*/
+		 38, /*  5: ZERO DIV							*/
 		 40, /*  6: CHECK REGISTER AGAINST UB/LB (1'S, 2'S COMP)		*/
 		 34, /*  7: TRAPV                                              	*/
 		 34, /*  8: PRIVILEGE VIOLATION                                 */
@@ -41,7 +41,7 @@ U8 M68K_EXECEPTION_TABLE[4][256] =
 		  4, /* 10: 1010                                                */
 		  4, /* 11: 1111                                                */
 		  4, /* 12: RESERVED                                            */
-		  4, /* 13: COPROCESSOR VIOLATION (SCD, 32X)  					*/
+		  4, /* 13: COPROCESSOR VIOLATION (SCD, 32X)  			*/
 		  4, /* 14: FORMAT ERROR                                       	*/
 		 44, /* 15: UNIITIALISED INTERRUPT                            	*/
 		  4, /* 16: RESERVED                                           	*/
