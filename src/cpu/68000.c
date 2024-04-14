@@ -18,6 +18,10 @@
 
 #endif
 
+/*===============================================================================*/
+/*							68000 MAIN CPU FUNCTIONALIY							 */
+/*===============================================================================*/
+
 /* DISCERN THE EXCEPTION HANDLER TABLE WHICH ENCOMPASSES THE */
 /* MASTER LOGIC FROM THE VECTOR TABLE OF THE HEADER OF 68K ASSEMBLY */
 
@@ -389,6 +393,7 @@ void M68K_STATE_REGISTER(const char* TYPE, int* CPU_BASE)
 int M68K_EXEC(int CYCLES)
 {
 	struct CPU_68K* CPU_68K;
+	int INITIAL_CYCLES;
 
 	if(!CPU_68K->STOPPED)
 	{
@@ -401,5 +406,53 @@ int M68K_EXEC(int CYCLES)
 
 			CPU_68K->PREVIOUS_PC = M68K_REG_PC;
 		}
+
+		return INITIAL_CYCLES;
 	}
+
+	return CYCLES;
+}
+
+/*===============================================================================*/
+/*							68000 MEMORY FUNCTIONALIY							 */
+/*===============================================================================*/
+
+/* LOAD THE TMSS ROM HEADER SUCH THAT THE MEMORY MAP IS ABLE TO DISCERN */
+/* IF THE PROVIDED ROM HAS TMSS SUPPORT */
+
+unsigned int* LOAD_TMSS_ROM(void)
+{
+	struct CPU_68K* CPU_68K;
+	unsigned char* TMSS_BUFFER;
+
+	/* THIS FUNCTION WILL ASSUME THAT THE TMSS CORRESPONDENCE WILL */
+	/* BE NULL TO BEGIN WITH */
+
+	CLEAR_TMSS_ROM();
+
+	/* DISCERN IF TMSS IS NOT ENABLED WITHIN THE ROM HEADER */
+
+	if(!IS_TMSS_ENABLED())
+		return -1;
+
+	/* DEFINE THE TMSS ROM FILESIZE, THIS IS BASED ON THE SIZE */
+	/* OF A TRADITIONAL MD ROM */
+
+	if(CPU_68K->TMSS.ROM < 0 || CPU_68K->TMSS.ROM > (int)M68K_MAX_TMSS_SIZE)
+	{
+		return -2;
+	} 
+
+	/* ASSUMING NOW THAT THE ROM FITS WITHIN THE REALMS OF THE SIZE OF THE BUFFER */
+	/* WE CAN BEGIN TO ALLOCATE MEMORY ONTO THE STACK TO STORE THE TMSS */
+
+	TMSS_BUFFER = (char*)malloc(sizeof(CPU_68K->TMSS.ROM()));
+
+	if(TMSS_BUFFER == NULL)
+	{
+		fprintf("Could not allocate relative memory to TMSS Rom Header %x", stderr);
+		free(CPU_68K->TMSS.ROM);
+		return -3;
+	}
+
 }
