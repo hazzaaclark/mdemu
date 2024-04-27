@@ -23,6 +23,10 @@
 
 #include "common.h"
 
+/*===============================================================================*/
+/*							68000 DEBUG											 */
+/*===============================================================================*/
+
 #ifdef DEBUG
 #define DEBUG_LOG(...) (__VA_ARGS__)
 #else
@@ -58,6 +62,10 @@
 #define USE_CPU
 #else
 #define USE_CPU
+
+/*===============================================================================*/
+/*							68000 MAIN CPU FUNCTIONALIY							 */
+/*===============================================================================*/
 
 /* MACROS USED FOR GETTING AND SETTING VALUES BASED ON SPECIFIC REQUIREMENTS */
 /* MORE SPECIFICALLY, THIS IS TO AVOID ARRAY INDEXXING ISSUES WHEN IT COMES TO */
@@ -103,6 +111,10 @@
 
 #define			M68K_MIN_TMSS_SIZE		4096
 #define			M68K_MAX_TMSS_SIZE		524288
+
+#define			M68K_RAM_BYTE			64 * 1024
+#define			M68K_RAM_WORD			64 * 1024 >> 1
+#define			M68K_RAM_LONG			64 * 1024 >> 2
 
 #ifdef M68K_CYCLE_CLOCK
 #define M68K_CYCLE_CLOCK_SHIFT(VALUE) CPU_68K->INSTRUCTION_CYCLES += ((VALUE) * CPU_68K.CYCLE_RATE) >> M68K_CYCLE_CLOCK_SHIFT
@@ -252,6 +264,10 @@ typedef enum CPU_68K_FLAGS
 #define M68K_SAVE_INSTR(IDENTIFIER, VALUE) 					(*((char*)(IDENTIFIER)) = (char)((VALUE)))
 #define	M68K_INT_LEVEL(IDENTIFIER) 							CPU_68K->INT_LEVEL += ((IDENTIFIER))
 #define	M68K_CYC_INSTRUCTION								CPU_68K->INSTRUCTION_CYCLES
+
+/*===============================================================================*/
+/*							68000 OPCODE FUNCTIONALIY							 */
+/*===============================================================================*/
 
 #ifdef 			USE_OPCODE_DEFS
 #define 		USE_OPCODE_DEFS
@@ -458,8 +474,14 @@ typedef enum OPCODE_MASK_MODE
 } OPCODE_MASK_MODE;
 
 
+/*===============================================================================*/
+/*							68000 INSTRUCTIONS									 */
+/*===============================================================================*/
+
+
 void INITIALISE_68K_CYCLES();
 void M68K_INIT(void);
+void M68K_MEM_INIT(void);
 int M68K_EXEC(int CYCLES);
 void M68K_INIT_OPCODE(void);
 void M68K_RUN(void);
@@ -493,6 +515,9 @@ U8 TMSS_ROM(void);
 U32 TMSS_ROM_SIZE;
 U32 TMSS_ROM_MASK;
 bool IS_TMSS_ENABLED();
+
+U8 M68K_READ_BUS_BYTE(U32*  ADDRESS);
+U8 M68K_READ_RAM_BYTE(U32* ADDRESS);
 
 
 #endif
