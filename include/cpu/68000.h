@@ -475,9 +475,48 @@ typedef enum OPCODE_MASK_MODE
 
 
 /*===============================================================================*/
-/*							68000 INSTRUCTIONS									 */
+/*							68000 ADDRESSING MODES								 */
 /*===============================================================================*/
 
+/* THE FOLLOWING DIRECTIVE SERVE TO PROVIDE FUNCTIONALITY PERTAINING TOWARDS */
+/* THE STRING LITERAL EVALUATION OF THESE ADDRESSING MODE TYPES */
+
+/* THE DIFFERENTIATION BETWEEN THIS AND THE ENUM IS THAT THE ENUM WILL BE */
+/* THERE TO PROVIDE LOOSE VALUES PERTAINING TOWARDS THE CYCLE ACCURATE ADDRESSABLE MODE */
+
+#ifndef HAS_EA_ACCESS
+#define HAS_EA_ACCESS
+
+#define 	HAS_NO_EA_MODE(VALUE) 										(strcmp(VALUE, " 			") == 0)
+#define		HAS_EA_ADDRESS_INDRECT(VALUE)								(strcmp(VALUE)[0] == 'AI')
+#define		HAS_EA_PRE_INCREMENT(VALUE)									(strcmp(VALUE)[0] == '+')
+#define		HAS_EA_POST_DECREMENT(VALUE)								(strcmp(VALUE)[0] == '-')
+#define		HAS_EA_DISP(VALUE)											(strcmp(VALUE)[0] == 'D')
+#define		HAS_EA_INCREMENT(VALUE)										(strcmp(VALUE)[0] == 'X')
+#define		HAS_EA_WORD(VALUE)											(strcmp(VALUE)[0] == 'W')
+#define		HAS_EA_LONG(VALUE)											(strcmp(VALUE)[0] == 'L')
+#define		HAS_EA_PROGRAM_COUNTER_DISP(VALUE)							(strcmp(VALUE)[0] == 'PCDI')
+#define		HAS_EA_PROGRAM_COUNTER_INDEX(VALUE)							(strcmp(VALUE)[0] == 'PCIX')
+#define		HAS_EA_INDEX(VALUE)											(strcmp(VALUE)[0] == 'I')
+
+typedef enum EA_MODES
+{ 
+	EA_NONE,
+	EA_AW,
+	EA_AL,
+	EA_AI,
+	EA_PI,
+	EA_PI7,
+	EA_PD,
+	EA_PD7,
+	EA_PCDI,
+	EA_PCIX,
+	EA_IX,
+	EA_I
+
+} EA_MODES;
+
+#endif
 
 void INITIALISE_68K_CYCLES();
 void M68K_INIT(void);
