@@ -197,7 +197,6 @@ typedef struct CPU_68K
 
 	U32 TMSS_BASE[4];
 
-
     char* INSTRUCTION_MODE;
     char* TRACE_FLAG;
 
@@ -214,12 +213,12 @@ typedef struct CPU_68K
     S32(*CPU_FUNC_CALLBACK)(unsigned FUNCTION);
 	unsigned int* INT_LEVEL;
 
-	unsigned S_FLAG;
-	unsigned X_FLAG;
-	unsigned N_FLAG;
-	unsigned V_FLAG;
-	unsigned C_FLAG;
-	unsigned M_FLAG;
+	unsigned* S_FLAG;
+	unsigned* X_FLAG;
+	unsigned* N_FLAG;
+	unsigned* V_FLAG;
+	unsigned* C_FLAG;
+	unsigned* M_FLAG;
 
 
 } CPU_68K;
