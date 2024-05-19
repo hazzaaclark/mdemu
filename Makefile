@@ -1,21 +1,27 @@
 # COPYRIGHT (C) HARRY CLARK 2024
 # SEGA MEGA DRIVE EMULATOR
 
-CC = gcc
-CFLAGS = -std=c99 -Wall -Wextra
+68000FILES 			=		68000.c opcode.c
+MDFILES 			=		main.c md.c psg.c vdp.c ym2612.c
+TARGET 				= 		mdemu
 
-SRCS = 68000.c md.c vdp.c psg.c ym2612.c
-OBJS = $(SRCS:.c=.o)
+EXE				=
+EXEPATH				=		./
 
-TARGET = mdemu
+.CFILES				= 		$(68000FILES) $(MDFILES)
+.OFILES				=		$(.CFILES:%.c=%.o)
 
-all: $(TARGET)
+CC 				= 		gcc
+WARNINGS 			= 		-std=c99 -Wall -Wextra
+CFLAGS				=		$(WARNINGS)
 
-$(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) -o $@ $^
+all: $(EXEPATH)$(EXE)
+
+$(EXEPATH)$(EXE): $(OFILES)
+	$(CC) $(OFILES) -o $(EXEPATH)$(EXE)
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c $<
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJS) $(TARGET)
+	rm -f $(OFILES) $(EXEPATH)$(EXE)
