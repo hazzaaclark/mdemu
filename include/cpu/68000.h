@@ -27,10 +27,27 @@
 /*							68000 DEBUG											 */
 /*===============================================================================*/
 
-#ifdef DEBUG
-#define DEBUG_LOG(...) (__VA_ARGS__)
+/* MISCALLANEOUS TYPES FOR A LINE EXCEPTION HANDLERS */
+/* THIS WILL BE USED IN DOCUMENTING CYCLE ACCURATE EXCEPTIONS AT RUNTIME */
+
+#if M68K_LOG_ENABLE
+	extern FILE* M68K_LOG_FILEHANDLE
+	#define M68K_DO_LOG(A) 			if(M68K_LOG_FILEHANDLE) fprintf A
+	#if M68K_LOG_1010_1111_A_LINE
+		#define M68K_DO_LOG(A) 		if(M68K_LOG_FILEHANDLE) fprintf A
+	#else
+		#define M68K_DO_LOG_EMU(A)
+	#endif
 #else
-#define DEBUG_LOG(MESSAGE, SIZE) printf("%s %p\n", MESSAGE, (void*)SIZE)
+	#define M68K_DO_LOG(A)
+	#define M68K_DO_LOG_EMU(A)
+
+	/* OPTIONS FOR IMMEDIATE ADDRESSING DIRECTIVES WHEN LOOKING */
+	/* FOR CPU CALLBACKS */	
+
+	#define M68K_OPT_OFF				0
+	#define M68K_OPT_ON					1
+
 #endif
 
 #define MODE_MASK(MODE) (1 << MODE)
@@ -91,7 +108,7 @@
 #define     M68K_READ_16(DATA, ADDRESS)                 (DATA)[(uintptr_t)(ADDRESS) ^ 2] 
 #define     M68K_WRITE_16(DATA, ADDRESS, PTR)           ((DATA)[(*(ADDRESS)) ^ 2] = (*(PTR)) & ADDRESS_WIDTH_16)
 
-#define     M68K_READ_32(DATA, ADDRESS)                 (DATA)[(uintptr_t)(ADDRESS) ^ 4] 
+#define     M68K_READ_32(DATA, ADDRESS)                 (DATA)[(unsigned)(ADDRESS) ^ 4] 
 #define     M68K_WRITE_32(DATA, ADDRESS, PTR)           ((DATA)[(*(ADDRESS)) ^ 4] = (*(PTR)) & ADDRESS_WIDTH_32)
 
 #define     M68K_RETURN_ADDRESS(ADDRESS)                ((*ADDRESS) & 0xFFFFFFFFFF)                       
@@ -192,12 +209,16 @@ typedef struct CPU_68K
     U32* STACK_POINTER;
 	U32* INTERRUPT_SP;
 	U32* MASTER_SP;
-	U32 USER_STACK;
+	U32* USER_STACK;
 	U32* ADDRESS_STACK_POINTER;
     U32* INSTRUCTION_REGISTER;
 	U32* SOURCE_FUNCTION_COUNTER;
 	U32* DEST_FUNCTION_COUNTER;
 	U32* VBR;
+	U32* FPR[8];
+	U32* FPIAR;
+	U32* FPCR;
+	U32* FPSR;
 	U32* CACHE_CONTROL;
 	U32* CACHE_ADDRESS;
 
@@ -226,39 +247,42 @@ typedef struct CPU_68K
 	unsigned* C_FLAG;
 	unsigned* M_FLAG;
 
+	unsigned* T0_FLAG;
+	unsigned* T1_FLAG;
+
 
 } CPU_68K;
 
 typedef enum CPU_68K_REGS
 {
 	M68K_REG_TYPE,
-    M68K_REG_D0 = 0,    
-    M68K_REG_D1 = 1,
-    M68K_REG_D2 = 2,
-    M68K_REG_D3 = 3,
-    M68K_REG_D4 = 4,
-    M68K_REG_D5 = 5,
-    M68K_REG_D6 = 6,
-    M68K_REG_D7 = 7,
-    M68K_REG_A0 = 8,    
-    M68K_REG_A1 = 9,
-    M68K_REG_A2 = 10,
-    M68K_REG_A3 = 11,
-    M68K_REG_A4 = 12,
-    M68K_REG_A5 = 13,
-    M68K_REG_A6 = 14,
-    M68K_REG_A7 = 15,
-    M68K_REG_PC,    
-    M68K_REG_SR,    
-    M68K_REG_SP,    
-    M68K_REG_USP,   
-    M68K_REG_ISP,
-    M68K_REG_IR, 
-	M68K_REG_SFC,
-	M68K_REG_VBR,
-	M68K_REG_DFC,
-	M68K_REG_CACR,
-	M68K_REG_CAAR,
+    M68K_D0 = 0,    
+    M68K_D1 = 1,
+    M68K_D2 = 2,
+    M68K_D3 = 3,
+    M68K_D4 = 4,
+    M68K_D5 = 5,
+    M68K_D6 = 6,
+    M68K_D7 = 7,
+    M68K_A0 = 8,    
+    M68K_A1 = 9,
+    M68K_A2 = 10,
+    M68K_A3 = 11,
+    M68K_A4 = 12,
+    M68K_A5 = 13,
+    M68K_A6 = 14,
+    M68K_A7 = 15,
+    M68K_PC,    
+    M68K_SR,    
+    M68K_SP,    
+    M68K_USP,   
+    M68K_ISP,
+    M68K_IR, 
+	M68K_SFC,
+	M68K_VBR,
+	M68K_DFC,
+	M68K_CACR,
+	M68K_CAAR,
 
 } CPU_68K_REGS;
 
@@ -270,10 +294,43 @@ typedef enum CPU_68K_FLAGS
     FLAG_N,
     FLAG_C,
     FLAG_V,
+	FLAG_T0,
     FLAG_T1,
 	FLAG_M
 
 } CPU_68K_FLAGS;
+
+#define 		M68K_REG_DA				CPU->DATA_REGISTER
+#define			M68K_REG_D				CPU->DATA_REGISTER
+#define			M68K_REG_A				(CPU->DATA_REGISTER + 8)
+#define			M68K_REG_PPC			CPU->PREVIOUS_PC
+#define			M68K_REG_PC				CPU->PC
+#define			M68K_REG_SP				CPU->STACK_POINTER
+#define			M68K_REG_USP			CPU->USER_STACK[0]
+#define			M68K_REG_ISP			CPU->INTERRUPT_SP[4]
+#define			M68K_REG_MSP			CPU->MASTER_SP[6]
+#define			M68K_REG_SP_FULL		CPU->REGISTER_BASE[15]
+#define			M68K_REG_VBR			CPU->VBR
+#define			M68K_REG_SFC			CPU->SOURCE_FUNCTION_COUNTER
+#define			M68K_REG_DFC			CPU->DEST_FUNCTION_COUNTER
+#define			M68K_REG_CACR			CPU->CACHE_CONTROL
+#define			M68K_REG_CAAR			CPU->CACHE_ADDRESS
+#define			M68K_REG_IR				CPU->INDEX_REGISTER
+#define 		M68K_REG_FPR			CPU->FPR
+#define			M68K_REG_FPCR			CPU->FPCR
+#define			M68K_REG_FPSR			CPU->FPSR
+#define			M68K_REG_FPIAR			CPU->FPIAR
+
+#define  		M68K_FLAG_T0			CPU->T0_FLAG
+#define			M68K_FLAG_T1			CPU->T1_FLAG
+#define			M68K_FLAG_S				CPU->S_FLAG
+#define			M68K_FLAG_M				CPU->M_FLAG
+#define			M68K_FLAG_X				CPU->X_FLAG
+#define			M68K_FLAG_N				CPU->N_FLAG
+#define			M68K_FLAG_Z				CPU->Z_FLAG
+#define			M68K_FLAG_V				CPU->V_FLAG
+#define			M68K_FLAG_C				CPU->C_FLAG
+#define			M68K_FLAG_INT_LVL		CPU->INT_LEVEL
 
 #define M68K_SAVE_INSTR(IDENTIFIER, VALUE) 					(*((char*)(IDENTIFIER)) = (char)((VALUE)))
 #define	M68K_INT_LEVEL(IDENTIFIER) 							CPU_68K->INT_LEVEL += ((IDENTIFIER))
@@ -532,6 +589,9 @@ typedef enum EA_MODES
 
 #endif
 
+extern CPU_68K* CPU;
+extern CPU_68K_REGS CPU_REGS;
+
 void INITIALISE_68K_CYCLES();
 void M68K_INIT(void);
 void M68K_MEM_INIT(void);
@@ -578,6 +638,23 @@ bool IS_TMSS_ENABLED();
 U8 M68K_READ_BUS_BYTE(U32*  ADDRESS);
 U8 M68K_READ_RAM_BYTE(U32* ADDRESS);
 
+/*===============================================================================*/
+/*							68000 EXCEPTION HANDLERS						  	 */
+/*===============================================================================*/
+
+/* DETERMINE THE LOGGED MEMORY ADDRESS IN RELATION TO THE HANDLING AND RUNTIME */
+/* OF THE CORRESPONDING A LINE INSTRUCTIONS */
+
+#define 		M68K_LOG_ALINE			M68K_OPT_OFF
+
+STATIC 
+INLINE void M68K_EXCEPTION_1010(void)
+{
+	unsigned SR;
+	M68K_DO_LOG(M68K_LOG_FILEHANDLE "%s at %08x: called 1010 instructions based on %04x (%s)\n");
+
+	M68K_REG_USP = 0;
+}
 
 #endif
 #endif
