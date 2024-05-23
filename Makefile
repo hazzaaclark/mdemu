@@ -5,14 +5,14 @@
 MDFILES 			=		main.c md.c psg.c vdp.c ym2612.c
 TARGET 				= 		mdemu
 
-EXE				=
+EXE					=
 EXEPATH				=		./
 
 .CFILES				= 		$(68000FILES) $(MDFILES)
 .OFILES				=		$(.CFILES:%.c=%.o)
 
-CC 				= 		gcc
-WARNINGS 			= 		-std=c99 -Wall -Wextra
+CC 					= 		gcc
+WARNINGS 			= 		-std=c99 -Wall -Wextra -Wno-int-conversion
 CFLAGS				=		$(WARNINGS)
 
 all: $(EXEPATH)$(EXE)
