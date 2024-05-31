@@ -73,19 +73,49 @@ void M68K_BUILD_OPCODE_TABLE(void)
     }
 }
 
+/* ALL OF THE FOLLOWING OPCODE DIRECTIVES ARE A PSEUDO BITWISE REPRESENTTION */
+/* BY WHICH THEY OPERATE WITH ONE ANOTHER */
+
+/* OPCODE WORKS UNDER THE GUISE OF EVOKING A SOURCE OFFSET, THE DESITINATION OFFSET */
+/* AS WELL AS THE RESULT OF THE FINAL OPERAND */
+
+/* ALL OF THESE FUNCTIONS SERVE TO PROVIDE A BARE METAL REPRESENTATION OF THE FLAGS AND CASTING */
+/* USED TO DEMONSTRATE THEIR RESPECTIVE FUNCTION */
+
+/* SEE: https://web.njit.edu/~rosensta/classes/architecture/252software/code.pdf */
+
 M68K_MAKE_EXCE_OP(1010, 0, _, _)
 {
-    M68K_EXEC(0);
+    M68K_EXCEPTION_1010();
+}
+
+M68K_MAKE_EXCE_OP(1111, 0, _, _)
+{
+    M68K_EXCEPTION_1111();
 }
 
 M68K_MAKE_OPCODE(ABCD, 8, RR, 0)
 {
     int* DST;
     int SRC;
-
-    int RES;
+    int RES = (int)SRC + (int*)DST;
 
     RES = FLAG_V;
 
     if(FLAG_C) RES -= 0xA0;
+
+    RES &= FLAG_V;
+    RES = FLAG_N;
 } 
+
+M68K_MAKE_OPCODE(ABCD, 8, MM, AX7)
+{
+    unsigned* SRC;
+    unsigned* EA;
+    unsigned* DST = M68K_READ_8(EA, NULL);
+    unsigned* RES = (int*)SRC + (int)DST;
+
+    if(RES > 9)
+        RES += (int)SRC + (int)DST;
+        RES = *(unsigned*)FLAG_X = *(unsigned*)FLAG_C = (RES > 0x99) << 8;
+}
