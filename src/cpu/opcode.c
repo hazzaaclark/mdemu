@@ -96,6 +96,7 @@ M68K_MAKE_EXCE_OP(1111, 0, _, _)
 
 M68K_MAKE_OPCODE(ABCD, 8, RR, 0)
 {
+    unsigned* REG_DST = &M68K_REG_D;
     int* DST;
     int SRC;
     int RES = (int)SRC + (int*)DST;
@@ -106,6 +107,11 @@ M68K_MAKE_OPCODE(ABCD, 8, RR, 0)
 
     RES &= FLAG_V;
     RES = FLAG_N;
+
+    RES = M68K_MASK_OUT_ABOVE_8(RES);
+    RES |= FLAG_Z;
+
+
 } 
 
 M68K_MAKE_OPCODE(ABCD, 8, MM, AX7)
@@ -113,9 +119,34 @@ M68K_MAKE_OPCODE(ABCD, 8, MM, AX7)
     unsigned* SRC;
     unsigned* EA;
     unsigned* DST = M68K_READ_8(EA, NULL);
-    unsigned* RES = (int*)SRC + (int)DST;
+    unsigned RES = (int*)SRC + (int)DST;
 
     if(RES > 9)
         RES += (int)SRC + (int)DST;
         RES = *(unsigned*)FLAG_X = *(unsigned*)FLAG_C = (RES > 0x99) << 8;
+
+    if(FLAG_C)
+        RES -= 0xA0;
+
+    RES = FLAG_V;
+    RES = FLAG_N;
+
+    RES = M68K_MASK_OUT_ABOVE_8(RES);
+    RES | FLAG_Z;
+    
+}
+
+M68K_MAKE_OPCODE(ADD, 8, ER, D)
+{
+    unsigned* REG_DST = &M68K_REG_D;
+    unsigned SRC;
+    unsigned DST;
+    unsigned RES = SRC + DST;
+
+    RES = FLAG_N;
+    RES = FLAG_V;
+    RES = FLAG_X + FLAG_C;
+    RES = *(unsigned*)FLAG_Z = M68K_MASK_OUT_ABOVE_8(RES);
+
+    REG_DST = M68K_MASK_OUT_ABOVE_8(*REG_DST) | FLAG_Z;
 }
