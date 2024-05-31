@@ -143,10 +143,10 @@ M68K_MAKE_OPCODE(ADD, 8, ER, D)
     unsigned DST;
     unsigned RES = SRC + DST;
 
-    RES = FLAG_N;
-    RES = FLAG_V;
-    RES = FLAG_X + FLAG_C;
-    RES = *(unsigned*)FLAG_Z = M68K_MASK_OUT_ABOVE_8(RES);
+    RES = M68K_FLAG_N;
+    RES = M68K_FLAG_V;
+    RES = M68K_FLAG_X + *(unsigned*)M68K_FLAG_C;
+    RES = *(unsigned*)M68K_FLAG_Z = M68K_MASK_OUT_ABOVE_8(RES);
 
     REG_DST = M68K_MASK_OUT_ABOVE_8(*REG_DST) | FLAG_Z;
 }
