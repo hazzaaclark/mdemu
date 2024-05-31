@@ -145,6 +145,27 @@
 
 #define		M68K_MAX_INSTR_LENGTH			0x10000
 
+#define		M68K_ADD_CYCLES(VALUE)			CPU->INSTRUCTION_CYCLES += (VALUE)
+#define		M68K_USE_CYCLES(VALUE)			CPU->INSTRUCTION_CYCLES -= (VALUE)
+#define		M68K_SET_CYCLES(VALUE)			CPU->INSTRUCTION_CYCLES = VALUE
+
+#define 	EXCEPTION_RESET                    0
+#define 	EXCEPTION_BUS_ERROR                2 
+#define 	EXCEPTION_ADDRESS_ERROR            3
+#define 	EXCEPTION_ILLEGAL_INSTRUCTION      4
+#define 	EXCEPTION_ZERO_DIVIDE              5
+#define 	EXCEPTION_CHK                      6
+#define 	EXCEPTION_TRAPV                    7
+#define 	EXCEPTION_PRIVILEGE_VIOLATION      8
+#define 	EXCEPTION_TRACE                    9
+#define 	EXCEPTION_1010                    10
+#define 	EXCEPTION_1111                    11
+#define 	EXCEPTION_FORMAT_ERROR            14
+#define 	EXCEPTION_UNINITIALIZED_INTERRUPT 15
+#define 	EXCEPTION_SPURIOUS_INTERRUPT      24
+#define 	EXCEPTION_INTERRUPT_AUTOVECTOR    24
+#define 	EXCEPTION_TRAP_BASE               32
+
 typedef struct CPU_68K
 {
     unsigned int* PC;
@@ -152,6 +173,7 @@ typedef struct CPU_68K
     unsigned int* CYCLE_RATE;
     unsigned int* INSTRUCTION_CYCLES_NULL;
     unsigned char* MEMORY_BASE;
+	unsigned int** CYCLE_EXCEPTION;
 
     unsigned(*MEMORY_DATA);
     unsigned(*MEMORY_ADDRESS);
@@ -331,6 +353,8 @@ typedef enum CPU_68K_FLAGS
 #define			M68K_FLAG_V				CPU->V_FLAG
 #define			M68K_FLAG_C				CPU->C_FLAG
 #define			M68K_FLAG_INT_LVL		CPU->INT_LEVEL
+
+#define			M68K_CYC_EXCE			CPU->CYCLE_EXCEPTION
 
 #define M68K_SAVE_INSTR(IDENTIFIER, VALUE) 					(*((char*)(IDENTIFIER)) = (char)((VALUE)))
 #define	M68K_INT_LEVEL(IDENTIFIER) 							CPU_68K->INT_LEVEL += ((IDENTIFIER))
@@ -667,7 +691,18 @@ STATIC INLINE void M68K_EXCEPTION_1010(void)
 	M68K_DO_LOG(M68K_LOG_FILEHANDLE "%s at %08x: called 1010 instructions based on %04x (%s)\n");
 
 	SR = M68K_INIT_EXCEPTION();
-	
+	M68K_JUMP_VECTOR(EXCEPTION_1010);
+	M68K_USE_CYCLES(M68K_CYC_EXCE[EXCEPTION_1010] - M68K_REG_IR);	
+}
+
+STATIC INLINE void M68K_EXCEPTION_1111(void)
+{
+	unsigned SR;
+	M68K_DO_LOG(M68K_LOG_FILEHANDLE "%s at %08x: called 1111 instructions based on %04x (%s)\n");
+
+	SR = M68K_INIT_EXCEPTION();
+	M68K_JUMP_VECTOR(EXCEPTION_1111);
+	M68K_USE_CYCLES(M68K_CYC_EXCE[EXCEPTION_1111] - M68K_REG_IR);
 }
 
 /* DETERMINE THE INITIAL S FLAG BASED ON THE CURRENT DISCERNMENT */
