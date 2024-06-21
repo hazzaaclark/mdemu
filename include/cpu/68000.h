@@ -110,7 +110,7 @@
 #define     M68K_READ_16(DATA, ADDRESS)                 (DATA)[(uintptr_t)(ADDRESS) ^ 2] 
 #define     M68K_WRITE_16(DATA, ADDRESS, PTR)           ((DATA)[(*(ADDRESS)) ^ 2] = (*(PTR)) & ADDRESS_WIDTH_16)
 
-#define     M68K_READ_32(DATA, ADDRESS)                 (DATA)[(unsigned)(ADDRESS) ^ 4] 
+#define 	M68K_READ_32(DATA, ADDRESS) 				((DATA)[(uintptr_t)(ADDRESS) ^ 4])
 #define     M68K_WRITE_32(DATA, ADDRESS, PTR)           ((DATA)[(*(ADDRESS)) ^ 4] = (*(PTR)) & ADDRESS_WIDTH_32)
 
 #define     M68K_RETURN_ADDRESS(ADDRESS)                ((*ADDRESS) & 0xFFFFFFFFFF)                       
