@@ -50,6 +50,8 @@
 #define		VDP_CRAM					(4 * 16)
 #define		VDP_VSRAM					[64]
 
+#define		VDP_MAX_HEADER_MASK			0x3400
+
 #define 	VDP_SPRITE_LOOKUP   		(1 << (1 + 2)) | (1 << (1 + 1 + 2 + 4)) | (1 << 4)
 #define		VDP_SPRITE_DETAIL_LOOKUP	(1 << (1 + 2)) | (1 << (1 + 1 + 2 + 4)) | (1 << 4)
 
@@ -84,10 +86,10 @@
 #define		VDP_MAX_SCANLINE			320
 #define 	VDP_MAX_SCANLINE_V30		240 * 2
 
-#define		VDP_READ_BYTE(DATA, ADDRESS)				(DATA)[(U8)(ADDRESS) ^ 1]
+#define		VDP_READ_BYTE(DATA, ADDRESS)				(DATA)[*(U8*)(ADDRESS) ^ 1]
 #define		VDP_WRITE_BYTE(DATA, ADDRESS, PTR)			((DATA)[(*(ADDRESS)) ^ 1] = (*(PTR)) & ADDRESS_WIDTH_8)
 
-#define		VDP_READ_WORD(DATA, ADDRESS)				(DATA)[(U16)(ADDRESS) ^ 2]
+#define		VDP_READ_WORD(DATA, ADDRESS)				(DATA)[*(U16*)(ADDRESS) ^ 2]
 #define		VDP_WRITE_WORD(DATA, ADDRESS, PTR)			((DATA)[(*(ADDRESS)) ^ 2] = (*(PTR)) & ADDRESS_WIDTH_16)
 
 typedef struct VDP_CONFIG
@@ -121,6 +123,7 @@ typedef struct VDP_STATE
 
 	} ACCESS_MODE;
 
+	U16 HSCROLL;
 	U16 PLANE_A_ADDRESS;
 	U16 PLANE_B_ADDRESS;
 	U16 WINDOW_ADDRESS;
@@ -178,7 +181,7 @@ typedef struct VDP
 
 } VDP;
 
-void VDP_CONST_INIT(VDP* VDP, VDP_STATE* STATE, U16 LOOKUP[0]);
+void VDP_CONST_INIT(VDP* VDP, VDP_STATE* STATE, U16 LOOKUP);
 void VDP_STATE_INIT(VDP_STATE* STATE);
 void VDP_RENDER_TILE(VDP* VDP, VDP_STATE* STATE);
 void VDP_RENDER_SCANLINE(const VDP* VDP, U16* SCANLINE);
