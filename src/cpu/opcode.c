@@ -21,9 +21,8 @@
 
 void M68K_BUILD_OPCODE_TABLE(void)
 {
-    OPCODE_MASK_MODE MASK_MODE;
+    unsigned MASK_MODE = 0;
     struct OPCODE* OPCODE_HANDLER;
-    struct CPU_68K* CPU_68K;
     int INDEX;
 
     /* FOR EVERY SUBSEQUENT MASK MODE OF THE OPCODE TABLE */
@@ -36,21 +35,20 @@ void M68K_BUILD_OPCODE_TABLE(void)
     switch (MASK_MODE)
     {
         case OPCODE_MASK_ILLEGAL:
-            if(INDEX = 0 && INDEX < M68K_MAX_INSTR_LENGTH)
+            if((INDEX = 0) && INDEX < M68K_MAX_INSTR_LENGTH)
             {
-                memset(OPCODE_HANDLER->HANDLER, 0xFF, 0);
-                CPU_68K->INSTRUCTION_CYCLES[INDEX][OPCODE_HANDLER->PATTERN];
+                M68K_CYC_INSTRUCTION = INDEX;
             }
             break;
 
         case OPCODE_MASK_LOG_BIT:
             for (INDEX = 0; INDEX < 8; INDEX++)
             {
-                OPCODE_HANDLER->INSTRUCTION = OPCODE_HANDLER->HANDLER;
+                M68K_OPCODE_INSTRUCTION = M68K_OPCODE_HANDLER;
 
                 if(!OPCODE_HANDLER->INSTRUCTION && M68K_MAX_INSTR_LENGTH == 0)
                 {
-                    CPU_68K->INSTRUCTION_CYCLES[0] = (CPU_68K->INSTRUCTION_CYCLES[1], OPCODE_HANDLER->INSTRUCTION + INDEX);
+                    M68K_CYC_INSTRUCTION[0] = (M68K_CYC_INSTRUCTION[1] || M68K_OPCODE_INSTRUCTION + INDEX);
                 }
             }
 
@@ -59,8 +57,8 @@ void M68K_BUILD_OPCODE_TABLE(void)
         case OPCODE_MASK_LOG_OR:
             for (INDEX = 0; INDEX < 0xF; INDEX++)
             {
-                OPCODE_HANDLER->INSTRUCTION = OPCODE_HANDLER->HANDLER;
-                CPU_68K->INSTRUCTION_CYCLES[INDEX] = OPCODE_HANDLER->PATTERN[INDEX] | CPU_68K->INSTRUCTION_CYCLES[INDEX];
+                M68K_OPCODE_INSTRUCTION = M68K_OPCODE_HANDLER;
+                M68K_CYC_INSTRUCTION[INDEX] = M68K_OPCODE_PATTERN[INDEX] | M68K_CYC_INSTRUCTION[INDEX];
             }
             
         
@@ -96,9 +94,8 @@ M68K_MAKE_EXCE_OP(1111, 0, _, _)
 
 M68K_MAKE_OPCODE(ABCD, 8, RR, 0)
 {
-    unsigned* REG_DST = &M68K_REG_D;
-    int* DST;
-    int SRC;
+    int* DST = 0;
+    int SRC = M68K_REG_D;
     int RES = (int)SRC + (int*)DST;
 
     RES = FLAG_V;
@@ -110,20 +107,17 @@ M68K_MAKE_OPCODE(ABCD, 8, RR, 0)
 
     RES = M68K_MASK_OUT_ABOVE_8(RES);
     RES |= FLAG_Z;
-
-
 } 
 
 M68K_MAKE_OPCODE(ABCD, 8, MM, AX7)
 {
-    unsigned* SRC;
-    unsigned* EA;
+    unsigned* SRC = 0;
+    unsigned* EA = 0;
     unsigned* DST = M68K_READ_8(EA, NULL);
     unsigned RES = (int*)SRC + (int)DST;
 
-    if(RES > 9)
-        RES += (int)SRC + (int)DST;
-        RES = *(unsigned*)FLAG_X = *(unsigned*)FLAG_C = (RES > 0x99) << 8;
+    RES += (int)SRC + (int)DST;
+    RES = *(unsigned*)FLAG_X = *(unsigned*)FLAG_C = (RES > 0x99) << 8;
 
     if(FLAG_C)
         RES -= 0xA0;
@@ -132,15 +126,15 @@ M68K_MAKE_OPCODE(ABCD, 8, MM, AX7)
     RES = FLAG_N;
 
     RES = M68K_MASK_OUT_ABOVE_8(RES);
-    RES | FLAG_Z;
+    RES |= FLAG_Z;
     
 }
 
 M68K_MAKE_OPCODE(ADD, 8, ER, D)
 {
     unsigned* REG_DST = &M68K_REG_D;
-    unsigned SRC;
-    unsigned DST;
+    unsigned SRC = 0;
+    unsigned DST = 0;
     unsigned RES = SRC + DST;
 
     RES = M68K_FLAG_N;
