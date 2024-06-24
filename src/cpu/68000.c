@@ -186,7 +186,7 @@ U32* CPU_ACCESS_REGISTERS(CPU_68K_REGS REGISTER)
 		case M68K_A6: return CPU_68K->REGISTER_BASE[14];
 		case M68K_A7: return CPU_68K->REGISTER_BASE[15];
 
-		case M68K_PC: return (U32*)(uintptr_t)M68K_RETURN_ADDRESS(CPU_68K->PC);
+		case M68K_PC: return (U32)M68K_RETURN_ADDRESS(CPU_68K->PC);
 
 		case M68K_USP:
 			return CPU_68K->S_FLAG;
@@ -654,7 +654,7 @@ void M68K_JUMP_VECTOR(unsigned VECTOR)
 void M68K_SET_SR_IRQ(unsigned VALUE)
 {
 	struct CPU_68K* CPU_68K = malloc(sizeof(CPU_68K));
-	
+
 	/* EVALUATE THE MASKABLE BITS FROM THE SR */
 	VALUE &= M68K_REG_SR[7]; 
 
