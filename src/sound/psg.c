@@ -1,6 +1,6 @@
-/* Copyright(C) 2023 Harry Clark * /
+/* COPYRIGHT (C) HARRY CLARK 2024 */
 
-/* SEGA Mega Drive Emulator */
+/* SEGA MEGA DRIVE EMULATOR */
 
 /* THIS FILE PERTAINS TOWARDS THE FUNCTIONALITY OF THE PSG */
 /* THE PSG GOVERNS THE ARRANGEMENT OF SOUND EFFECTS IN CONJUNCTION */
@@ -17,7 +17,6 @@
 /* I AM ABLE TO EFFICIENTLY SORT BETWEEN EACH VOLUME LEVEL BASED ON */
 /* THEIR RESPECTIVE CHANNEL */
 
-STATIC
 void PSG_CONST_INIT(PSG_BASE* PSG_BASE)
 {
     /* CREATE AN ARBITARY VOLUME TABLE */
@@ -43,7 +42,6 @@ void PSG_CONST_INIT(PSG_BASE* PSG_BASE)
 /* AND OF COURSE, FREE ANY AND ALL UNWANTED MEMORY */
 /* FROM THE STRUCTURE WHEN NOT IN USE */
 
-STATIC
 void PSG_FREE(PSG_BASE* PSG_BASE)
 {
     free(PSG_BASE);
@@ -52,8 +50,7 @@ void PSG_FREE(PSG_BASE* PSG_BASE)
 /* INITIALISE THE STATE MACHINE OF THE PSG */
 /* TAKING INTO ACCOUNT ALL OF THE CORRESPONDENCE FROM THE STATE UNION */
 
-STATIC
-void PSG_STATE_INIT(PSG_BASE* PSG_BASE, S16* BUFFER, UNK* TOTAL_SAMPLES)
+void PSG_STATE_INIT(PSG_BASE* PSG_BASE)
 {
     /* ASSUME THE COUNT OF THE AMOUNT OF TONE CHANNELS WITHIN */
     /* THE PSG'S INFRASTRUCTURE */
@@ -65,22 +62,21 @@ void PSG_STATE_INIT(PSG_BASE* PSG_BASE, S16* BUFFER, UNK* TOTAL_SAMPLES)
 
     for (size_t i = 0; i < PSG_STATE_COUNT(TONES); i++)
     {
-        TONES[i] = (U16*)malloc(PSG_BASE->STATE.COUNTDOWN = 0);
-        TONES[i] = (U16*)malloc(PSG_BASE->STATE.COUNTDOWN_MASTER_CONTROL = 0);
-        TONES[i] = (U8*)malloc(PSG_BASE->STATE.ATTENUATION = 0);
-        TONES[i] = (U8*)malloc(PSG_BASE->STATE.OUTPUT = 0);
+        TONES[i] = (U16*)malloc(PSG_BASE->PSG_STATE.COUNTDOWN = 0);
+        TONES[i] = (U16*)malloc(PSG_BASE->PSG_STATE.COUNTDOWN_MASTER_CONTROL = 0);
+        TONES[i] = (U8*)malloc(PSG_BASE->PSG_STATE.ATTENUATION = 0);
+        TONES[i] = (U8*)malloc(PSG_BASE->PSG_STATE.OUTPUT = 0);
     }
 }
 
 /* CHECK TO SEE IF THE AUDIO FRAME WITHIN THE PSG'S CHANNEL REGISTERS */
 /* NEEDS TO UPDATE IN ORDER TO PASS THROUGH THE NEXT TRANSITION */
 
-STATIC
 void PSG_UPDATE(PSG_BASE* PSG_BASE)
 {
     struct PSG_TONE* TONES[4];
-    int INDEX;
-    int CHANNEL_INDEX;
+    unsigned INDEX;
+    unsigned CHANNEL_INDEX;
 
     for (INDEX = 0; INDEX < sizeof(TONES); INDEX++)
     {
@@ -101,24 +97,24 @@ void PSG_UPDATE(PSG_BASE* PSG_BASE)
 
         for (CHANNEL_INDEX = 0; CHANNEL_INDEX < sizeof(PSG_BASE->TOTAL_SAMPLES); CHANNEL_INDEX++)
         {
-            if(!PSG_BASE->STATE.COUNTDOWN != 0)
+            if(!PSG_BASE->PSG_STATE.COUNTDOWN != 0)
             {
-                switch (PSG_BASE->STATE.FREQUENCEY)
+                switch (PSG_BASE->PSG_STATE.FREQUENCEY)
                 {
                     case 0:
-                        PSG_BASE->STATE.COUNTDOWN = 0x10;
+                        PSG_BASE->PSG_STATE.COUNTDOWN = 0x10;
                         break;
 
                     case 1:
-                        PSG_BASE->STATE.COUNTDOWN = 0x20;
+                        PSG_BASE->PSG_STATE.COUNTDOWN = 0x20;
                         break;
 
                     case 2:
-                        PSG_BASE->STATE.COUNTDOWN = 0x40;
+                        PSG_BASE->PSG_STATE.COUNTDOWN = 0x40;
                         break;
 
                     case 3:
-                        PSG_BASE->STATE.COUNTDOWN += (PSG_BASE->STATE.COUNTDOWN_MASTER_CONTROL != 0) ? sizeof(TONES) : 0;
+                        PSG_BASE->PSG_STATE.COUNTDOWN += (PSG_BASE->PSG_STATE.COUNTDOWN_MASTER_CONTROL != 0) ? sizeof(TONES) : 0;
                 
                     default:
                         break;
@@ -129,6 +125,6 @@ void PSG_UPDATE(PSG_BASE* PSG_BASE)
         /* OUTPUT THE CORRESPONDING SAMPLES IN RELATION TO THE OFFSET OF */
         /* THE VOLUME, ATTENUATION, AND REALTIME OUTPUT */
 
-        PSG_BASE->SAMPLE_BUFFER = PSG_BASE->VOLUME[sizeof(PSG_BASE->STATE.ATTENUATION)] ? sizeof(PSG_BASE->STATE.OUTPUT) : 0;
+        PSG_BASE->SAMPLE_BUFFER = PSG_BASE->VOLUME[sizeof(PSG_BASE->PSG_STATE.ATTENUATION)] ? sizeof(PSG_BASE->PSG_STATE.OUTPUT) : 0;
     }    
 }
