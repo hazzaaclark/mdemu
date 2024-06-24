@@ -22,8 +22,8 @@
 
 void MD_INIT(void)
 {
-    struct MD* MD_CONSOLE;
-    struct CPU_68K* CPU_68K;
+    struct MD* MD_CONSOLE = malloc(sizeof(MD));
+    struct CPU_68K* CPU_68K = malloc(sizeof(CPU_68K));
 
     if((MD_CONSOLE->SYSTEM_TYPE = SYSTEM_MD))
     {
@@ -76,27 +76,23 @@ void MD_INIT(void)
             CPU_68K->MEMORY_MAP[0xA1].MEMORY_WRITE_8 = CTRL_WRITE_WORD(CPU_68K->MEMORY_DATA, CPU_68K->MEMORY_ADDRESS, CPU_68K->MEMORY_POINTER);
 
         }
-        
-        M68K_INIT();
-        MD_CART_INIT();
-        MD_MAKE();
     }
+
+    M68K_INIT();
+    MD_CART_INIT();
+    MD_MAKE();
 }
 
 /* AFTER THE INITIALISATION OF THE MEMORY MAP */
 /* THE CONSOLE EMULATION WILL COMMENCE BY ALLOCATING CORRESPONDING MEMORY */
 /* TO THE STACK */
 
-MD* MD_MAKE()
+void MD_MAKE()
 {
-    struct MD* MD_CONSOLE;
-    struct CPU_68K* CPU_68K;
-
     /* ALLOCATE MEMORY FOR THE BASE STRUCTURE WHICH HOUSES */
     /* THE CORRESPONDENCE OF EACH COMPONENT, CPU AND CONSOLE */
 
-    MD_CONSOLE = malloc(MD_CONSOLE);
-    CPU_68K = malloc(CPU_68K);
+    struct MD* MD_CONSOLE = malloc(sizeof(MD_CONSOLE));
 
     MD_CONSOLE->SYS_ROM = (U8*)malloc(sizeof(MD_CONSOLE->SYS_ROM));
     MD_CONSOLE->SYS_RAM = (U8*)malloc(sizeof(MD_CONSOLE->SYS_RAM));
@@ -118,10 +114,10 @@ MD* MD_MAKE()
 
 void MD_RESET(void)
 {
-    struct MD* MD_CONSOLE;
-    struct CPU_68K* CPU_68K;
-    int RESET_MODE;
-    MD_RESET_MODE MODE;
+
+    struct MD* MD_CONSOLE = malloc(sizeof(MD)); 
+    struct CPU_68K* CPU_68K = malloc(sizeof(CPU_68K));
+    MD_RESET_MODE MODE = 0;
 
     switch (MODE)
     {
@@ -159,8 +155,8 @@ void MD_RESET(void)
         default:
             free(&MD_CONSOLE->MD_CART);
             free(&CPU_68K->Z80_MEM);
-            free(&CPU_68K);
-    }
+            free(CPU_68K);
+    } 
 }
 
 /* THE BANK SWITCH FUNCTIONS LOOKS INTO THE CORRESPODENCE STORED IN */
@@ -169,28 +165,28 @@ void MD_RESET(void)
 /* THIS WILL CHECK TO SEE IF THE BOOT ROM HAS BEEN LOADED AND IF SO */
 /* MIMMICK THE FUNCTIONALITY OF THE JUMP COROUTINE TO INITIALISE THE START OF THE CART */
 
-U32* MD_BANKSWITCH(unsigned int VALUE)
+U32* MD_BANKSWITCH()
 {
-    struct MD MD_CONSOLE;
-    struct CPU_68K* CPU_68K;
+    struct MD* MD_CONSOLE = malloc(sizeof(MD));
+    struct CPU_68K* CPU_68K = malloc(sizeof(CPU_68K));
 
     /* IS THE BOOT ROM INITIALISED? */
 
-    switch (MD_CONSOLE.SYSTEM_BIOS)
+    switch (MD_CONSOLE->SYSTEM_BIOS)
     {
 
-    case 0:
-        CPU_68K->MEMORY_MAP[0].BASE = MD_CONSOLE.BOOT_ROM;
+        case 0:
+            CPU_68K->MEMORY_MAP[0].BASE = (char*)MD_CONSOLE->BOOT_ROM;
 
-    /* IS THE ROM LOADED IN THE MEMORY MAP? */
+        /* IS THE ROM LOADED IN THE MEMORY MAP? */
 
-    case 1:
-        CPU_68K->MEMORY_MAP[0].BASE = MD_CONSOLE.MD_CART->ROM_BASE;
-        break;
-    
-    default:
-        if(MD_CONSOLE.SYSTEM_BIOS == SYSTEM_MD)
-            return (&CPU_68K->MEMORY_MAP[0].BASE == MD_CONSOLE.MD_CART->ROM_BASE);
+        case 1:
+            CPU_68K->MEMORY_MAP[0].BASE = (char*)MD_CONSOLE->MD_CART->ROM_BASE;
+            break;
+        
+        default:
+            if(MD_CONSOLE->SYSTEM_BIOS == SYSTEM_MD)
+                return (CPU_68K->MEMORY_MAP[0].BASE = (char*)MD_CONSOLE->MD_CART->ROM_BASE);
     }
 
     return ZBUFFER_MAX;
@@ -204,8 +200,9 @@ U32* MD_BANKSWITCH(unsigned int VALUE)
 
 void MD_BUS_REQ(unsigned STATE, unsigned CYCLES)
 {
-    struct CPU_68K* CPU_68K;
-    struct MD* MD_CONSOLE;
+    struct CPU_68K* CPU_68K = malloc(sizeof(CPU_68K));
+    struct MD* MD_CONSOLE = malloc(sizeof(MD));
+
     assert(&STATE); /* EVALUATE THE INITIAL STATE */
 
     /* BEGIN BY SYNCHRONISING WITH THE 68K */
@@ -265,7 +262,7 @@ void MD_SAVE_REGISTER_STATE(struct CPU_68K* CPU_68K)
     }
 
     CPU_68K->PC += (int)malloc(sizeof(CPU_68K->PC));
-    CPU_68K->STATUS_REGISTER += (U16)malloc(sizeof(CPU_68K->STATUS_REGISTER));
+    CPU_68K->STATUS_REGISTER += *(U16*)malloc(sizeof(CPU_68K->STATUS_REGISTER));
 
     memset(CPU_68K, 0x00, sizeof(*CPU_68K));
 }
@@ -282,8 +279,8 @@ void MD_SAVE_REGISTER_STATE(struct CPU_68K* CPU_68K)
 
 int MD_UPDATE_BANKING(struct CPU_68K* CPU_68K, int BANKS)
 {
-    struct MD* MD_CONSOLE;
-    int CURRENT_BANK;
+    struct MD* MD_CONSOLE = malloc(sizeof(MD));
+    int CURRENT_BANK = 0;
 
     if(MD_CONSOLE->TMSS[CURRENT_BANK])
     {
@@ -306,14 +303,14 @@ int MD_UPDATE_BANKING(struct CPU_68K* CPU_68K, int BANKS)
 
 int MD_CART_UPDATE_BANKING(struct CPU_68K* CPU_68K, int BANKS)
 {
-    struct MD_CART* MD_CARTRIDGE;
+    struct MD_CART* MD_CARTRIDGE = malloc(sizeof(MD_CART));
     int BANKS_UPDATED = 0;
-    int INDEX;
+    int INDEX = 0;
 
     /* DOES THE CORRESPONDING AMOUNT OF BANKS RELATE */
     /* TO THE CURRENTLY AVAILABLE ON THE STACK */
 
-    if(BANKS > sizeof(MD_CARTRIDGE->CARTRIDGE_BANKS))
+    if((UNK)BANKS >= sizeof(MD_CARTRIDGE->CARTRIDGE_BANKS))
         BANKS += sizeof(MD_CARTRIDGE->CARTRIDGE_BANKS);
 
     /* EVALUATE THE HIGH AND LOW ADDRESSING MODES */
@@ -344,15 +341,16 @@ int MD_CART_UPDATE_BANKING(struct CPU_68K* CPU_68K, int BANKS)
 
 int MD_CART_INIT(void)
 {
-    struct MD_CONSOLE* MD_CONSOLE;
-    struct MD_CART* MD_CARTRIDGE;
+    struct MD_CART* MD_CARTRIDGE = malloc(sizeof(MD_CART));
 
     /* ASSUME TO BEGIN WITH THAT THERE IS NO CURRENT ROM */
     /* BEING LOADED ONTO THE STACK */
 
     if(!MD_CARTRIDGE->ROM_BASE)
+    {
         free(MD_CARTRIDGE);
         return -1;
+    }
 
     /* CHECK TO DETERMINE IF THE FILE IS TOO BIG */
     /* IN THE LUCKLIHOOD OF AN INCOMPLETE FILE TYPE */
@@ -365,7 +363,7 @@ int MD_CART_INIT(void)
 
     /* ALLOCATE INITAL SPACE FOR THE CARTRIDGE */
     
-    MD_CARTRIDGE->ROM_BASE += (U32)_aligned_malloc(sizeof(MD_CARTRIDGE->ROM_SIZE));
+    MD_CARTRIDGE->ROM_BASE += (U32)malloc(sizeof(MD_CARTRIDGE->ROM_SIZE));
 
     /* STORE THE INITIAL 512KB FOR SSE2 */
     /* THIS IS BY ALIGNING 16 BYTES OF ADDRESSABLE VECTOR TYPES TO THE HEADER */
@@ -373,12 +371,14 @@ int MD_CART_INIT(void)
     /* 17/02/24 - UPDATED THE DEFERENCING NULLPTR EXCEPTION */
     /* USING ALIGNED MALLOC FIXES THESE ISSUES BY ALIGNING FOR A SPECIFIC PIECE OF MEMORY */
 
-    MD_CARTRIDGE->ROM_DATA = (void**)_aligned_malloc((MD_CARTRIDGE->ROM_SIZE), 16, (MD_CARTRIDGE->ROM_DATA)) != 0;
+    MD_CARTRIDGE->ROM_DATA = (void*)malloc((MD_CARTRIDGE->ROM_SIZE));
 
     /* AFTER ALLOCATING THE PROVIDED MEMORY TO THE STACK */
     /* BEGIN BY INITIALISAING THE MEMORY MAP OF THE CARTRIDGE */
 
     MD_CART_MEMORY_MAP();
+
+    return 0;
 }
 
 /* DISCERN THE MEMORY MAP FOR THE CARTRIDGE'S ROM SIZE */
@@ -392,12 +392,10 @@ int MD_CART_INIT(void)
 
 void MD_CART_MEMORY_MAP(void)
 {
-    int INDEX;
-    struct MD_CART* MD_CARTRIDGE;
-    struct CPU_68K* CPU_68K;
-    MD_CART_MAP_MODE MAP_MODE;
-
-    assert(MD_CARTRIDGE->ROM_MAP = NULL);
+    UNK INDEX;
+    struct MD_CART* MD_CARTRIDGE = malloc(sizeof(MD_CART));
+    struct CPU_68K* CPU_68K = malloc(sizeof(CPU_68K));
+    int MAP_MODE = 0;
 
     switch (MAP_MODE)
     {
