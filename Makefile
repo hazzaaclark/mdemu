@@ -12,16 +12,19 @@ CFILES              =       $(68000FILES) $(MDFILES)
 OFILES              =       $(CFILES:.c=.o)
 
 CC                  =       gcc
-WARNINGS            =       -std=c99 -Wall -Wextra -Wno-int-conversion
+
+WARNINGS            =       -std=c99 -Wall -Wextra -Wno-int-conversion -Wno-incompatible-pointer-types 
 CFLAGS              =       $(WARNINGS)
 
-all: $(EXEPATH)$(EXE)
+all: run
 
 $(EXEPATH)$(EXE): $(OFILES)
 	$(CC) $(OFILES) -o $(EXEPATH)$(EXE)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
+
+run: $(EXEPATH)$(EXE)
 
 clean:
 	rm -f $(OFILES) $(EXEPATH)$(EXE)
