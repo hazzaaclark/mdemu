@@ -656,7 +656,7 @@ void M68K_PULSE_RESET(void);
 
 void M68K_BUILD_OPCODE_TABLE(void);
 void M68K_OPCODE_HANDLE();
-void M68K_STATE_REGISTER(char* TYPE, int* CPU_BASE);
+void M68K_STATE_REGISTER();
 
 void M68K_JUMP(unsigned NEW_PC);
 void M68K_JUMP_VECTOR(unsigned VECTOR);
@@ -695,13 +695,13 @@ U8 M68K_READ_RAM_BYTE(U32* ADDRESS);
 #define 		M68K_LOG_ALINE			M68K_OPT_OFF
 
 
-static void M68K_JUMP_VECTOR_MASK(unsigned NEW_VECTOR)
+static inline void M68K_JUMP_VECTOR_MASK(unsigned NEW_VECTOR)
 {
 	M68K_REG_PC = (NEW_VECTOR << 2) + M68K_REG_VBR;
 	M68K_REG_PC = M68K_READ_32(M68K_REG_PC, NULL);
 }
 
-static void M68K_EXCEPTION_1010(void)
+static inline void M68K_EXCEPTION_1010(void)
 {
 	M68K_DO_LOG(M68K_LOG_FILEHANDLE "%s at %08x: called 1010 instructions based on %04x (%s)\n");
 
@@ -709,7 +709,7 @@ static void M68K_EXCEPTION_1010(void)
 	M68K_USE_CYCLES(M68K_CYC_EXCE[EXCEPTION_1010] - M68K_REG_IR);	
 }
 
-static void M68K_EXCEPTION_1111(void)
+static inline void M68K_EXCEPTION_1111(void)
 {
 	M68K_DO_LOG(M68K_LOG_FILEHANDLE "%s at %08x: called 1111 instructions based on %04x (%s)\n");
 	
@@ -720,13 +720,13 @@ static void M68K_EXCEPTION_1111(void)
 /* DETERMINE THE INITIAL S FLAG BASED ON THE CURRENT DISCERNMENT */
 /* EVALUATE THE FLAGS CURRENT OFFSET IN RELATION TO THE OTHER FLAGS	 */
 
-static void M68K_SET_S_FLAG(unsigned VALUE)
+static inline void M68K_SET_S_FLAG(unsigned VALUE)
 {
 	M68K_FLAG_S = VALUE;
 	M68K_REG_SP = M68K_REG_SP_FULL[M68K_FLAG_S | ((M68K_FLAG_S >> 1) & M68K_FLAG_M)];
 }
 
-static int M68K_INIT_EXCEPTION()
+static inline int M68K_INIT_EXCEPTION()
 {
 	M68K_FLAG_T0 = M68K_FLAG_T1 = 0;
 	return 0;
