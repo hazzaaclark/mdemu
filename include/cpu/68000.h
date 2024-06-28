@@ -145,9 +145,9 @@
 #define 		M68K_MAX_BITMASK		32*7
 
 #ifdef M68K_CYCLE_CLOCK
-#define M68K_CYCLE_CLOCK_SHIFT(VALUE) CPU_68K->INSTRUCTION_CYCLES += ((VALUE) * CPU_68K.CYCLE_RATE) >> M68K_CYCLE_CLOCK_SHIFT
+#define M68K_CYCLE_CLOCK_SHIFT(VALUE) 		CPU_68K->INSTRUCTION_CYCLES += ((VALUE) * CPU_68K.CYCLE_RATE) >> M68K_CYCLE_CLOCK_SHIFT
 #else
-#define M68K_CYCLE_CLOCK_SHIFT(VALUE) CPU_68K->INSTRUCTION_CYCLES += ((VALUE))
+#define M68K_CYCLE_CLOCK_SHIFT(VALUE) 		CPU->INSTRUCTION_CYCLES += ((VALUE))
 #endif
 
 #define		M68K_MAX_INSTR_LENGTH			0x10000
@@ -335,6 +335,7 @@ typedef enum CPU_68K_FLAGS
 #define 		M68K_REG_DA				CPU->DATA_REGISTER
 #define			M68K_REG_D				CPU->DATA_REGISTER
 #define			M68K_REG_A				(CPU->DATA_REGISTER + 8)
+#define			M68K_REG_SR				CPU->STATUS_REGISTER
 #define			M68K_REG_PPC			CPU->PREVIOUS_PC
 #define			M68K_REG_PC				CPU->PC
 #define			M68K_REG_SP				CPU->STACK_POINTER
@@ -369,7 +370,7 @@ typedef enum CPU_68K_FLAGS
 
 #define M68K_SAVE_INSTR(IDENTIFIER, VALUE) 					(*((char*)(IDENTIFIER)) = (char)((VALUE)))
 #define	M68K_INT_LEVEL										CPU->INT_LEVEL
-#define	M68K_CYC_INSTRUCTION								CPU_68K->INSTRUCTION_CYCLES
+#define	M68K_CYC_INSTRUCTION								CPU->INSTRUCTION_CYCLES
 
 /*===============================================================================*/
 /*							68000 OPCODE FUNCTIONALIY							 */
@@ -579,6 +580,11 @@ typedef enum OPCODE_MASK_MODE
 	
 } OPCODE_MASK_MODE;
 
+#define				M68K_OPCODE_PATTERN				OPCODE_BASE->PATTERN
+#define				M68K_OPCODE_SIZE				OPCODE_BASE->OPCODE_SIZE
+#define				M68K_OPCODE_HANDLER				OPCODE_BASE->HANDLER
+#define				M68K_OPCODE_INSTRUCTION			OPCODE_BASE->INSTRUCTION
+
 
 /*===============================================================================*/
 /*							68000 ADDRESSING MODES								 */
@@ -624,8 +630,10 @@ typedef enum EA_MODES
 
 #endif
 
-extern CPU_68K* CPU;
-extern CPU_68K_REGS CPU_REGS;
+CPU_68K* CPU;
+CPU_68K_REGS CPU_REGS;
+OPCODE* OPCODE_BASE;
+OPCODE_TYPE OPCODE_TYPES;
 
 void INITIALISE_68K_CYCLES();
 void M68K_INIT(void);
@@ -645,7 +653,7 @@ void M68K_CHECK_IRQ(void);
 void M68K_PULSE_RESET(void);
 
 void M68K_BUILD_OPCODE_TABLE(void);
-void M68K_OPCODE_HANDLER();
+void M68K_OPCODE_HANDLE();
 void M68K_STATE_REGISTER(char* TYPE, int* CPU_BASE);
 void M68K_SAVE_REGISTER(char*, int*, char, int);
 
