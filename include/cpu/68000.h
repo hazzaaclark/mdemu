@@ -101,28 +101,21 @@
 /* ARBITARY MACROS TO ALLOW FOR READING AND WRITING DATA */
 /* THIS RETURNS A STATIC CAST OF A SPECIFIC DATA TYPE */
 
-/* DATA AND ADDRESS ARE PARSED AS PER THE STATUS QUO OF ARCHITECURE */
-/* PTR IS DISCERNED TO OUTPUT A BITWISE AND OPERAND */
+extern unsigned int M68K_READ_8(unsigned int ADDRESS);
+extern unsigned int M68K_READ_16(unsigned int ADDRESS);
+extern unsigned int M68K_READ_32(unsigned int ADDRESS);
 
-#define     M68K_READ_8(DATA, ADDRESS)                  (DATA)[(uintptr_t)(ADDRESS) ^ 1] 
-#define     M68K_WRITE_8(DATA, ADDRESS, PTR)            ((DATA)[(*(ADDRESS)) ^ 1] = (*(PTR)) & ADDRESS_WIDTH_8)
+extern void M68K_WRITE_8(unsigned int ADDRESS, unsigned int DATA);
+extern void M68K_WRITE_16(unsigned int ADDRESS, unsigned int DATA);
+extern void M68K_WRITE_32(unsigned int ADDRESS, unsigned int DATA);
 
-#define     M68K_READ_16(DATA, ADDRESS)                 (DATA)[(uintptr_t)(ADDRESS) ^ 2] 
-#define     M68K_WRITE_16(DATA, ADDRESS, PTR)           ((DATA)[(*(ADDRESS)) ^ 2] = (*(PTR)) & ADDRESS_WIDTH_16)
+extern unsigned int Z80_READ(unsigned int ADDRESS);
+extern void Z80_WRITE(unsigned int ADDRESS, unsigned int DATA);
 
-#define 	M68K_READ_32(DATA, ADDRESS) 				((DATA)[(uintptr_t)(ADDRESS) ^ 4])
-#define     M68K_WRITE_32(DATA, ADDRESS, PTR)           ((DATA)[(*(ADDRESS)) ^ 4] = (*(PTR)) & ADDRESS_WIDTH_32)
-
-#define     M68K_RETURN_ADDRESS(ADDRESS)                ((*ADDRESS) & 0xFFFFFFFFFF)                       
-
-#define     Z80_READ(DATA, ADDRESS)                             (DATA)[(uintptr_t)(ADDRESS)]
-#define     Z80_WRITE(DATA, ADDRESS, PTR)                       ((DATA)[(*(ADDRESS)) ^ 4] = (*(PTR)) & ADDRESS_WIDTH_32)
-
-#define		CTRL_READ_BYTE(DATA, ADDRESS)				(DATA)[(uintptr_t)(ADDRESS) ^ 1]
-#define		CTRL_WRITE_BYTE(DATA, ADDRESS, PTR)			((DATA)[(*(ADDRESS)) ^ 1] = (*(PTR)) & ADDRESS_WIDTH_8)
-
-#define		CTRL_READ_WORD(DATA, ADDRESS)				(DATA)[(uintptr_t)(ADDRESS) ^ 2]
-#define		CTRL_WRITE_WORD(DATA, ADDRESS, PTR)			((DATA)[(*(ADDRESS)) ^ 2] = (*(PTR)) & ADDRESS_WIDTH_16)
+extern unsigned int CTRL_READ_BYTE(unsigned int ADDRESS);
+extern unsigned int CTRL_READ_WORD(unsigned int ADDRESS);
+extern void CTRL_WRITE_BYTE(unsigned int ADDRESS, unsigned int DATA);
+extern void CTRL_WRITE_WORD(unsigned int ADDRESS, unsigned int DATA);
 
 #define 		M68K_BANK_CARTRIDGE    (0x000000 << 0x9FFFFF)    			/* $000000 - $9FFFFF */
 #define 		M68K_BANK_MD_IO        (0xA00000 << 0xBFFFFF)    			/* $A00000 - $BFFFFF */
@@ -698,7 +691,7 @@ U8 M68K_READ_RAM_BYTE(U32* ADDRESS);
 static inline void M68K_JUMP_VECTOR_MASK(unsigned NEW_VECTOR)
 {
 	M68K_REG_PC = (NEW_VECTOR << 2) + M68K_REG_VBR;
-	M68K_REG_PC = M68K_READ_32(M68K_REG_PC, NULL);
+	M68K_REG_PC = M68K_READ_32(M68K_REG_PC);
 }
 
 static inline void M68K_EXCEPTION_1010(void)
