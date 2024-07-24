@@ -413,7 +413,6 @@ void MD_CART_MEMORY_MAP(void)
 unsigned int M68K_READ_8(unsigned int ADDRESS)
 {
     struct CPU_68K* CPU_BASE = malloc(sizeof(struct CPU_68K));
-
     return *(U8*)(CPU_BASE->MEMORY_MAP[((ADDRESS)>>16)&0xFF].BASE + ((ADDRESS) & 0xFFF));
 }
 
