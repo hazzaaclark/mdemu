@@ -315,7 +315,7 @@ void M68K_SET_FUNC_CALLBACK(int* CALLBACK)
 
 void M68K_SET_MOVE_IRQ_INT()
 {
-	struct CPU_68K* CPU_68K;
+	struct CPU_68K* CPU_68K = malloc(sizeof(struct CPU_68K));
 
 	/* FIRSTLY, WE BEGIN TO EVALUATE THE SIZE OF THE CURRENTLY EXECUTED INSTRUCTION */
 	/* THIS IS SO THAT WHEN CHECKING THE MASK, WE DON'T RUN INTO BUFFER OVERFLOWS */
@@ -346,11 +346,13 @@ void M68K_SET_MOVE_IRQ_INT()
 	}
 
 	INT_LEVEL &= 8;
+
+	free(CPU_68K);
 }
 
 void M68K_RUN(void)
 {
-	struct CPU_68K* CPU_68K;
+	struct CPU_68K* CPU_68K = malloc(sizeof(struct CPU_68K));
 	int* CYCLES = NULL;
 
 	/* WHILE WORKING, CHECK IF THE INSTRUCTION CYCLES */
@@ -372,6 +374,8 @@ void M68K_RUN(void)
 	/* EXECUTE RELEVANT INSTRUCTION */
 
 	M68K_CYCLE_CLOCK_SHIFT(M68K_CYC_INSTRUCTION[M68K_IR]);
+
+	free(CPU_68K);
 
 }
 
@@ -481,7 +485,7 @@ void M68K_STATE_REGISTER()
 
 int M68K_EXEC(int CYCLES)
 {
-	struct CPU_68K* CPU_68K = malloc(sizeof(CPU_68K));
+	struct CPU_68K* CPU_68K = malloc(sizeof(struct CPU_68K));
 	int INITIAL_CYCLES = NULL;
 
 	if(!CPU_68K->STOPPED)
@@ -511,14 +515,14 @@ int M68K_EXEC(int CYCLES)
 
 unsigned int* LOAD_TMSS_ROM(void)
 {
-	struct CPU_68K* CPU_68K;
-	unsigned char* TMSS_BUFFER;
+	struct CPU_68K* CPU_68K = malloc(sizeof(struct CPU_68K));
+	unsigned char* TMSS_BUFFER = NULL;
 
 	/* THIS FUNCTION WILL ASSUME THAT THE TMSS CORRESPONDENCE WILL */
 	/* BE NULL TO BEGIN WITH */
 	/* DISCERN IF TMSS IS NOT ENABLED WITHIN THE ROM HEADER */
 
-	if(TMSS_BUFFER == NULL)
+	if(!TMSS_BUFFER)
 		return -1;
 
 	/* DEFINE THE TMSS ROM FILESIZE, THIS IS BASED ON THE SIZE */
@@ -542,9 +546,8 @@ unsigned int* LOAD_TMSS_ROM(void)
 	/* CLEAR THE EMPTY STACK MEMORY OF THE ROM BUFFER ASSUMING WHEN */
 	/* IT ISN'T BEING USED */
 
-	free(&CPU_68K->TMSS.ROM);
 	return 0;
-
+	free(CPU_68K);
 }
 
 /* INITIALISE THE MEMORY MAPPER FOR THE CPU */
@@ -651,10 +654,12 @@ void M68K_JUMP_VECTOR(unsigned VECTOR)
 
 void M68K_SET_SR_IRQ(unsigned VALUE)
 {
-	struct CPU_68K* CPU_68K = malloc(sizeof(CPU_68K));
+	struct CPU_68K* CPU_68K = malloc(sizeof(struct CPU_68K));
 
 	/* EVALUATE THE MASKABLE BITS FROM THE SR */
 	VALUE &= M68K_REG_SR[7]; 
 
 	if(CPU_68K == NULL && !VALUE) free(CPU_68K);
+
+	free(CPU_68K);
 }
