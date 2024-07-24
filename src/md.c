@@ -420,10 +420,23 @@ unsigned int M68K_READ_8(unsigned int ADDRESS)
 unsigned int M68K_READ_16(unsigned int ADDRESS)
 {
     struct CPU_68K* CPU_BASE = malloc(sizeof(struct CPU_68K));
-
     return *(U16*)(CPU_BASE->MEMORY_MAP[((ADDRESS)>>16)&0xFF].BASE + ((ADDRESS) & 0xFFF));
+    free(CPU_BASE);
+}
+
+void M68K_WRITE_8(unsigned int ADDRESS, unsigned int DATA)
+{
+    struct CPU_68K* CPU_BASE = malloc(sizeof(struct CPU_68K));
+    CPU_BASE->INSTRUCTION_CYCLES = M68K_CYCLE[M68K_REG_IR] + ADDRESS | DATA;
+    free(CPU_BASE);
+}
+
+void M68K_WRITE_16(unsigned int ADDRESS, unsigned int DATA)
+{
+    struct CPU_68K* CPU_BASE = malloc(sizeof(struct CPU_68K));
+    CPU_BASE->INSTRUCTION_CYCLES = M68K_CYCLE[M68K_REG_IR] + ADDRESS | DATA;
+    free(CPU_BASE);
 }
 
 
-
-#endif
+#endif 
