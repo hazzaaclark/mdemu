@@ -15,7 +15,6 @@
 
 /* NESTED INCLUDES */
 
-#include "68000.h"
 #include "common.h"
 
 /* SYSTEM INCLUDES */
@@ -86,11 +85,12 @@
 #define		VDP_MAX_SCANLINE			320
 #define 	VDP_MAX_SCANLINE_V30		240 * 2
 
-#define		VDP_READ_BYTE(DATA, ADDRESS)				(DATA)[*(U8*)(ADDRESS) ^ 1]
-#define		VDP_WRITE_BYTE(DATA, ADDRESS, PTR)			((DATA)[(*(ADDRESS)) ^ 1] = (*(PTR)) & ADDRESS_WIDTH_8)
+extern unsigned int VDP_READ_BYTE(unsigned int ADDRESS);
+extern unsigned int VDP_READ_WORD(unsigned int ADDRESS);
 
-#define		VDP_READ_WORD(DATA, ADDRESS)				(DATA)[*(U16*)(ADDRESS) ^ 2]
-#define		VDP_WRITE_WORD(DATA, ADDRESS, PTR)			((DATA)[(*(ADDRESS)) ^ 2] = (*(PTR)) & ADDRESS_WIDTH_16)
+extern void VDP_WRITE_BYTE(unsigned int ADDRESS, unsigned int DATA);
+extern void VDP_WRITE_WORD(unsigned int ADDRESS, unsigned int DATA);
+
 
 typedef struct VDP_CONFIG
 {
@@ -181,10 +181,10 @@ typedef struct VDP
 
 } VDP;
 
-void VDP_CONST_INIT(VDP* VDP, VDP_STATE* STATE, U16 LOOKUP);
+void VDP_CONST_INIT(VDP* VDP, VDP_STATE* STATE, U16 LOOKUP[]);
 void VDP_STATE_INIT(VDP_STATE* STATE);
-void VDP_RENDER_TILE(VDP* VDP, VDP_STATE* STATE);
-void VDP_RENDER_SCANLINE(const VDP* VDP, U16* SCANLINE);
+void VDP_RENDER_TILE();
+void VDP_RENDER_SCANLINE(const VDP* VDP);
 void SCANLINE_CALLBACK(const void* USER_DATA, U16 SCANLINE, U8* PIXELS, U16 WIDTH, U16 HEIGHT);
 
 U16 VDP_READ(VDP* VDP);
