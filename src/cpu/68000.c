@@ -115,8 +115,7 @@ U8 M68K_EXECEPTION_TABLE[4][512] =
 
 void INITIALISE_68K_CYCLES()
 {
-	char* CPU_68K_CYCLES;
-	CPU_68K_CYCLES = malloc(sizeof(CPU_68K_CYCLES));
+	char* CPU_68K_CYCLES = NULL;
 
 	/* THIS LOOP WILL CHECK FOR EVERY SUBSEQUENT BITWISE */
 	/* OPERATION AND EVALUATE IT'S DESIGNATED MEMORY */
@@ -144,6 +143,8 @@ void INITIALISE_68K_CYCLES()
 				break;
 		}
 	}
+
+	free(CPU_68K_CYCLES);
 }
 
 /* ACCESS EACH RESPECTIVE REGISTER FROM THE ENUMERATION */
@@ -504,6 +505,7 @@ int M68K_EXEC(int CYCLES)
 	}
 
 	return CYCLES;
+	free(CPU_68K);
 }
 
 /*===============================================================================*/
