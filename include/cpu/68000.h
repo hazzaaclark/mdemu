@@ -117,6 +117,8 @@ extern unsigned int CTRL_READ_WORD(unsigned int ADDRESS);
 extern void CTRL_WRITE_BYTE(unsigned int ADDRESS, unsigned int DATA);
 extern void CTRL_WRITE_WORD(unsigned int ADDRESS, unsigned int DATA);
 
+#define     M68K_RETURN_ADDRESS(ADDRESS)                ((*ADDRESS) & 0xFFFFFFFFFF)
+
 #define 		M68K_BANK_CARTRIDGE    (0x000000 << 0x9FFFFF)    			/* $000000 - $9FFFFF */
 #define 		M68K_BANK_MD_IO        (0xA00000 << 0xBFFFFF)    			/* $A00000 - $BFFFFF */
 #define 		M68K_BANK_VDP          (0xC00000 << 0xDFFFFF)   		 	/* $C00000 - $DFFFFF */
@@ -168,6 +170,16 @@ extern void CTRL_WRITE_WORD(unsigned int ADDRESS, unsigned int DATA);
 #define 	EXCEPTION_INTERRUPT_AUTOVECTOR    24
 #define 	EXCEPTION_TRAP_BASE               32
 
+typedef struct CPU_68K_MEMORY
+{
+    char* BASE;
+    U8* MEMORY_READ_8;
+    U16*  MEMORY_READ_16;
+    U8* MEMORY_WRITE_8;
+    U16* MEMORY_WRITE_16;
+
+} CPU_68K_MEMORY;
+
 typedef struct CPU_68K
 {
     unsigned int* PC;
@@ -186,16 +198,6 @@ typedef struct CPU_68K
 	void(*USER_DATA);
 
 	unsigned int* STOPPED;
-    
-    union MEMORY_MAP
-    {
-        char* BASE;
-        U8 MEMORY_READ_8;
-        U16 MEMORY_READ_16;
-        U8 MEMORY_WRITE_8;
-        U16 MEMORY_WRITE_16;
-
-    } MEMORY_MAP[256];
 
     /* PUTTING THE Z80 MEMORY BANK FUNCTIONALITY */
     /* IN HERE FOR NOW UNTIL MODULARISATION WOULD BETTER SUIT */
@@ -206,9 +208,11 @@ typedef struct CPU_68K
         unsigned(*WRITE)(unsigned ADDRESS);
 
         unsigned int CYCLES;
+		U8 ZRAM[0x2000];
 
     } Z80_MEM[256];
 
+	CPU_68K_MEMORY MEMORY_MAP[256];
 
 	/* VERY UNORGANISED TMSS MAPPER */
 	/* TO:DO - FIX THE ORGANISATION */
@@ -362,6 +366,7 @@ typedef enum CPU_68K_FLAGS
 #define			M68K_CPU_STOPPED		CPU->CPU_STOPPED
 
 #define			M68K_CYC_EXCE			CPU->CYCLE_EXCEPTION
+#define 		M68K_CYCLE				CPU->INSTRUCTION_CYCLES[16]
 
 #define M68K_SAVE_INSTR(IDENTIFIER, VALUE) 					(*((char*)(IDENTIFIER)) = (char)((VALUE)))
 #define	M68K_INT_LEVEL										CPU->INT_LEVEL
