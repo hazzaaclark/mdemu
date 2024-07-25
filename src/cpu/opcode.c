@@ -8,7 +8,6 @@
 
 /* NESTED INCLUDES */
 
-#include "68000.h"
 #include "opcode.h"
 
 #undef USE_OPCODE_DEFS
@@ -22,7 +21,7 @@
 void M68K_BUILD_OPCODE_TABLE(void)
 {
     unsigned MASK_MODE = 0;
-    struct OPCODE* OPCODE_HANDLER;
+    struct OPCODE* OPCODE_HANDLER = malloc(sizeof(struct OPCODE));
     int INDEX;
 
     /* FOR EVERY SUBSEQUENT MASK MODE OF THE OPCODE TABLE */
@@ -69,6 +68,8 @@ void M68K_BUILD_OPCODE_TABLE(void)
         }
         break;
     }
+
+    free(OPCODE_HANDLER);
 }
 
 /* ALL OF THE FOLLOWING OPCODE DIRECTIVES ARE A PSEUDO BITWISE REPRESENTTION */
@@ -113,7 +114,7 @@ M68K_MAKE_OPCODE(ABCD, 8, MM, AX7)
 {
     unsigned* SRC = 0;
     unsigned* EA = 0;
-    unsigned* DST = M68K_READ_8(EA, NULL);
+    unsigned* DST = M68K_READ_8(EA);
     unsigned RES = (int*)SRC + (int)DST;
 
     RES += (int)SRC + (int)DST;
