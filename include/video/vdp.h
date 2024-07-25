@@ -73,7 +73,7 @@
 #define		VDP_HSCROLL_MODE_1LINE		2
 
 #define		VDP_VSCROLL_MODE_FULL       0
-#define		VDP_VSCROLL_MODE_2CELL      1
+#define		VDP_VSCROLL_MODE_2CELL      1	
 
 #define		VDP_ACCESS_VRAM		        0		
 #define		VDP_ACCESS_VSRAM            1
@@ -87,10 +87,6 @@
 
 extern unsigned int VDP_READ_BYTE(unsigned int ADDRESS);
 extern unsigned int VDP_READ_WORD(unsigned int ADDRESS);
-
-extern void VDP_WRITE_BYTE(unsigned int ADDRESS, unsigned int DATA);
-extern void VDP_WRITE_WORD(unsigned int ADDRESS, unsigned int DATA);
-
 
 typedef struct VDP_CONFIG
 {
