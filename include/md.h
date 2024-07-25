@@ -10,7 +10,6 @@
 
 /* NESTED INCLUDES */
 
-#include "68000.h"
 #include "common.h"
 
 /* SYSTEM INCLUDES */
@@ -95,20 +94,16 @@ typedef enum MD_CART_MAP_MODE
 
 } MD_CART_MAP_MODE;
 
-typedef MD* MD_MAKE();
-
+void MD_MAKE(void);
 void MD_INIT(void);
 void MD_RESET(void);
 void MD_ADDRESS_BANK_WRITE(unsigned DATA);
 void MD_ADDRESS_BANK_READ(void);
 void MD_BUS_REQ(unsigned STATE, unsigned CYCLES);
-void MD_SAVE_REGISTER_STATE(struct CPU_68K* CPU_68K);
 int MD_CART_INIT(void);
 void MD_CART_RESET(int const RESET_TYPE);
 S32(*MD_CART_CONTEXT(U8* STATE))(void);
-U32(*MD_BANKSWITCH(unsigned int VALUE));
-int MD_UPDATE_BANKING(struct CPU_68K* CPU_68K, int BANKS);
-int MD_CART_UPDATE_BANKING(struct CPU_68K* CPU_68K, int BANKS);
+U32(*MD_BANKSWITCH());
 void MD_CART_MEMORY_MAP(void);
 
 #endif
