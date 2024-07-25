@@ -155,7 +155,7 @@ void VDP_RENDER_SCANLINE(const VDP* VDP)
 				switch (VDP->STATE->HSCROLL_MODE)
 				{
 					case VDP_HSCROLL_MODE_FULL:
-						VDP->STATE->HSCROLL += sizeof(VDP_READ_WORD(VDP->STATE, VDP->STATE->HSCROLL_ADDRESS + INDEX));
+						VDP->STATE->HSCROLL = *(U16*)VDP->STATE + VDP->STATE->HSCROLL_ADDRESS + INDEX;
 						break;
 				
 				default:
@@ -175,4 +175,68 @@ U16 VDP_READ(VDP* VDP)
 {
 	VDP->STATE->ACCESS_MODE.WRITE_PENDING = false;
 	return VDP_MAX_HEADER_MASK | VDP->STATE->VBLANK << 3;
+}
+
+unsigned int VDP_READ_BYTE(unsigned int ADDRESS)
+{
+    struct CPU_68K* CPU_BASE = malloc(sizeof(struct CPU_68K));
+	int DATA = 0;
+
+	switch(ADDRESS & 0xFD)
+	{
+		case 0x00:
+			return (M68K_READ_8(ADDRESS) >> 8);
+
+		case 0x01:
+			return (M68K_READ_8(ADDRESS) & 0xFF);
+
+		case 0x04:
+			DATA = (M68K_READ_8(CPU_BASE->INSTRUCTION_CYCLES) >> 8);
+
+			/* PREFETCH AND STORE THE CORRESPONDENCE IN THE BUS */
+
+			ADDRESS = M68K_REG_PC;
+			DATA |= (M68K_READ_BUS_BYTE((CPU_BASE->MEMORY_MAP[((ADDRESS) >> 16) & 0xFF].BASE)));
+			return DATA;
+
+		case 0x05:
+			return M68K_READ_32(CPU_BASE->INSTRUCTION_CYCLES) & 0xFF;
+
+		default:
+			return M68K_READ_8(ADDRESS);
+	}
+
+	free(CPU_BASE);
+}
+
+unsigned int VDP_READ_WORD(unsigned int ADDRESS)
+{
+    struct CPU_68K* CPU_BASE = malloc(sizeof(struct CPU_68K));
+	int DATA = 0;
+
+	switch(ADDRESS & 0xFD)
+	{
+		case 0x00:
+			return (M68K_READ_8(ADDRESS) >> 8);
+
+		case 0x01:
+			return (M68K_READ_8(ADDRESS) & 0xFF);
+
+		case 0x04:
+			DATA = (M68K_READ_8(CPU_BASE->INSTRUCTION_CYCLES) >> 8);
+
+			/* PREFETCH AND STORE THE CORRESPONDENCE IN THE BUS */
+
+			ADDRESS = M68K_REG_PC;
+			DATA |= (M68K_READ_BUS_BYTE((CPU_BASE->MEMORY_MAP[((ADDRESS) >> 16) & 0xFF].BASE)));
+			return DATA;
+
+		case 0x05:
+			return M68K_READ_32(CPU_BASE->INSTRUCTION_CYCLES) & 0xFF;
+
+		default:
+			return M68K_READ_8(ADDRESS);
+	}
+
+	free(CPU_BASE);
 }
