@@ -25,6 +25,7 @@ $(EXEPATH)$(EXE): $(OFILES)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 run: $(EXEPATH)$(EXE)
+	./$(EXEPATH)$(EXE)
 
 clean:
 	rm -f $(OFILES) $(EXEPATH)$(EXE)
