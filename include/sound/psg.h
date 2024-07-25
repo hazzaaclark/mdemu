@@ -1,6 +1,6 @@
-/* Copyright(C) 2023 Harry Clark * /
+/* COPYRIGHT (C) HARRY CLARK 2024 */
 
-/* SEGA Mega Drive Emulator */
+/* SEGA MEGA DRIVE EMULATOR */
 
 /* THIS FILE PERTAINS TOWARDS THE FUNCTIONALITY OF THE PSG */
 /* THE PSG GOVERNS THE ARRANGEMENT OF SOUND EFFECTS IN CONJUNCTION */
@@ -18,6 +18,7 @@
 #include <math.h>
 #include <malloc.h>
 #include <stddef.h>
+#include <stdbool.h>
 
 #if defined(USE_PSG)
 #define USE_PSG
@@ -27,6 +28,10 @@
 #define     PSG_TYPE_PERIODIC       0
 #define     PSG_TYPE_WHITE          1
 #define     PSG_VOLUME              0x10
+#define     PSG_LOOKUP_LENGTH       0x0F
+#define     PSG_CHANNEL_VOLUME      4.0 * 8.0
+#define     PSG_CLOCKS              240       
+#define     PSG_STATE_COUNT(VALUE)      (sizeof(VALUE) / sizeof(VALUE)[0])  
 
 typedef struct PSG_BASE
 {
@@ -34,30 +39,36 @@ typedef struct PSG_BASE
     bool NOISE_DISABLED;
     bool VOLUME_CONTROL;
     S16 VOLUME[PSG_VOLUME][2];
+    S16 SAMPLE_BUFFER;
+    UNK TOTAL_SAMPLES;
 
-    union STATE
+    union PSG_STATE
     {
         U16* PHASE_COUNT;
         U16* PHASE_COUNT_MASTER;
         U8* ATTENUATION;
         U8* OUTPUT;
+        U16* POLARITY;
+        U32* TIMESTAMP;
 
         U8* CHANNEL;
         U8* FAKE_OUTPUT_LO;
         U8* FAKE_OUTPUT_HI;
-        U8* FREQUENCEY;
+        U8 FREQUENCEY;
         U16* SHIFT;
 
-    } STATE;
+        U16* COUNTDOWN;
+        U16* COUNTDOWN_MASTER_CONTROL;
 
-    struct PSG_TONE* TONES[3];
+    } PSG_STATE;
 
 } PSG_BASE;
 
-void PSG_CONST_INIT(const PSG_BASE* PSG_BASE);
-void PSG_STATE_INIT(const PSG_BASE* PSG_BASE, S16* BUFFER, size_t* TOTAL_SAMPLES);
-void PSG_UPDATE(const PSG_BASE* PSG_BASE);
+void PSG_CONST_INIT(PSG_BASE* PSG_BASE);
+void PSG_STATE_INIT(PSG_BASE* PSG_BASE);
+void PSG_UPDATE(PSG_BASE* PSG_BASE);
 void PSG_UPDATE_INSTR(PSG_BASE* PSG_BASE, U8* INSTRUCTION);
+void PSG_FREE(PSG_BASE* PSG_BASE);
 
 #endif
 
