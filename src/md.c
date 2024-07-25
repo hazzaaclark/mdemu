@@ -337,7 +337,7 @@ int MD_CART_UPDATE_BANKING(struct CPU_68K* CPU_68K, int BANKS)
 
 int MD_CART_INIT(void)
 {
-    struct MD_CART* MD_CARTRIDGE = malloc(sizeof(MD_CART));
+    struct MD_CART* MD_CARTRIDGE = malloc(sizeof(struct MD_CART));
 
     /* ASSUME TO BEGIN WITH THAT THERE IS NO CURRENT ROM */
     /* BEING LOADED ONTO THE STACK */
@@ -374,6 +374,7 @@ int MD_CART_INIT(void)
 
     MD_CART_MEMORY_MAP();
 
+    free(MD_CARTRIDGE);
     return 0;
 }
 
@@ -410,6 +411,10 @@ void MD_CART_MEMORY_MAP(void)
     }
 }
 
+/* ========================================================== */
+/*                  68000 HELPER FUNCTIONS                    */
+/* ========================================================== */
+
 unsigned int M68K_READ_8(unsigned int ADDRESS)
 {
     struct CPU_68K* CPU_BASE = malloc(sizeof(struct CPU_68K));
@@ -427,14 +432,14 @@ unsigned int M68K_READ_16(unsigned int ADDRESS)
 void M68K_WRITE_8(unsigned int ADDRESS, unsigned int DATA)
 {
     struct CPU_68K* CPU_BASE = malloc(sizeof(struct CPU_68K));
-    CPU_BASE->INSTRUCTION_CYCLES = M68K_CYCLE[M68K_REG_IR] + ADDRESS | DATA;
+    CPU_BASE->INSTRUCTION_CYCLES = M68K_CYCLE[M68K_REG_IR] + ADDRESS + DATA;
     free(CPU_BASE);
 }
 
 void M68K_WRITE_16(unsigned int ADDRESS, unsigned int DATA)
 {
     struct CPU_68K* CPU_BASE = malloc(sizeof(struct CPU_68K));
-    CPU_BASE->INSTRUCTION_CYCLES = M68K_CYCLE[M68K_REG_IR] + ADDRESS | DATA;
+    CPU_BASE->INSTRUCTION_CYCLES = M68K_CYCLE[M68K_REG_IR] + ADDRESS + DATA;
     free(CPU_BASE);
 }
 
@@ -448,7 +453,44 @@ unsigned int M68K_READ_32(unsigned int ADDRESS)
 void M68K_WRITE_32(unsigned int ADDRESS, unsigned int DATA)
 {
     struct CPU_68K* CPU_BASE = malloc(sizeof(struct CPU_68K));
-    CPU_BASE->INSTRUCTION_CYCLES = M68K_CYCLE[M68K_REG_IR] + ADDRESS | DATA;
+    CPU_BASE->INSTRUCTION_CYCLES = M68K_CYCLE[M68K_REG_IR] + ADDRESS + DATA;
+    free(CPU_BASE);
+}
+
+unsigned int Z80_READ(unsigned int ADDRESS)
+{
+    struct CPU_68K* CPU_BASE = malloc(sizeof(struct CPU_68K));
+    unsigned int DATA = 0;
+
+    CPU_BASE->INSTRUCTION_CYCLES += 1 * 7;
+
+    switch((ADDRESS >> 13) & 3)
+    {
+        default:
+            return CPU_BASE->Z80_MEM->ZRAM[ADDRESS & 0x1FFF];
+    }
+
+    return (DATA | (DATA << 8));
+    free(CPU_BASE);
+}
+
+void Z80_WRITE(unsigned int ADDRESS, unsigned int DATA)
+{
+    struct CPU_68K* CPU_BASE = malloc(sizeof(struct CPU_68K));
+
+    CPU_BASE->INSTRUCTION_CYCLES += 1 * 7;
+
+    switch((ADDRESS > 13) & 3)
+    {
+        case 0x7F:
+            M68K_WRITE_8(ADDRESS, DATA);
+            return;
+
+        default:
+            CPU_BASE->Z80_MEM->ZRAM[ADDRESS & 0x1FFF] = DATA;
+            return;
+    }
+
     free(CPU_BASE);
 }
 
