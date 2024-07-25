@@ -206,6 +206,7 @@ unsigned int VDP_READ_BYTE(unsigned int ADDRESS)
 			return M68K_READ_8(ADDRESS);
 	}
 
+	return 0;
 	free(CPU_BASE);
 }
 
@@ -238,5 +239,6 @@ unsigned int VDP_READ_WORD(unsigned int ADDRESS)
 			return M68K_READ_8(ADDRESS);
 	}
 
+	return 0;
 	free(CPU_BASE);
 }
