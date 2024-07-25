@@ -47,9 +47,9 @@ void MD_INIT(void)
     for (int i = 0xC; i < 0xFF; i++)
     {
         CPU_BASE->MEMORY_MAP[i].MEMORY_READ_8 =  VDP_READ_BYTE;
-        CPU_BASE->MEMORY_MAP[i].MEMORY_WRITE_8 = VDP_WRITE_BYTE;
+        CPU_BASE->MEMORY_MAP[i].MEMORY_WRITE_8 = M68K_WRITE_8;
         CPU_BASE->MEMORY_MAP[i].MEMORY_READ_16 = VDP_READ_WORD;
-        CPU_BASE->MEMORY_MAP[i].MEMORY_WRITE_16 = VDP_WRITE_WORD;
+        CPU_BASE->MEMORY_MAP[i].MEMORY_WRITE_16 = M68K_WRITE_16;
     }
 
     /* IO CONTROL REGISTERS */
@@ -492,6 +492,42 @@ void Z80_WRITE(unsigned int ADDRESS, unsigned int DATA)
     }
 
     free(CPU_BASE);
+}
+
+unsigned int CTRL_READ_BYTE(unsigned int ADDRESS)
+{
+    switch ((ADDRESS >> 8) & 0xFF)
+    {
+        case 0x00 & 0xE0:
+            return M68K_READ_8(ADDRESS);
+    }
+}
+
+void CTRL_WRITE_BYTE(unsigned int ADDRESS, unsigned int DATA)
+{
+    switch ((ADDRESS >> 8) & 0xFF)
+    {
+        case 0x00 & 0xE1:
+            return M68K_READ_8(ADDRESS);
+    }
+}
+
+unsigned int CTRL_READ_WORD(unsigned int ADDRESS)
+{
+    switch ((ADDRESS >> 8) & 0xFF)
+    {
+        case 0x00 & 0xE0:
+            return M68K_READ_8(ADDRESS);
+    }
+}
+
+void CTRL_WRITE_WORD(unsigned int ADDRESS, unsigned int DATA)
+{
+    switch ((ADDRESS >> 8) & 0xFF)
+    {
+        case 0x00 & 0xE1:
+            return M68K_READ_8(ADDRESS);
+    }
 }
 
 
