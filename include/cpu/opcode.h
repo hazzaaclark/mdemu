@@ -14,7 +14,9 @@
 
 /* SYSTEM INCLUDES */
 
+#include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #if defined(USE_68000_OP)
 #define USE_68000_OP
