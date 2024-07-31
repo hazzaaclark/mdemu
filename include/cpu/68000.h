@@ -80,6 +80,14 @@
 #else
 #define USE_CPU
 
+#define 	READ_BYTE(BASE, ADDR) 			(BASE)[(ADDR)^1]
+#define 	READ_WORD(BASE, ADDR) 			(((BASE)[ADDR]<<8) | (BASE)[(ADDR)+1])
+
+#define 	READ_WORD_LONG(BASE, ADDR) 		(((BASE)[(ADDR)+1]<<24) |       \
+                                    		((BASE)[(ADDR)]<<16) |  		\
+                                    		((BASE)[(ADDR)+3]<<8) |   		\
+                                    		(BASE)[(ADDR)+2])
+
 /*===============================================================================*/
 /*							68000 MAIN CPU FUNCTIONALIY							 */
 /*===============================================================================*/
@@ -172,7 +180,7 @@ extern void CTRL_WRITE_WORD(unsigned int ADDRESS, unsigned int DATA);
 
 typedef struct CPU_68K_MEMORY
 {
-    char* BASE;
+    unsigned(*MEMORY_BASE);
     U8* MEMORY_READ_8;
     U16*  MEMORY_READ_16;
     U8* MEMORY_WRITE_8;
@@ -580,12 +588,6 @@ typedef enum OPCODE_MASK_MODE
 	
 } OPCODE_MASK_MODE;
 
-#define				M68K_OPCODE_PATTERN				OPCODE_BASE->PATTERN
-#define				M68K_OPCODE_SIZE				OPCODE_BASE->OPCODE_SIZE
-#define				M68K_OPCODE_HANDLER				OPCODE_BASE->HANDLER
-#define				M68K_OPCODE_INSTRUCTION			OPCODE_BASE->INSTRUCTION
-
-
 /*===============================================================================*/
 /*							68000 ADDRESSING MODES								 */
 /*===============================================================================*/
@@ -630,15 +632,13 @@ typedef enum EA_MODES
 
 #endif
 
-CPU_68K* CPU;
-CPU_68K_REGS CPU_REGS;
-OPCODE* OPCODE_BASE;
-OPCODE_TYPE OPCODE_TYPES;
+static CPU_68K* CPU;
+extern CPU_68K_REGS CPU_REGS;
 
 void INITIALISE_68K_CYCLES();
 void M68K_INIT(void);
 void M68K_MEM_INIT(void);
-int M68K_EXEC(int CYCLES);
+int M68K_EXEC(struct CPU_68K* CPU_68K, int CYCLES);
 void M68K_INIT_OPCODE(void);
 void M68K_RUN(void);
 void M68K_SET_FUNC_CALLBACK(int* CALLBACK);
@@ -659,8 +659,7 @@ void M68K_STATE_REGISTER();
 void M68K_JUMP(unsigned NEW_PC);
 void M68K_JUMP_VECTOR(unsigned VECTOR);
 void M68K_SET_SR_IRQ(unsigned VALUE);
-
-S32 M68K_REMAINING_CYCLES;
+	
 U32* CPU_ACCESS_REGISTERS(struct CPU_68K* CPU_68K, int REGISTER);
 void CPU_SET_REGISTERS(struct CPU_68K* CPU_68K, int REGISTER, unsigned VALUE);
 
@@ -673,8 +672,6 @@ int UPDATE_SYS_BANKING(struct CPU_68K* CPU_68K, int BANKS);
 unsigned int(*LOAD_TMSS_ROM(void));
 void CLEAR_TMSS_ROM();
 U8 TMSS_ROM(void);
-U32 TMSS_ROM_SIZE;
-U32 TMSS_ROM_MASK;
 bool IS_TMSS_ENABLED();
 
 U8 M68K_READ_BUS_BYTE(U32*  ADDRESS);
@@ -693,8 +690,9 @@ U8 M68K_READ_RAM_BYTE(U32* ADDRESS);
 #define 		M68K_LOG_ALINE			M68K_OPT_OFF
 
 
-static inline void M68K_JUMP_VECTOR_MASK(unsigned NEW_VECTOR)
+static inline void M68K_JUMP_VECTOR_MASK()
 {
+	int NEW_VECTOR = 0;
 	M68K_REG_PC = (NEW_VECTOR << 2) + M68K_REG_VBR;
 	M68K_REG_PC = M68K_READ_32(M68K_REG_PC);
 }
