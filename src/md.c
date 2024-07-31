@@ -168,7 +168,7 @@ U32* MD_BANKSWITCH()
         case 1:
             CPU_68K->MEMORY_MAP[0].MEMORY_BASE = (unsigned char*)MD_CONSOLE->MD_CART->ROM_BASE;
             break;
-        
+
         default:
             if(MD_CONSOLE->SYSTEM_BIOS == SYSTEM_MD)
                 return (CPU_68K->MEMORY_MAP[0].MEMORY_BASE = (unsigned char*)MD_CONSOLE->MD_CART->ROM_BASE);
@@ -288,6 +288,8 @@ int MD_UPDATE_BANKING(struct CPU_68K* CPU_68K, int BANKS)
     struct MD* MD_CONSOLE = malloc(sizeof(struct MD));
     int CURRENT_BANK = 0;
 
+    *MD_CONSOLE->TMSS = 0;
+
     if(MD_CONSOLE->TMSS[CURRENT_BANK])
     {
         CURRENT_BANK = MD_UPDATE_BANKING(CPU_68K->TMSS_BASE[CURRENT_BANK], BANKS);
@@ -347,6 +349,8 @@ int MD_CART_INIT(void)
 
     /* ASSUME TO BEGIN WITH THAT THERE IS NO CURRENT ROM */
     /* BEING LOADED ONTO THE STACK */
+
+    MD_CARTRIDGE->ROM_BASE = 0;
 
     if(!MD_CARTRIDGE->ROM_BASE)
     {
