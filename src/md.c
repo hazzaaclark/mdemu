@@ -155,9 +155,10 @@ U32* MD_BANKSWITCH()
 
     /* IS THE BOOT ROM INITIALISED? */
 
+    MD_CONSOLE->SYSTEM_BIOS = 0;
+
     switch (MD_CONSOLE->SYSTEM_BIOS)
     {
-
         case 0:
             CPU_68K->MEMORY_MAP[0].MEMORY_BASE = (unsigned char*)MD_CONSOLE->BOOT_ROM;
             break;
@@ -171,6 +172,7 @@ U32* MD_BANKSWITCH()
         default:
             if(MD_CONSOLE->SYSTEM_BIOS == SYSTEM_MD)
                 return (CPU_68K->MEMORY_MAP[0].MEMORY_BASE = (unsigned char*)MD_CONSOLE->MD_CART->ROM_BASE);
+            break;
     }
 
     return ZBUFFER_MAX;
@@ -539,7 +541,7 @@ void CTRL_WRITE_BYTE(unsigned int ADDRESS, unsigned int DATA)
 
 unsigned int CTRL_READ_WORD(unsigned int ADDRESS)
 {
-    switch ((ADDRESS >> 8) & 0xFF)
+    switch ((ADDRESS >> 8) & 0xFF)      
     {
         case 0x00 & 0xE0:
             return M68K_READ_8(ADDRESS);
