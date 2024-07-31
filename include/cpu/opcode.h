@@ -8,10 +8,6 @@
 #ifndef M68K_OPCODES
 #define M68K_OPCODES
 
-/* NESTED INCLUDES */
-
-#include "68000.h"
-
 /* SYSTEM INCLUDES */
 
 #include <stdlib.h>
