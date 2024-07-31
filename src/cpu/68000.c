@@ -42,7 +42,7 @@ void INITIALISE_68K_CYCLES()
 	/* THE SECOND CO-EFFICIENT REPRESENTS THE SIZE OF THE REGISTER */
 
 	for (size_t INDEX = 0; INDEX < sizeof(CPU_68K_CYCLES); INDEX++)
-	{
+	{	
 		switch (INDEX / 16)
 		{
 			case 0:
@@ -521,7 +521,7 @@ U8 M68K_READ_BUS_BYTE(U32* ADDRESS)
 
 		case 0xA20000:
 			if(*ADDRESS < 0xFFFF)
-				memset((void*)sizeof(ADDRESS), 0, sizeof(unsigned int));
+				memset((void*)ADDRESS, 0, sizeof(unsigned int));
 
 			else
 				assert(0);
