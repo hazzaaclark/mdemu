@@ -22,88 +22,6 @@
 /*							68000 MAIN CPU FUNCTIONALIY							 */
 /*===============================================================================*/
 
-/* DISCERN THE EXCEPTION HANDLER TABLE WHICH ENCOMPASSES THE */
-/* MASTER LOGIC FROM THE VECTOR TABLE OF THE HEADER OF 68K ASSEMBLY */
-
-U8 M68K_EXECEPTION_TABLE[4][512] =
-{
-	{ 	  0, /* 	NULL	 										 	*/
-		  4, /*  0: RESET - STACK POINTER 		                     	*/
-		  4, /*  1: RESET - PROGRAM COUNTER                    			*/
-		 50, /*  2: BUS ERROR                             				*/
-		 50, /*  3: ADDRESS ERROR 										*/
-		 34, /*  4: ILLEGAL OP/INSTR                                	*/
-		 38, /*  5: ZERO DIV							             	*/
-		 40, /*  6: CHECK REGISTER AGAINST UB/LB (1'S, 2'S COMP)		*/
-		 34, /*  7: TRAPV                                              	*/
-		 34, /*  8: PRIVILEGE VIOLATION                                 */
-		 34, /*  9: TRACE EXEC                                          */
-		  4, /* 10: 1010                                                */
-		  4, /* 11: 1111                                                */
-		  4, /* 12: RESERVED                                            */
-		  4, /* 13: COPROCESSOR VIOLATION (SCD, 32X)  					*/
-		  4, /* 14: FORMAT ERROR                                       	*/
-		 44, /* 15: UNIITIALISED INTERRUPT                            	*/
-		  4, /* 16: RESERVED                                           	*/
-		  4, /* 17: RESERVED                                           	*/
-		  4, /* 18: RESERVED                                           	*/
-		  4, /* 19: RESERVED                                           	*/
-		  4, /* 20: RESERVED                                           	*/
-		  4, /* 21: RESERVED                                           	*/
-		  4, /* 22: RESERVED                                           	*/
-		  4, /* 23: RESERVED                                           	*/
-		 44, /* 24: SP INTERRUPT		                                */
-		 44, /* 25: LEVEL 1 IRQ                       					*/
-		 44, /* 26: LEVEL 2 IRQ                       					*/
-		 44, /* 27: LEVEL 3 IRQ                        					*/
-		 44, /* 28: LEVEL 4 IRQ                        					*/
-		 44, /* 29: LEVEL 5 IRQ                        					*/
-		 44, /* 30: LEVEL 6 IRQ                        					*/
-		 44, /* 31: LEVEL 7 IRQ                        					*/
-		 34, /* 32: TRAP #0                   							*/
-		 34, /* 33: TRAP #1                                            	*/
-		 34, /* 34: TRAP #2                                            	*/
-		 34, /* 35: TRAP #3                                            	*/
-		 34, /* 36: TRAP #4                                            	*/
-		 34, /* 37: TRAP #5                                            	*/
-		 34, /* 38: TRAP #6                                            	*/
-		 34, /* 39: TRAP #7                                            	*/
-		 34, /* 40: TRAP #8                                            	*/
-		 34, /* 41: TRAP #9                                            	*/
-		 34, /* 42: TRAP #10                                           	*/
-		 34, /* 43: TRAP #11                                           	*/
-		 34, /* 44: TRAP #12                                           	*/
-		 34, /* 45: TRAP #13                                           	*/
-		 34, /* 46: TRAP #14                                           	*/
-		 34, /* 47: TRAP #15                                           	*/
-		  4, /* 48: FP BRAS 											*/
-		  4, /* 49: FP INEAXCT 											*/
-		  4, /* 50: FP ZERO DIVIDE 										*/
-		  4, /* 51: FP UNDERFLOW										*/
-		  4, /* 52: FP OPERNAD                      					*/
-		  4, /* 53: FP OVERFLOW                           				*/
-		  4, /* 54: FP SIGNAL NAN                       				*/
-		  4, /* 55: FP UNUSED DATA TYPE            						*/
-		  4, /* 56: MMU CONFIG ERROR               						*/
-		  4, /* 57: MMU ILLEGAL OP ERROR           						*/
-		  4, /* 58: MMU ACCESS LEVEL VIOLATION      					*/
-		  4, /* 59: RESERVED                                           	*/
-		  4, /* 60: RESERVED                                           	*/
-		  4, /* 61: RESERVED                                           	*/
-		  4, /* 62: RESERVED                                           	*/
-		  4, /* 63: RESERVED                                           	*/
-		     /* 64-255: USER DEFINED                                   	*/
-		  4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,
-		  4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,
-		  4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,
-		  4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,
-		  4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,
-		  4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,
-	}
-};
-
-
-
 /* FOLLOWING THE INITIAL DECLARATION OF THE VECTOR TABLE */
 /* DISCERN THE RUDIMENTARY AMOUNT OF CPU CYCLES */
 /* THE CPU WILL GOVERN OVER THE COURSE OF IT'S RUN TIME */
@@ -267,8 +185,6 @@ void CPU_SET_REGISTERS(struct CPU_68K* CPU_68K, int REGISTER, unsigned VALUE)
 		default:
 			break;
 	}
-
-	free(CPU_68K);
 }
 
 /*===============================================================================*/
@@ -480,9 +396,8 @@ void M68K_STATE_REGISTER()
 /* IT WILL LOOK INTO THE PREVIOUS PROGRAM COUNTER STATE TO DETERMINE */
 /* WHICH INSTRUCTION TO COMPUTE */
 
-int M68K_EXEC(int CYCLES)
+int M68K_EXEC(struct CPU_68K* CPU_68K, int CYCLES)
 {
-	struct CPU_68K* CPU_68K = malloc(sizeof(struct CPU_68K));
 	int INITIAL_CYCLES = NULL;
 
 	if(!CPU_68K->STOPPED)
@@ -501,7 +416,6 @@ int M68K_EXEC(int CYCLES)
 	}
 
 	return CYCLES;
-	free(CPU_68K);
 }
 
 /*===============================================================================*/
