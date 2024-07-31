@@ -356,6 +356,7 @@ void M68K_INIT(void)
 
 	unsigned INIT_EMU = 0;
 
+
 	if(!INIT_EMU)
 	{
 		M68K_BUILD_OPCODE_TABLE();
@@ -399,6 +400,7 @@ void M68K_STATE_REGISTER()
 int M68K_EXEC(struct CPU_68K* CPU_68K, int CYCLES)
 {
 	int INITIAL_CYCLES = NULL;
+	S32 M68K_REMAINING_CYCLES = 0;
 
 	if(!CPU_68K->STOPPED)
 	{
