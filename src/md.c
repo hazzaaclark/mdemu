@@ -7,8 +7,6 @@
 /* NESTED INCLUDES */
 
 #include "md.h"
-#include "68000.h"
-#include "vdp.h"
 #include "common.h"
 
 #ifdef USE_MD
