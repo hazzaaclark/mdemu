@@ -59,6 +59,8 @@ void M68K_BUILD_OPCODE_TABLE(void)
                 M68K_OPCODE_INSTRUCTION = M68K_OPCODE_HANDLER;
                 M68K_CYC_INSTRUCTION[INDEX] = M68K_OPCODE_PATTERN[INDEX] | M68K_CYC_INSTRUCTION[INDEX];
             }
+
+            break;
             
         
     default:
@@ -113,11 +115,11 @@ M68K_MAKE_OPCODE(ABCD, 8, RR, 0)
 M68K_MAKE_OPCODE(ABCD, 8, MM, AX7)
 {
     unsigned* SRC = 0;
-    unsigned* EA = 0;
+    unsigned* EA = 0;           
     unsigned* DST = M68K_READ_8(EA);
-    unsigned RES = (int*)SRC + (int)DST;
+    unsigned RES = (int*)SRC + *(int*)DST;
 
-    RES += (int)SRC + (int)DST;
+    RES += *(int*)SRC + *(int*)DST;
     RES = *(unsigned*)FLAG_X = *(unsigned*)FLAG_C = (RES > 0x99) << 8;
 
     if(FLAG_C)
