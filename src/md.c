@@ -482,12 +482,13 @@ unsigned int Z80_READ(unsigned int ADDRESS)
     struct CPU_68K* CPU_BASE = malloc(sizeof(struct CPU_68K));
     unsigned int DATA = 0;
 
-    CPU_BASE->INSTRUCTION_CYCLES += 1 * 7;
+    CPU_BASE->INSTRUCTION_CYCLES = malloc(M68K_LOW_BITMASK);
 
     switch((ADDRESS >> 13) & 3)
     {
         default:
-            return CPU_BASE->Z80_MEM->ZRAM[ADDRESS & 0x1FFF];
+            CPU_BASE->Z80_MEM->ZRAM[ADDRESS & 0xFF] = DATA;
+            break;
     }
 
     return (DATA | (DATA << 8));
@@ -498,7 +499,7 @@ void Z80_WRITE(unsigned int ADDRESS, unsigned int DATA)
 {
     struct CPU_68K* CPU_BASE = malloc(sizeof(struct CPU_68K));
 
-    CPU_BASE->INSTRUCTION_CYCLES += 1 * 7;
+    CPU_BASE->INSTRUCTION_CYCLES = malloc(M68K_LOW_BITMASK);
 
     switch((ADDRESS > 13) & 3)
     {
