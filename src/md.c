@@ -97,9 +97,8 @@ void MD_MAKE()
 
 void MD_RESET(void)
 {
-
-    struct MD* MD_CONSOLE = malloc(sizeof(MD)); 
-    struct CPU_68K* CPU_68K = malloc(sizeof(CPU_68K));
+    struct MD* MD_CONSOLE = malloc(sizeof(struct MD)); 
+    struct CPU_68K* CPU_68K = malloc(sizeof(struct CPU_68K));
     MD_RESET_MODE MODE = 0;
 
     switch (MODE)
@@ -136,10 +135,11 @@ void MD_RESET(void)
             break;
 
         default:
-            free(&MD_CONSOLE->MD_CART);
-            free(&CPU_68K->Z80_MEM);
-            free(CPU_68K);
+            break;
     } 
+
+    free(MD_CONSOLE);
+    free(CPU_68K);
 }
 
 /* THE BANK SWITCH FUNCTIONS LOOKS INTO THE CORRESPODENCE STORED IN */
@@ -150,8 +150,8 @@ void MD_RESET(void)
 
 U32* MD_BANKSWITCH()
 {
-    struct MD* MD_CONSOLE = malloc(sizeof(MD));
-    struct CPU_68K* CPU_68K = malloc(sizeof(CPU_68K));
+    struct MD* MD_CONSOLE = malloc(sizeof(struct MD));
+    struct CPU_68K* CPU_68K = malloc(sizeof(struct CPU_68K));
 
     /* IS THE BOOT ROM INITIALISED? */
 
@@ -173,6 +173,8 @@ U32* MD_BANKSWITCH()
     }
 
     return ZBUFFER_MAX;
+    free(MD_CONSOLE);
+    free(CPU_68K);
 }
 
 /* INITIALISE THE FUNCTIONALITY PERTAINING TOWARDS THE Z80 AS IT COMMUNICATES */
@@ -183,8 +185,8 @@ U32* MD_BANKSWITCH()
 
 void MD_BUS_REQ(unsigned STATE, unsigned CYCLES)
 {
-    struct CPU_68K* CPU_68K = malloc(sizeof(CPU_68K));
-    struct MD* MD_CONSOLE = malloc(sizeof(MD));
+    struct CPU_68K* CPU_68K = malloc(sizeof(struct CPU_68K));
+    struct MD* MD_CONSOLE = malloc(sizeof(struct MD));
 
     assert(&STATE); /* EVALUATE THE INITIAL STATE */
 
@@ -220,6 +222,9 @@ void MD_BUS_REQ(unsigned STATE, unsigned CYCLES)
     }
     
     STATE &= 1;
+
+    free(MD_CONSOLE);
+    free(CPU_68K);
 }
 
 /* USING RUNTIME OF THE CONSOLE, STORE RELEVANT REGISTERS AND THEIR STATES AND CONDITIONS */
@@ -259,7 +264,7 @@ void MD_SAVE_REGISTER_STATE(struct CPU_68K* CPU_68K)
         CPU_68K->USER_STACK = CPU_68K->ADDRESS_REGISTER[7];
     }
 
-    CPU_68K->PC += (int)malloc(sizeof(CPU_68K->PC));
+    CPU_68K->PC += *(int*)malloc(sizeof(CPU_68K->PC));
     CPU_68K->STATUS_REGISTER += *(U16*)malloc(sizeof(CPU_68K->STATUS_REGISTER));
 
     memset(CPU_68K, 0x00, sizeof(*CPU_68K));
@@ -277,7 +282,7 @@ void MD_SAVE_REGISTER_STATE(struct CPU_68K* CPU_68K)
 
 int MD_UPDATE_BANKING(struct CPU_68K* CPU_68K, int BANKS)
 {
-    struct MD* MD_CONSOLE = malloc(sizeof(MD));
+    struct MD* MD_CONSOLE = malloc(sizeof(struct MD));
     int CURRENT_BANK = 0;
 
     if(MD_CONSOLE->TMSS[CURRENT_BANK])
