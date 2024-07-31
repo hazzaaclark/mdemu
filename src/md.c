@@ -159,17 +159,18 @@ U32* MD_BANKSWITCH()
     {
 
         case 0:
-            CPU_68K->MEMORY_MAP[0].BASE = (char*)MD_CONSOLE->BOOT_ROM;
+            CPU_68K->MEMORY_MAP[0].MEMORY_BASE = (unsigned char*)MD_CONSOLE->BOOT_ROM;
+            break;
 
         /* IS THE ROM LOADED IN THE MEMORY MAP? */
 
         case 1:
-            CPU_68K->MEMORY_MAP[0].BASE = (char*)MD_CONSOLE->MD_CART->ROM_BASE;
+            CPU_68K->MEMORY_MAP[0].MEMORY_BASE = (unsigned char*)MD_CONSOLE->MD_CART->ROM_BASE;
             break;
         
         default:
             if(MD_CONSOLE->SYSTEM_BIOS == SYSTEM_MD)
-                return (CPU_68K->MEMORY_MAP[0].BASE = (char*)MD_CONSOLE->MD_CART->ROM_BASE);
+                return (CPU_68K->MEMORY_MAP[0].MEMORY_BASE = (unsigned char*)MD_CONSOLE->MD_CART->ROM_BASE);
     }
 
     return ZBUFFER_MAX;
@@ -362,7 +363,7 @@ int MD_CART_INIT(void)
 
     /* ALLOCATE INITAL SPACE FOR THE CARTRIDGE */
     
-    MD_CARTRIDGE->ROM_BASE += (U32)malloc(sizeof(MD_CARTRIDGE->ROM_SIZE));
+    MD_CARTRIDGE->ROM_BASE += *(U32*)malloc(sizeof(MD_CARTRIDGE->ROM_SIZE));
 
     /* STORE THE INITIAL 512KB FOR SSE2 */
     /* THIS IS BY ALIGNING 16 BYTES OF ADDRESSABLE VECTOR TYPES TO THE HEADER */
@@ -393,8 +394,8 @@ int MD_CART_INIT(void)
 void MD_CART_MEMORY_MAP(void)
 {
     UNK INDEX;
-    struct MD_CART* MD_CARTRIDGE = malloc(sizeof(MD_CART));
-    struct CPU_68K* CPU_68K = malloc(sizeof(CPU_68K));
+    struct MD_CART* MD_CARTRIDGE = malloc(sizeof(struct MD_CART));
+    struct CPU_68K* CPU_68K = malloc(sizeof(struct CPU_68K));
     int MAP_MODE = 0;
 
     switch (MAP_MODE)
@@ -412,6 +413,9 @@ void MD_CART_MEMORY_MAP(void)
 
             break;
     }
+
+    free(MD_CARTRIDGE);
+    free(CPU_68K);
 }
 
 /* ========================================================== */
@@ -421,14 +425,23 @@ void MD_CART_MEMORY_MAP(void)
 unsigned int M68K_READ_8(unsigned int ADDRESS)
 {
     struct CPU_68K* CPU_BASE = malloc(sizeof(struct CPU_68K));
-    return *(U8*)(CPU_BASE->MEMORY_MAP[((ADDRESS)>>16)&0xFF].BASE + ((ADDRESS) & 0xFFF));
+    int INDEX = 0;
+
+    CPU_BASE->MEMORY_MAP[INDEX].MEMORY_BASE = malloc(0x1000);
+
+    return READ_BYTE(CPU_BASE->MEMORY_MAP[((ADDRESS)>>16)&0xFF].MEMORY_BASE, (ADDRESS) & 0xFFFF);
     free(CPU_BASE);
+
 }
 
 unsigned int M68K_READ_16(unsigned int ADDRESS)
 {
     struct CPU_68K* CPU_BASE = malloc(sizeof(struct CPU_68K));
-    return *(U16*)(CPU_BASE->MEMORY_MAP[((ADDRESS)>>16)&0xFF].BASE + ((ADDRESS) & 0xFFF));
+    int INDEX = 0;
+
+    CPU_BASE->MEMORY_MAP[INDEX].MEMORY_BASE = malloc(0x1000);
+
+    return READ_WORD(CPU_BASE->MEMORY_MAP[((ADDRESS)>>16)&0xFF].MEMORY_BASE, (ADDRESS) & 0xFFFF);
     free(CPU_BASE);
 }
 
@@ -449,7 +462,11 @@ void M68K_WRITE_16(unsigned int ADDRESS, unsigned int DATA)
 unsigned int M68K_READ_32(unsigned int ADDRESS)
 {
     struct CPU_68K* CPU_BASE = malloc(sizeof(struct CPU_68K));
-    return *(U32*)(CPU_BASE->MEMORY_MAP[((ADDRESS)>>16)&0xFF].BASE + ((ADDRESS) & 0xFFF));
+    int INDEX = 0;
+
+    CPU_BASE->MEMORY_MAP[INDEX].MEMORY_BASE = malloc(0x1000);
+
+    return READ_WORD_LONG(CPU_BASE->MEMORY_MAP[((ADDRESS)>>16)&0xFF].MEMORY_BASE, (ADDRESS) & 0xFFFF);
     free(CPU_BASE);
 }
 
