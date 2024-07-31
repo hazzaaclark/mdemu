@@ -137,6 +137,7 @@ void INITIALISE_68K_CYCLES()
 
 			case 2:
 				CPU_68K_CYCLES[INDEX] += (int)M68K_HIGH_BITMASK;
+				break;
 
 			default:
 				CPU_68K_CYCLES[INDEX] += (int)M68K_MAX_BITMASK;
@@ -560,14 +561,14 @@ unsigned int* LOAD_TMSS_ROM(void)
 void M68K_MEM_INIT(void)
 {
 	int INDEX;
-	int* CYCLE_TAB[256];
+	int* CYCLE_TAB[512];
 	
 	/* WHEN THE INDEX FOR THE TABLE IS LESS THAN THE MAX BUFFER */
 	/* ALLOCATE MEMORY FOR EACH RESEPECTIVE REGISTER */
 
 	for(INDEX = 0; INDEX < 512; ++INDEX)
 	{
-		*CYCLE_TAB[INDEX] = (int*)(INDEX * 7 / 15);
+		*CYCLE_TAB[INDEX] = INDEX * 7 / 15;
 	}
 }
 
