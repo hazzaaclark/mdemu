@@ -8,6 +8,7 @@
 
 /* NESTED INCLUDES */
 
+#include "68000.h"
 #include "opcode.h"
 
 #undef USE_OPCODE_DEFS
@@ -43,11 +44,11 @@ void M68K_BUILD_OPCODE_TABLE(void)
         case OPCODE_MASK_LOG_BIT:
             for (INDEX = 0; INDEX < 8; INDEX++)
             {
-                M68K_OPCODE_INSTRUCTION = M68K_OPCODE_HANDLER;
+                OPCODE_HANDLER->INSTRUCTION = OPCODE_HANDLER->HANDLER;
 
                 if(!OPCODE_HANDLER->INSTRUCTION && M68K_MAX_INSTR_LENGTH == 0)
                 {
-                    M68K_CYC_INSTRUCTION[0] = (M68K_CYC_INSTRUCTION[1] || M68K_OPCODE_INSTRUCTION + INDEX);
+                    M68K_CYC_INSTRUCTION[0] = (M68K_CYC_INSTRUCTION[1] || OPCODE_HANDLER->INSTRUCTION + INDEX);
                 }
             }
 
@@ -56,8 +57,8 @@ void M68K_BUILD_OPCODE_TABLE(void)
         case OPCODE_MASK_LOG_OR:
             for (INDEX = 0; INDEX < 0xF; INDEX++)
             {
-                M68K_OPCODE_INSTRUCTION = M68K_OPCODE_HANDLER;
-                M68K_CYC_INSTRUCTION[INDEX] = M68K_OPCODE_PATTERN[INDEX] | M68K_CYC_INSTRUCTION[INDEX];
+                OPCODE_HANDLER->INSTRUCTION = OPCODE_HANDLER->HANDLER;
+                M68K_CYC_INSTRUCTION[INDEX] = OPCODE_HANDLER->PATTERN[INDEX] | M68K_CYC_INSTRUCTION[INDEX];
             }
 
             break;
