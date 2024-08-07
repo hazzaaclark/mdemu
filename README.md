@@ -1,4 +1,4 @@
-# MD68000
+# mdemu
 
 ```
 Emulation of the SEGA Mega Drive's Hardware.
