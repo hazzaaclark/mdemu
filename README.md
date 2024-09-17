@@ -1,26 +1,30 @@
 # mdemu
 
+![Untitled-1](https://github.com/user-attachments/assets/d3352cca-1971-4504-9eed-ab09d24adf20)
+
 ```
-Emulation of the SEGA Mega Drive's Hardware.
-This repository is to highlight the ways of which I am able to emulate the MD/Genesis' Hardware
-in the hopes of making emulated hardware to carry out my MD Developments.
-So, think of this as my interpretation of a MD Dev Kit
+Sonic the Hedgehog (PAL 50) on Wayland (KDE Plasma)
+```  
+
+# Motive:
+
+The aim with this project is to provide myself with my own surrogates means of emulating one of my favourite games consoles.
+
+Being my major breakout into the ever-growing, enigmatic world of Reverse Engineering and Low Level Programming, this project aims to showcase my expertise in said field.
+
+# Building:
+
+Built using the ANSI C99 standard
+
+```
+git clone
+
+make clean
+
+make
 ```
 
-
-## Inspiration
-This Project was heavily inspired by OneLoneCoder's NES Emulation series and I wanted to see if I would be able to expand my technical skill to
-create something similar but unique in it's entirety
-
-https://www.youtube.com/watch?v=F8kx56OZQhg&t=738s
-
-![image](https://user-images.githubusercontent.com/107435091/173459479-ca9f8eaf-2573-4a46-b99b-335871003a8d.png)
-
-Several inspirations for this Project include the Dolphin Emulator as well as KEGA Fusion
-
-## OneLoneCoder's Repo:
-https://github.com/OneLoneCoder/olcNES
-
+the following output should be an executable should ``mdemu`` 
 
 ## Documentation used:
 
