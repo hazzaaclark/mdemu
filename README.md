@@ -26,6 +26,8 @@ make
 
 the following output should be an executable should ``mdemu`` 
 
+From there, drag and drop your ROM and enjoy!
+
 ## Documentation used:
 
 ● ```Motorolla 68000 Programmer Manual:``` https://www.nxp.com/files-static/archives/doc/ref_manual/M68000PRM.pdf
