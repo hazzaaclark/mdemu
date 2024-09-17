@@ -33,6 +33,7 @@
 #define     MD_CART_BANK_DEFAULT        0
 #define     MD_CART_BANK_UNUSED         0xFF
 #define     MD_CART_BANK_RO             1
+#define     MD_CART_ROM_SIZE            (2 * 1024 * 1024)
 
 typedef struct MD_CART
 {
@@ -102,7 +103,7 @@ void MD_RESET(void);
 void MD_ADDRESS_BANK_WRITE(unsigned DATA);
 void MD_ADDRESS_BANK_READ(void);
 void MD_BUS_REQ(unsigned STATE, unsigned CYCLES);
-int MD_CART_INIT(void);
+int MD_CART_INIT(struct MD_CART* CART, unsigned char* DATA, unsigned long* SIZE);
 void MD_CART_RESET(int const RESET_TYPE);
 S32(*MD_CART_CONTEXT(U8* STATE))(void);
 U32(*MD_BANKSWITCH());
