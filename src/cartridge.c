@@ -38,12 +38,19 @@ void MD_GET_ROM_INFO(char* HEADER)
     int INDEX = 0;
     int ITERATOR = 0;
     unsigned char SYSTEM_TYPE = 0;
+    unsigned short OFFSET = 0;
 
     /* THROUGH EVERY SUBSEQUENT READ OF THE ROM HEADER */
     /* CLEAR THE READER BUFFER, THAT WAY MISMATCHED DATA DOESN'T GET TRANSCODED */
     /* WHEN OTHER ROMS ARE LOADED */
 
     memset(ROM, 0, sizeof(struct ROM_INFO));
+
+    if(ROM == NULL)
+    {
+        fprintf(stderr, "Could not evaluate space for the ROM Header");
+        exit(1);
+    }
 
     if(SYSTEM_TYPE == SYSTEM_MD)
     {
@@ -60,7 +67,49 @@ void MD_GET_ROM_INFO(char* HEADER)
         }
     }
 
-    ROM->DOMESTIC[ITERATOR] = 0; 
+    ROM->DOMESTIC[ITERATOR] = 0;
+
+    /* NOW ASSERT THE PRE-REQUISITE INFORMATION BASED ON ROM HEADER INFO */
+
+    memcpy(ROM->TYPE, HEADER + ROM_TYPE, 2);
+    memcpy(ROM->SERIAL, HEADER + ROM_SERIAL, 12);
+    memcpy(ROM->CHECKSUM, HEADER + ROM_CHECKSUM, 2);
+    memcpy(ROM->START, HEADER + ROM_START, 4);
+    memcpy(ROM->END, HEADER + ROM_END, 4);
+    memcpy(ROM->INTERNATIONAL, HEADER + ROM_INTERNATIONAL, 16);
+
+    ROM->START = 0;
+    switch(HEADER[OFFSET - 0x0F])
+    {
+        case 0x00:
+          ROM->END = 0x3FFFF;
+          break;
+        case 0x01:
+          ROM->END = 0x7FFFF;
+          break;
+        case 0x02:
+          ROM->END = 0xFFFFF;
+          break;
+        case 0x0a:
+          ROM->END = 0x1FFF;
+          break;
+        case 0x0b:
+          ROM->END = 0x3FFF;
+          break;
+        case 0x0c:
+          ROM->END = 0x7FFF;
+          break;
+        case 0x0d:
+          ROM->END = 0xBFFF;
+          break;
+        case 0x0e:
+          ROM->END = 0xFFFF;
+          break;
+        case 0x0f:
+          ROM->END = 0x1FFFF;
+          break;
+    }
+
 
     free(ROM);
 }
