@@ -78,6 +78,11 @@ void MD_GET_ROM_INFO(char* HEADER)
     memcpy(ROM->END, HEADER + ROM_END, 4);
     memcpy(ROM->INTERNATIONAL, HEADER + ROM_INTERNATIONAL, 16);
 
+    /* FROM THERE, WE WILL BEGIN TO EVALUATE THE MEMORY ADDRESSES */\
+    /* OF EACH RESPECTIVE ENTITY */
+
+    /* THIS WILL BE DONE BASED ON A BIT MASK BETWEEN 0 AND 15  (16 BIT CHECKSUM) */
+
     ROM->START = 0;
     switch(HEADER[OFFSET - 0x0F])
     {
@@ -90,22 +95,22 @@ void MD_GET_ROM_INFO(char* HEADER)
         case 0x02:
           ROM->END = 0xFFFFF;
           break;
-        case 0x0a:
+        case 0x0A:
           ROM->END = 0x1FFF;
           break;
-        case 0x0b:
+        case 0x0B:
           ROM->END = 0x3FFF;
           break;
-        case 0x0c:
+        case 0x0C:
           ROM->END = 0x7FFF;
           break;
-        case 0x0d:
+        case 0x0D:
           ROM->END = 0xBFFF;
           break;
-        case 0x0e:
+        case 0x0E:
           ROM->END = 0xFFFF;
           break;
-        case 0x0f:
+        case 0x0F:
           ROM->END = 0x1FFFF;
           break;
     }
