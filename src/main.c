@@ -1,7 +1,16 @@
+/* COPYRIGHT (C) HARRY CLARK 2024 */
+/* SEGA MEGA DRIVE EMULATOR */
+
+/* THIS FILE PERTAINS TOWARDS THE MAIN FUNCTIONALITY OF THE PROGRAM */
+
+/* SYSTEM INCLUDES */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <SDL2/SDL.h>
+
+/* NESTED INCLUDES */
 
 #include "md.h"
 #include "cartridge.h"
